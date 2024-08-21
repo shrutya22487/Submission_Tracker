@@ -1,3 +1,6 @@
+-- CREATE DATABASE rema_db;
+
+
 CREATE TABLE IF NOT EXISTS Professor
 (
     id       SERIAL PRIMARY KEY,
@@ -12,6 +15,13 @@ CREATE TABLE IF NOT EXISTS Student
     email_id VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS users
+(
+    id       SERIAL PRIMARY KEY,
+    email     VARCHAR(50) NOT NULL
+);
+
+
 CREATE TABLE IF NOT EXISTS Mapping
 (
     prof_id    INT,
@@ -20,3 +30,5 @@ CREATE TABLE IF NOT EXISTS Mapping
 
 
 
+SELECT *
+FROM users;
