@@ -1,26 +1,18 @@
 -- CREATE DATABASE rema_db;
 
-
 CREATE TABLE IF NOT EXISTS Professor
 (
     id       SERIAL PRIMARY KEY,
     Name     VARCHAR(50) NOT NULL,
-    email_id VARCHAR(50) NOT NULL
+    email_id VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS Student
 (
     id       SERIAL PRIMARY KEY,
     Name     VARCHAR(50) NOT NULL,
-    email_id VARCHAR(50) NOT NULL
+    email_id VARCHAR(50) UNIQUE NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS users
-(
-    id       SERIAL PRIMARY KEY,
-    email     VARCHAR(50) NOT NULL
-);
-
 
 CREATE TABLE IF NOT EXISTS Mapping
 (
@@ -28,7 +20,19 @@ CREATE TABLE IF NOT EXISTS Mapping
     student_id INT
 );
 
+CREATE TABLE IF NOT EXISTS Job
+(
+    id         SERIAL PRIMARY KEY,
+    title      VARCHAR(1000) NOT NULL,
+    prof_name  VARCHAR(1000) NOT NULL,
+    author     VARCHAR(1000) NOT NULL,
+    conference VARCHAR(1000),
+    status     VARCHAR(1000) NOT NULL,
+    link       VARCHAR(1000),
+    date       DATE,
+    student_id    INT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES Student(id)
+);
 
 
-SELECT *
-FROM users;
+

@@ -1,5 +1,9 @@
 <%- include('partials/header') %>
 
+<% if (message) { %>
+    <p style="color: red;"><%= message %></p>
+<% } %>
+
 <div class="container mt-5">
     <h1>Login</h1>
 

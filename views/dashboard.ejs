@@ -1,13 +1,74 @@
 <%- include('partials/header') %>
 
-
-<div class="jumbotron centered">
-    <div class="container">
-        <h1 class="display-3">DASHBOARD</h1>
-        <p class="lead"></p>
-        <hr>
-
-    </div>
+<div class="jumbotron text-center">
+    Dashboard
 </div>
 
+<div class="container">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Professor Name</th>
+            <th>Author</th>
+            <th>Conference</th>
+            <th>Status</th>
+            <th>Link</th>
+            <th>Date</th>
+            <th>Student ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% if (Jobs.rows.length > 0) { %>
+            <% Jobs.rows.forEach(job => { %>
+                <tr>
+                    <td><%= job.id %></td>
+                    <td><%= job.title %></td>
+                    <td><%= job.prof_name %></td>
+                    <td><%= job.author %></td>
+                    <td><%= job.conference %></td>
+                    <td><%= job.status %></td>
+                    <td><a href="<%= job.link %>"><%= job.link %></a></td>
+                    <td><%= job.date ? job.date.toDateString() : '' %></td>
+                </tr>
+            <% }); %>
+        <% } else { %>
+            <tr>
+                <td colspan="9">No jobs found.</td>
+            </tr>
+        <% } %>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="container">
+    ADD JOB:
+    <form action="/dashboard" method="POST">
+        <label for="title">Job Title:</label>
+        <input type="text" id="title" name="title" required>
+
+        <label for="prof_name">Professor Name:</label>
+        <input type="text" id="prof_name" name="prof_name" required>
+
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required>
+
+        <label for="conference">Conference:</label>
+        <input type="text" id="conference" name="conference">
+
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" required>
+
+        <label for="link">Link:</label>
+        <input type="url" id="link" name="link">
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date">
+
+        <button type="submit">Add Job</button>
+    </form>
+
+</div>
 <%- include('partials/footer') %>
