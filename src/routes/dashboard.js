@@ -7,7 +7,7 @@ const router = Router();
 // TODO: 4. make mapping for student and prof
 
 //////////////// STUDENT DASHBOARD ////////////////////////////
-function isStudent(email){
+function isStudent(email) {
     const studentEmailPattern = /^[a-zA-Z]+[0-9]{5}@iiitd\.ac\.in$/;
     return studentEmailPattern.test(email);
 }
@@ -37,7 +37,7 @@ async function student_dashboard_get(req, res) {
     res.render("dashboard.ejs", { Jobs: jobsResult });
 }
 
-async function prof_dashboard_get(req,res) {
+async function prof_dashboard_get(req, res) {
 
 }
 
@@ -45,7 +45,7 @@ router.get("/dashboard", async (req, res) => {
     console.log(req.user);
     if (req.isAuthenticated()) {
         try {
-            if(isStudent(req.user.email_id)) {
+            if (isStudent(req.user.email_id)) {
                 await student_dashboard_get(req, res);
             }
             else
@@ -63,7 +63,7 @@ router.get("/dashboard", async (req, res) => {
 async function student_dashboard_post(req, res) {
     const studentResult = await db.query(
         `SELECT id FROM Student WHERE email_id = $1`,
-        [req.user.email]
+        [req.user.email_id]
     );
 
     if (studentResult.rows.length === 0) {
@@ -85,7 +85,7 @@ async function student_dashboard_post(req, res) {
 
 }
 
-async function prof_dashboard_post(req,res) {
+async function prof_dashboard_post(req, res) {
 
 }
 
