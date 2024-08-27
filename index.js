@@ -8,10 +8,14 @@ import session from "express-session";
 import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
 import db from "./src/utils/db.js";
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const app = express();
 const port = 3000;
 env.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.use(
     session({
@@ -20,6 +24,8 @@ app.use(
         saveUninitialized: true,
     })
 );
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -39,7 +45,8 @@ app.get("/", (req, res) => {
 app.get("/login", (req, res) => {
     const error = req.query.error;
     if (error === "unauthorized_domain") {
-        res.render("login.ejs", { message: "Registration is only allowed for users with a specific domain." });
+        res.locals.message = "Registration is only allowed for users with a specific domain.";
+        res.render("login.ejs");
     } else {
         res.render("login.ejs");
     }
@@ -76,6 +83,11 @@ app.post(
     })
 );
 
+
+function isStudent(email){
+    const studentEmailPattern = /^[a-zA-Z]+[0-9]{5}@iiitd\.ac\.in$/;
+    return studentEmailPattern.test(email);
+}
 passport.use(
     "google",
     new GoogleStrategy(
@@ -94,29 +106,32 @@ passport.use(
                     return cb(null, false, { message: "Kindly login with IIITD Email-ID" });
                 }
 
-                const studentEmailPattern = /^[a-zA-Z]+[0-9]{5}@iiitd\.ac\.in$/;
-                const isStudent = studentEmailPattern.test(email);
+                let user = null;
 
-                const user = null;
-
-                if (isStudent) {
+                if (isStudent(email)) {
                     const studentResult = await db.query(
                         "SELECT * FROM Student WHERE email_id = $1",
                         [email]
                     );
 
+                    // Check if any rows are returned
                     if (studentResult.rows.length === 0) {
-                        // Insert into 'Student' table
+                        // Insert into 'Student' table if no rows exist
                         await db.query(
-                            "INSERT INTO Student (Name,email_id) VALUES ($1, $2)",
-                            [profile.displayName,email]
+                            "INSERT INTO Student (Name, email_id) VALUES ($1, $2)",
+                            [profile.displayName, email]
                         );
-                    }
 
-                    const user = await db.query(
-                        "SELECT * FROM Student WHERE email_id = $1",
-                        [email]
-                    ).rows[0];
+                        // Retrieve the inserted student
+                        const newStudentResult = await db.query(
+                            "SELECT * FROM Student WHERE email_id = $1",
+                            [email]
+                        );
+
+                        user = newStudentResult.rows[0];
+                    } else {
+                        user = studentResult.rows[0];
+                    }
                 } else {
                     // Check if user exists in 'Professor' table
                     const professorResult = await db.query(
@@ -124,19 +139,25 @@ passport.use(
                         [email]
                     );
 
+                    // Check if any rows are returned
                     if (professorResult.rows.length === 0) {
-                        // Insert into 'Professor' table
+                        // Insert into 'Professor' table if no rows exist
                         await db.query(
-                            "INSERT INTO Professor (Name, email_id) VALUES ($1)",
-                            [profile.displayName,email]
+                            "INSERT INTO Professor (Name, email_id) VALUES ($1, $2)",
+                            [profile.displayName, email]
                         );
-                    }
-                    const user = await db.query(
-                        "SELECT * FROM Professor WHERE email_id = $1",
-                        [email]
-                    ).rows[0];
-                }
 
+                        // Retrieve the inserted professor
+                        const newProfessorResult = await db.query(
+                            "SELECT * FROM Professor WHERE email_id = $1",
+                            [email]
+                        );
+
+                        user = newProfessorResult.rows[0];
+                    } else {
+                        user = professorResult.rows[0];
+                    }
+                }
                 return cb(null, user);
             } catch (err) {
                 return cb(err);

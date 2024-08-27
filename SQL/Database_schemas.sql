@@ -34,5 +34,13 @@ CREATE TABLE IF NOT EXISTS Job
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
 
+INSERT INTO Job (title, prof_name, author, conference, status, link, date, student_id)
+VALUES ('Fighting an infodemic: Covid-19 fake news dataset', 'Md. Shad Akhtar',
+        'Parth Patwa, Shivam Sharma, Srinivas Pykl, Vineeth Guptha, Gitanjali Kumari, Md Shad Akhtar, Asif Ekbal, Amitava Das, Tanmoy Chakraborty',
+        '', 'Under Review', 'link not here','2024-08-27',1);
+INSERT INTO Job (title, prof_name, author, conference, status, link, date, student_id)
+VALUES ('Title of the Job', 'Professor Name', 'Author Name', 'Conference Name', 'Status', 'http://example.com', '2024-08-27', 1);
 
 
+
+SELECT Student.name FROM Student WHERE Student.id NOT IN (SELECT Mapping.student_id FROM Mapping WHERE given_prof_id = student_id);
