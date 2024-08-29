@@ -1,10 +1,53 @@
 <%- include('partials/header') %>
 
-    <div class="jumbotron text-center">
-        <h1 style="font-size:20vh;"><b>Dashboard</b></h1>
-    </div>
+<div class="container">
+    <% if (locals.prof_flag === true){%>
+    <h1>Professor Dashboard</h1>
 
-    <div class="container">
+    <h2>Students Under Professor</h2>
+    <ul>
+        <%if (studentsUnderProf && studentsUnderProf.rows.length > 0) { %>
+            <% studentsUnderProf.rows.forEach(student => { %>
+                <li><%= student.name %> - <%= student.email_id %></li>
+        <% });} %>
+    </ul>
+
+    <h2>Add Student to Professor</h2>
+    <form action="/professor/addStudent" method="POST">
+        <input type="hidden" name="prof_id" value="<%= prof_id %>" />
+        <select name="student_id">
+            <%if (studentsNotUnderProf && studentsNotUnderProf.rows.length > 0) { %>
+                <% studentsNotUnderProf.rows.forEach(student => { %>
+                    <option value="<%= student.id %>"><%= student.name %></option>
+            <% });} %>
+        </select>
+        <button type="submit">Add Student</button>
+    </form>
+
+    <h2>Search for Students</h2>
+    <form method="GET" action="/dashboard">
+        <input type="hidden" name="prof_id" value="<%= prof_id %>" />
+        <input type="text" name="search" placeholder="Search by name">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        <% if (studentsNotUnderProf && studentsNotUnderProf.rows.length > 0) { %>
+            <% studentsNotUnderProf.rows.forEach(student => { %>
+                <li><%= student.name %> - <%= student.email_id %></li>
+            <% }); %>
+        <% } else { %>
+            <li>No students found</li>
+        <% } %>
+    </ul>
+
+    <div class="jumbotron text-center">
+        <h1 style="font-size:20vh;"><b> Student Dashboard</b></h1>
+    </div>
+    <a class="btn btn-dark btn-lg" href="/logout" role="button">Login</a>
+
+    <%}%>
+    <%else{ %>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <thead>
                 <tr>
@@ -72,6 +115,7 @@
                                 <% } %>
             </tbody>
         </table>
+    <%}%>
     </div>
 
     <div class="container">
@@ -126,7 +170,6 @@
         </form>
     </div>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>
 
 
-        <%- include('partials/footer') %>

@@ -102,9 +102,10 @@ passport.use(
                 const email = profile.email;
                 const domain = email.split("@")[1]; // Extract the domain from the email
 
-                if (domain !== "iiitd.ac.in") {
-                    return cb(null, false, { message: "Kindly login with IIITD Email-ID" });
-                }
+                // TODO Comment this out when project has been completed
+                // if (domain !== "iiitd.ac.in") {
+                //     return cb(null, false, { message: "Kindly login with IIITD Email-ID" });
+                // }
 
                 let user = null;
 
