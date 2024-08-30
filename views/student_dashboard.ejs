@@ -1,143 +1,113 @@
 <%- include('partials/header') %>
-    <div class="jumbotron text-center">
-        <h1 style="font-size: 10vh;"><b> Student Dashboard</b></h1>
-    </div>
-    <div class="container">
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+<div class="jumbotron text-center" style="margin-bottom: 20px;">
+    <h1 style="font-size: 5rem; font-weight: bold;">Student Dashboard</h1>
+</div>
+<div class="container">
+    <div style="overflow-x: auto; margin-bottom: 20px;">
+        <table style="width: 100%; max-width: 1000px; border-collapse: collapse; margin: 0 auto;">
             <thead>
                 <tr>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        ID</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Title</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Professor Name</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Author</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Conference</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Status</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Link</th>
-                    <th
-                        style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">
-                        Date</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">ID</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Title</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Professor Name</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Author</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Conference</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Status</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Link</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Date</th>
                 </tr>
             </thead>
             <tbody>
-                <% if (Jobs && Array.isArray(Jobs.rows) && Jobs.rows.length> 0) { %>
-                    <% Jobs.rows.forEach(job=> { %>
+                <% if (Jobs && Jobs.rows.length > 0) { %>
+                    <% Jobs.rows.forEach(job => { %>
                         <tr>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.id %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.title %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.prof_name %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.author %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.conference %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
                                 <%= job.status %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
-                                <a href="<%= job.link %>">
-                                    <%= job.link %>
-                                </a>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
+                                <a href="<%= job.link %>" style="color: #007bff; text-decoration: none;">Link</a>
                             </td>
-                            <td
-                                style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; width: 150px; white-space: nowrap;">
-                                <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short' , day: 'numeric'
-                                    }).split(',').join(' ') : '' %>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem; width: 150px; white-space: nowrap;">
+                                <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(',').join(' ') : '' %>
                                 <br>
                                 <%= job.date ? job.date.getFullYear() : '' %>
                             </td>
-                            <!-- <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
-                                <form action="/delete_job/<%= job.id %>" method="POST" style="display: inline;">
-                                    <button type="submit" style="background-color: #ff4c4c; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
-                                        Remove
-                                    </button>
-                                </form>
-                            </td> -->
                         </tr>
                     <% }); %>
                 <% } else { %>
                     <tr>
-                        <td colspan="9" style="text-align: center; padding: 12px;">No jobs found.</td>
+                        <td colspan="8" style="text-align: center; padding: 12px; font-size: 0.875rem;">No jobs found.</td>
                     </tr>
                 <% } %>
             </tbody>
-            
         </table>
     </div>
+</div>
 
-    <div class="container">
-        <h1>Add Job:</h1>
-        <form action="/student_dashboard" method="POST" style="margin-top: 20px;">
+<div class="container">
+    <h2 style="font-size: 2rem; font-weight: bold;">Add Job:</h2>
+    <form action="/student_dashboard" method="POST" style="margin-top: 20px;">
 
-            <label for="title" style="font-size: x-large; margin-bottom: 4px;">Job Title:</label>
-            <input type="text" id="title" name="title" required
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="title" style="font-size: 1rem; display: block; margin-bottom: 4px;">Job Title:</label>
+        <input type="text" id="title" name="title" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <label for="prof_name" style="font-size: x-large; margin-bottom: 4px;">Professor Name:</label>
-            <input type="text" id="prof_name" name="prof_name" required
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="prof_name" style="font-size: 1rem; display: block; margin-bottom: 4px;">Professor Name:</label>
+        <input type="text" id="prof_name" name="prof_name" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <label for="author" style="font-size: x-large; margin-bottom: 4px;">Author:</label>
-            <input type="text" id="author" name="author" required
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="author" style="font-size: 1rem; display: block; margin-bottom: 4px;">Author:</label>
+        <input type="text" id="author" name="author" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <label for="conference" style="font-size: x-large; margin-bottom: 4px;">Conference:</label>
-            <input type="text" id="conference" name="conference"
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="conference" style="font-size: 1rem; display: block; margin-bottom: 4px;">Conference:</label>
+        <input type="text" id="conference" name="conference"
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <label for="status" style="font-size: x-large; margin-bottom: 4px;">Status:</label>
-            <select id="status" name="status" required
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="Submitted">Submitted</option>
-                <option value="Under Review">Under Review</option>
-                <option value="Published">Published</option>
-                <option value="Rejected">Rejected</option>
-            </select>
-            <br>
+        <label for="status" style="font-size: 1rem; display: block; margin-bottom: 4px;">Status:</label>
+        <select id="status" name="status" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+            <option value="Submitted">Submitted</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Published">Published</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        <br>
 
-            <label for="link" style="font-size: x-large; margin-bottom: 4px;">Link:</label>
-            <input type="url" id="link" name="link"
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="link" style="font-size: 1rem; display: block; margin-bottom: 4px;">Link:</label>
+        <input type="url" id="link" name="link"
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <label for="date" style="font-size: x-large; margin-bottom: 4px;">Date:</label>
-            <input type="date" id="date" name="date"
-                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <br>
+        <label for="date" style="font-size: 1rem; display: block; margin-bottom: 4px;">Date:</label>
+        <input type="date" id="date" name="date"
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        <br>
 
-            <button type="submit"
-                style="font-family: ' Satoshi', sans-serif; background-color: #4CAF50; color: white; padding: 10px
-                                    20px; border: none; border-radius: 4px; cursor: pointer;">Add
-                                    Job</button>
-                                    <br>
-                                    <br>
-                                    </form>
-    </div>
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;">Add Job</button>
+        <br><br>
+    </form>
+</div>
 
-    <a class="btn btn-dark btn-lg" href="/logout" role="button">Logout</a>
+<a class="btn btn-dark btn-lg" href="/logout" role="button" style="margin: 20px 0; display: inline-block;">Logout</a>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>
