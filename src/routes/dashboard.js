@@ -33,4 +33,19 @@ router.get("/dashboard", (req, res) => {
     }
 });
 
+router.post('/delete_job/:id', async (req, res) => {
+    const jobId = req.params.id;
+    try {
+        // Assuming you have a jobs table in your database
+        await db.query('DELETE FROM jobs WHERE id = $1', [jobId]);
+
+        // Redirect back to the student dashboard after deletion
+        res.redirect('/student_dashboard');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+    }
+});
+
+
 export default router;

@@ -1,8 +1,8 @@
 <%- include('partials/header') %>
-<div class="jumbotron text-center">
-    <h1 style="font-size:20vh;"><b> Student Dashboard</b></h1>
-</div>
-<div class="container">
+    <div class="jumbotron text-center">
+        <h1 style="font-size: 10vh;"><b> Student Dashboard</b></h1>
+    </div>
+    <div class="container">
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <thead>
                 <tr>
@@ -33,7 +33,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% if (Jobs && Jobs.rows.length> 0) { %>
+                <% if (Jobs && Array.isArray(Jobs.rows) && Jobs.rows.length> 0) { %>
                     <% Jobs.rows.forEach(job=> { %>
                         <tr>
                             <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
@@ -54,78 +54,90 @@
                             <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
                                 <%= job.status %>
                             </td>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;"><a
-                                    href="<%= job.link %>">
-                                    <%= job.link %>
-                                </a></td>
                             <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
-                                <%= job.date ? job.date.toDateString() : '' %>
+                                <a href="<%= job.link %>">
+                                    <%= job.link %>
+                                </a>
                             </td>
+                            <td
+                                style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; width: 150px; white-space: nowrap;">
+                                <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short' , day: 'numeric'
+                                    }).split(',').join(' ') : '' %>
+                                <br>
+                                <%= job.date ? job.date.getFullYear() : '' %>
+                            </td>
+                            <!-- <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                                <form action="/delete_job/<%= job.id %>" method="POST" style="display: inline;">
+                                    <button type="submit" style="background-color: #ff4c4c; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
+                                        Remove
+                                    </button>
+                                </form>
+                            </td> -->
                         </tr>
-                        <% }); %>
-                            <% } else { %>
-                                <tr>
-                                    <td colspan="9" style="text-align: center; padding: 12px;">No jobs found.</td>
-                                </tr>
-                                <% } %>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="9" style="text-align: center; padding: 12px;">No jobs found.</td>
+                    </tr>
+                <% } %>
             </tbody>
+            
         </table>
     </div>
 
-<div class="container">
-    <h1>Add Job:</h1>
-    <form action="/student_dashboard" method="POST" style="margin-top: 20px;">
+    <div class="container">
+        <h1>Add Job:</h1>
+        <form action="/student_dashboard" method="POST" style="margin-top: 20px;">
 
-        <label for="title" style="font-size: x-large; margin-bottom: 4px;">Job Title:</label>
-        <input type="text" id="title" name="title" required
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="title" style="font-size: x-large; margin-bottom: 4px;">Job Title:</label>
+            <input type="text" id="title" name="title" required
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <label for="prof_name" style="font-size: x-large; margin-bottom: 4px;">Professor Name:</label>
-        <input type="text" id="prof_name" name="prof_name" required
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="prof_name" style="font-size: x-large; margin-bottom: 4px;">Professor Name:</label>
+            <input type="text" id="prof_name" name="prof_name" required
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <label for="author" style="font-size: x-large; margin-bottom: 4px;">Author:</label>
-        <input type="text" id="author" name="author" required
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="author" style="font-size: x-large; margin-bottom: 4px;">Author:</label>
+            <input type="text" id="author" name="author" required
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <label for="conference" style="font-size: x-large; margin-bottom: 4px;">Conference:</label>
-        <input type="text" id="conference" name="conference"
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="conference" style="font-size: x-large; margin-bottom: 4px;">Conference:</label>
+            <input type="text" id="conference" name="conference"
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <label for="status" style="font-size: x-large; margin-bottom: 4px;">Status:</label>
-        <select id="status" name="status" required
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-            <option value="Submitted">Submitted</option>
-            <option value="Under Review">Under Review</option>
-            <option value="Published">Published</option>
-            <option value="Rejected">Rejected</option>
-        </select>
-        <br>
+            <label for="status" style="font-size: x-large; margin-bottom: 4px;">Status:</label>
+            <select id="status" name="status" required
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+                <option value="Submitted">Submitted</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Published">Published</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <br>
 
-        <label for="link" style="font-size: x-large; margin-bottom: 4px;">Link:</label>
-        <input type="url" id="link" name="link"
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="link" style="font-size: x-large; margin-bottom: 4px;">Link:</label>
+            <input type="url" id="link" name="link"
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <label for="date" style="font-size: x-large; margin-bottom: 4px;">Date:</label>
-        <input type="date" id="date" name="date"
-            style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
-        <br>
+            <label for="date" style="font-size: x-large; margin-bottom: 4px;">Date:</label>
+            <input type="date" id="date" name="date"
+                style="min-width: 50%; max-width: 100%; width: auto; padding: 8px; margin-bottom: 16px; display: block; border: 1px solid #ccc; border-radius: 4px;">
+            <br>
 
-        <button type="submit"
-            style="font-family: 'Satoshi', sans-serif; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">Add
-            Job</button>
-        <br>
-        <br>
-    </form>
-</div>
+            <button type="submit"
+                style="font-family: ' Satoshi', sans-serif; background-color: #4CAF50; color: white; padding: 10px
+                                    20px; border: none; border-radius: 4px; cursor: pointer;">Add
+                                    Job</button>
+                                    <br>
+                                    <br>
+                                    </form>
+    </div>
 
-<a class="btn btn-dark btn-lg" href="/logout" role="button">Logout</a>
+    <a class="btn btn-dark btn-lg" href="/logout" role="button">Logout</a>
 
-<%- include('partials/footer') %>
-
-
+    <%- include('partials/footer') %>
