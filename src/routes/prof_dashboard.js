@@ -1,6 +1,11 @@
+import express from 'express';
 import { Router } from "express";
 import db from "../utils/db.js";
 const router = Router();
+import bodyParser from "body-parser";
+
+router.use(bodyParser.urlencoded({ extended: true }));
+router.use(express.json());
 
 router.get('/prof_dashboard', async (req, res) => {
     const prof_id_result = await db.query(
@@ -40,7 +45,7 @@ router.get('/prof_dashboard', async (req, res) => {
 });
 
 router.get('/search', async (req, res) => {
-    const query = req.query.q;
+    const {query} = req.query;
 
     try {
         // Find the professor ID using the provided email
@@ -77,6 +82,9 @@ router.get('/search', async (req, res) => {
 
 router.post('/prof_dashboard', async (req, res) => {
     try {
+        // console.log(req.body);
+
+        const {student_id} = req.body;
         const prof_id_result = await db.query(
             `SELECT id FROM Professor WHERE email_id = $1`,
             [req.user.email_id]
@@ -88,9 +96,6 @@ router.post('/prof_dashboard', async (req, res) => {
         }
 
         let prof_id = prof_id_result.rows[0].id;
-
-        // Extract student_id from request body
-        const student_id = req.body.id;
 
         if (!student_id) {
             return res.status(400).send("Student ID is required");

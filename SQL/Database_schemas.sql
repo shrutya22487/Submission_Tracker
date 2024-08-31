@@ -57,6 +57,25 @@ INSERT INTO Job (title, prof_name, author, conference, status, link, date, stude
 ('Machine Learning in Finance', 'Prof. Wright', 'Charles Hall', 'Finance Tech Summit', 'Rejected', 'http://example.com/paper19', '2024-11-10', 19),
 ('Environmental Data Analysis', 'Prof. Scott', 'Mary Allen', 'EnviroTech Expo', 'Accepted', 'http://example.com/paper20', '2024-12-15', 20);
 
+UPDATE Job
+SET author = (
+    SELECT name
+    FROM student
+    WHERE student.id = Job.student_id
+)
+WHERE EXISTS (
+    SELECT 1
+    FROM student
+    WHERE student.id = Job.student_id
+);
+SELECT *
+FROM Job;
+SELECT *
+from Student;
+
+
 
 -- Making connections with the profs
 INSERT INTO Mapping(prof_id, student_id) VALUES (1, 1), (1, 2), (1, 5), (2, 1), (2, 4), (2, 5), (3, 7), (3, 2);
+
+
