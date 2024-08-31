@@ -18,7 +18,7 @@
                 </tr>
             </thead>
             <tbody>
-                <% if (Jobs && Jobs.rows.length > 0) { %>
+                <% if (Jobs && Array.isArray(Jobs.rows) && Jobs.rows.length> 0) { %>
                     <% Jobs.rows.forEach(job => { %>
                         <tr>
                             <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem;">
