@@ -68,12 +68,6 @@ WHERE EXISTS (
     FROM student
     WHERE student.id = Job.student_id
 );
-SELECT *
-FROM Job;
-SELECT *
-from Student;
-
-
 
 -- Making connections with the profs
 INSERT INTO Mapping(prof_id, student_id) VALUES (1, 1), (1, 2), (1, 5), (2, 1), (2, 4), (2, 5), (3, 7), (3, 2);
