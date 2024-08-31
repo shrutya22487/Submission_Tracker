@@ -53,20 +53,20 @@ router.post('/student_dashboard', async (req, res) => {
 
 });
 
-// router.post('/delete_job/:id', async (req, res) => {
-//     const jobId = req.params.id;
+router.post('/delete_job/:id', async (req, res) => {
+    const jobId = req.params.id;
 
-//     try {
-//         await db.query(
-//             `DELETE FROM job WHERE id = $1`,
-//             [jobId]
-//         );
-//         res.redirect("/student_dashboard");
-//     } catch (err) {
-//         console.error("Error deleting job:", err);
-//         res.status(500).send("Server error");
-//     }
-// });
+    try {
+        await db.query(
+            `DELETE FROM job WHERE id = $1`,
+            [jobId]
+        );
+        res.redirect("/student_dashboard");
+    } catch (err) {
+        console.error("Error deleting job:", err);
+        res.status(500).send("Server error");
+    }
+});
 
 
 export default router;
