@@ -1,7 +1,9 @@
 <%- include('partials/header') %>
-<div class="jumbotron text-center" style="margin-bottom: 20px;">
+<div class="jumbotron text-center" style="margin-bottom: 15px;">
     <h1 style="font-size: 5rem; font-weight: bold;">Student Dashboard</h1>
+    <a class="btn btn-dark btn-lg" href="/logout" role="button" style="font-size: 1rem;display: inline-block;">Logout</a>
 </div>
+
 <div class="container">
     <div style="overflow-x: auto; margin-bottom: 20px;">
         <table style="width: 100%; max-width: 1000px; border-collapse: collapse; margin: 0 auto;">
@@ -15,6 +17,8 @@
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Status</th>
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Link</th>
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Date</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;"></th>
+
                 </tr>
             </thead>
             <tbody>
@@ -47,14 +51,15 @@
                                 <br>
                                 <%= job.date ? job.date.getFullYear() : '' %>
                             </td>
-                        </tr>
-                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                        
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem; width: 150px; white-space: nowrap;">
                             <form action="/delete_job/<%= job.id %>" method="POST" style="display: inline;">
                                 <button type="submit" style="background-color: #ff4c4c; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
                                     Remove
                                 </button>
                             </form>
                         </td>
+                    </tr>
                     <% }); %>
                 <% } else { %>
                     <tr>
@@ -73,22 +78,22 @@
         <label for="title" style="font-size: 1rem; display: block; margin-bottom: 4px;">Job Title:</label>
         <input type="text" id="title" name="title" required
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
+        
 
         <label for="prof_name" style="font-size: 1rem; display: block; margin-bottom: 4px;">Professor Name:</label>
         <input type="text" id="prof_name" name="prof_name" required
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
+        
 
         <label for="author" style="font-size: 1rem; display: block; margin-bottom: 4px;">Author:</label>
         <input type="text" id="author" name="author" required
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
+        
 
         <label for="conference" style="font-size: 1rem; display: block; margin-bottom: 4px;">Conference:</label>
         <input type="text" id="conference" name="conference"
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
+        
 
         <label for="status" style="font-size: 1rem; display: block; margin-bottom: 4px;">Status:</label>
         <select id="status" name="status" required
@@ -98,22 +103,21 @@
             <option value="Published">Published</option>
             <option value="Rejected">Rejected</option>
         </select>
-        <br>
+        
 
         <label for="link" style="font-size: 1rem; display: block; margin-bottom: 4px;">Link:</label>
         <input type="url" id="link" name="link"
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
+        
 
         <label for="date" style="font-size: 1rem; display: block; margin-bottom: 4px;">Date:</label>
         <input type="date" id="date" name="date"
             style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
-        <br>
-        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem;">Add Job</button>
+        
+        <button type="btn btn-dark btn-lg" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: black; border-radius: 4px; border-width: 1px; cursor: pointer; font-size: 1rem;">Add Job</button>
         <br><br>
     </form>
 </div>
 
-<a class="btn btn-dark btn-lg" href="/logout" role="button" style="margin: 20px 0; display: inline-block;">Logout</a>
 
 <%- include('partials/footer') %>
