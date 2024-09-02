@@ -4,12 +4,79 @@
 <head>
     <meta charset="utf-8">
     <title>Secrets</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
         integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
         integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap" rel="stylesheet">
+
+    
+
+    <style>
+
+        
+
+        #login-button {
+            opacity: 0; /* Hide button initially */
+            transition: opacity 1s; /* Smooth transition for fade-in effect */
+        }
+        
+
+        #typed-text {
+            white-space: nowrap; /* Prevents text from wrapping */
+            overflow: hidden; /* Hides any overflow */
+            display: inline-block; /* Ensures the text stays in one line */
+        }
+        
+        
+        
+        .tooltip-container {
+            position: relative;
+            display: block; /* Ensure the container covers the entire width of the card */
+        }
+        
+        .tooltip-container .tooltip {
+            visibility: hidden;
+            width: 160px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1000;
+            bottom: 125%; /* Position above the button */
+            left: 50%;
+            transform: translateX(-50%); /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        
+        .tooltip-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .tooltip-container button {
+            width: 100%; /* Ensure button covers the entire width */
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: #f9f9f9;
+            text-align: left;
+            font-size: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block; /* Ensure button takes up the full width */
+        }
+        
+        
+    </style>
 
 </head>
 

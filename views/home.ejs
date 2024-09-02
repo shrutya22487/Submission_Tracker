@@ -1,13 +1,36 @@
 <%- include('partials/header') %>
 
-    <div class="jumbotron centered" style="text-align: center; padding: 2rem 1rem;">
-        <!-- Added centered text and padding -->
+    <div class="jumbotron centered" style="text-align: center; padding: 2rem 1rem; height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+        <!-- Centering content vertically and horizontally -->
         <div class="container">
-            <h1 class="display-3">Home</h1>
+            <h1 class="display-1" id="typed-text" style="font-size: 15rem; font-weight: bold;"></h1>
             <p class="lead"></p>
-            <hr>
-            <a class="btn btn-dark btn-lg" href="/login" role="button">Login</a>
+            <a class="btn btn-dark btn-lg" id="login-button" href="/login" role="button" style="opacity: 0; transition: opacity 1s;">Enter</a>
         </div>
     </div>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>
+
+<script>
+    function typeWriter(element, text, speed, callback) {
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(interval);
+                if (callback) callback(); // Execute callback after typing is done
+            }
+        }, speed);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const typedTextElement = document.getElementById('typed-text');
+        const loginButton = document.getElementById('login-button');
+
+        typeWriter(typedTextElement, 'ReMa.', 150, () => {
+            loginButton.style.opacity = 1; // Fade in the login button
+        });
+    });
+</script>
