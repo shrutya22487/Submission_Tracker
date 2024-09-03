@@ -1,0 +1,82 @@
+<%- include('partials/header') %>
+
+<div class="jumbotron text-center" style="margin-bottom: 20px;">
+    <h1 style="font-size: 5rem; font-weight: bold;">Conferences Dashboard</h1>
+    <a class="btn btn-dark btn-lg" href="/logout" role="button" style="position: absolute; right: 20px; top: 20px;">Logout</a>
+</div>
+
+<div class="container" style="position: relative;">
+    <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Conferences List</h2>
+    
+    <div style="overflow-x: auto; margin-bottom: 20px;">
+        <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
+            <thead>
+                <tr>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Conference ID</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Conference Name</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Deadline</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Website Link</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (conferences && Array.isArray(conferences) && conferences.length > 0) { %>
+                    <% conferences.forEach(conference => { %>
+                        <tr>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <%= conference.conference_id %>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <%= conference.conference_name %>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <%= conference.deadline ? new Date(conference.deadline).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '' %>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <a href="<%= conference.website_link %>" style="color: #007bff; text-decoration: none;">Link</a>
+                            </td>
+                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                                <form action="/delete_conference/<%= conference.conference_id %>" method="POST" style="display: inline;">
+                                    <button type="submit" style="background-color: #ff4c4c; color: white; padding: 8px 12px; border: none; border-radius: 4px; cursor: pointer;">
+                                        Remove
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 12px; font-size: 1rem;">No conferences found.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<br>
+
+<div class="container" style="width: 80%; max-width: 900px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; border-radius: 10px; background-color: #f9f9f9;">
+    <h2 style="font-size: 2rem; font-weight: bold;">Add Conference:</h2>
+    <form action="/conferences" method="POST" style="margin-top: 20px; width: 100%; max-width: 100%;">
+
+        <label for="conference_name" style="font-size: 1rem; display: block; margin-bottom: 4px;">Conference Name:</label>
+        <input type="text" id="conference_name" name="conference_name" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+
+        <label for="deadline" style="font-size: 1rem; display: block; margin-bottom: 4px;">Deadline:</label>
+        <input type="date" id="deadline" name="deadline" required
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+
+        <label for="website_link" style="font-size: 1rem; display: block; margin-bottom: 4px;">Website Link:</label>
+        <input type="url" id="website_link" name="website_link"
+            style="width: 100%; padding: 8px; margin-bottom: 16px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem;">
+        
+        <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; margin-top: 20px;">Add Conference</button>
+    </form>
+</div>
+<br>
+<br>
+<br>
+
+<%- include('partials/footer') %>

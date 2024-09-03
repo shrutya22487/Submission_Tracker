@@ -7,6 +7,7 @@ import GoogleStrategy from "passport-google-oauth2";
 import session from "express-session";
 import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
+import conferencesRouter from "./src/routes/conferences.js";
 import db from "./src/utils/db.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -35,12 +36,14 @@ app.use(passport.session());
 
 
 app.use(dashboardRouter);
+app.use(conferencesRouter);
 
 ///////////////Google Oauth////////////////////////////////////
 
 app.get("/", (req, res) => {
     res.render("home.ejs");
 });
+
 
 app.get("/login", (req, res) => {
     const error = req.query.error;
