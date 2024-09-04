@@ -14,7 +14,6 @@
         <table style="width: 100%; border-collapse: collapse; margin: 0 auto;">
             <thead>
                 <tr>
-                    <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">ID</th>
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Title</th>
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Professor Name</th>
                     <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-size: 1rem; font-weight: bold;">Author</th>
@@ -29,9 +28,6 @@
                 <% if (Jobs && Array.isArray(Jobs.rows) && Jobs.rows.length > 0) { %>
                     <% Jobs.rows.forEach(job => { %>
                         <tr>
-                            <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
-                                <%= job.id %>
-                            </td>
                             <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
                                 <%= job.title %>
                             </td>
