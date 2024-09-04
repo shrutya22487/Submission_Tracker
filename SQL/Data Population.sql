@@ -60,4 +60,10 @@ WHERE EXISTS (
 );
 
 
-SELECT * FROM student
+INSERT INTO conferences (conference_name, deadline, website_link)
+VALUES
+    ('International Conference on Machine Learning (ICML)', '2024-01-15', 'https://icml.cc'),
+    ('Neural Information Processing Systems (NeurIPS)', '2024-02-01', 'https://neurips.cc'),
+    ('Conference on Computer Vision and Pattern Recognition (CVPR)', '2024-03-05', 'https://cvpr2024.thecvf.com'),
+    ('International Conference on Learning Representations (ICLR)', '2024-04-10', 'https://iclr.cc'),
+    ('AAAI Conference on Artificial Intelligence (AAAI)', '2024-05-20', 'https://aaai.org');

@@ -37,6 +37,10 @@ CREATE TABLE IF NOT EXISTS Job
     FOREIGN KEY (student_id) REFERENCES Student(id)
 );
 
-SELECT *
-FROM Student
+CREATE TABLE conferences (
+    conference_id SERIAL PRIMARY KEY,
+    conference_name VARCHAR(255) NOT NULL,
+    deadline DATE NOT NULL,
+    website_link VARCHAR(255)
+);
 
