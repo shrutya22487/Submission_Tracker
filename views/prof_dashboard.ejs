@@ -23,23 +23,37 @@
 <br>
 
 <div class="container">
-    <!-- Section for unarchived students under professor -->
+    <!-- Section for Students Under Professor -->
     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Students Under Professor</h2>
-    <ul style="list-style-type: none; padding: 0; font-size: 1rem;">
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Name</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Email</th>
+                <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Archive</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if (locals.unarchived_students && Array.isArray(locals.unarchived_students.rows) && locals.unarchived_students.rows.length > 0) { %>
+                <% locals.unarchived_students.rows.forEach(student => { %>
+                    <tr>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= student.name %></td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= student.email_id %></td>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                            <button class="archive_student_button" data-student-id="<%= student.id %>" style="padding: 8px 16px; background-color: #a40000; color: white; border: none; border-radius: 5px; cursor: pointer;">Archive</button>
+                        </td>
+                        
+                    </tr>
+                <% }); %>
+            <% } else { %>
+                <tr>
+                    <td colspan="4" style="padding: 12px; text-align: center;">No students found.</td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
 
-        <% if (locals.unarchived_students && Array.isArray(locals.unarchived_students.rows) && locals.unarchived_students.rows.length > 0) { %>
-            <% locals.unarchived_students.rows.forEach(student => { %>
-                <li style="padding: 8px 0; border-bottom: 1px solid #ddd;">
-                    <%= student.name %> - <%= student.email_id %>
-                </li>
-                <button class="archive_student_button" data-student-id="<%= student.id %>">Archive</button>
-            <% }); %>
-        <% } else { %>
-            <li style="padding: 12px; text-align: center;">No students found.</li>
-        <% } %>
-    </ul>
-
-    <!-- Table for jobs -->
+    <!-- Table for Student Jobs -->
     <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Student Jobs Data</h2>
     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
         <thead>
@@ -55,7 +69,7 @@
             </tr>
         </thead>
         <tbody>
-            <% if (locals.unarchived_jobs && Array.isArray(locals.unarchived_jobs.rows) && locals.unarchived_jobs.rows.length> 0) { %>
+            <% if (locals.unarchived_jobs && Array.isArray(locals.unarchived_jobs.rows) && locals.unarchived_jobs.rows.length > 0) { %>
                 <% locals.unarchived_jobs.rows.forEach(job => { %>
                     <tr>
                         <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.title %></td>
@@ -66,79 +80,85 @@
                         <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
                             <a href="<%= job.link %>" style="color: #007bff; text-decoration: none;">Link</a>
                         </td>
-                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem; width: 150px; white-space: nowrap;">
-                            <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(',').join(' ') : '' %>
-                            <br>
-                            <%= job.date ? job.date.getFullYear() : '' %>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem; white-space: nowrap;">
+                            <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '' %>
+                            <br><%= job.date ? job.date.getFullYear() : '' %>
                         </td>
-                        <button class="archive_job_button" data-job-id="<%= job.id %>">Archive</button>
+                        <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                            <button class="archive_job_button" data-job-id="<%= job.id %>" style="padding: 8px 16px; background-color: #a40000; color: white; border: none; border-radius: 5px; cursor: pointer;">Archive</button>
+                        </td>
+                        
                     </tr>
                 <% }); %>
             <% } else { %>
                 <tr>
-                    <td colspan="8" style="text-align: center; padding: 12px; font-size: 0.875rem;">No jobs found.</td>
+                    <td colspan="9" style="text-align: center; padding: 12px; font-size: 0.875rem;">No jobs found.</td>
                 </tr>
             <% } %>
         </tbody>
     </table>
-    <!--Archived students-->
+
+    <!-- Archived Students -->
     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Archived Students</h2>
-    <ul style="list-style-type: none; padding: 0; font-size: 1rem;">
-        <% if (locals.archived_students && Array.isArray(locals.archived_students.rows) && locals.archived_students.rows.length > 0) { %>
-            <% locals.archived_students.rows.forEach(student => { %>
-                <li style="padding: 8px 0; border-bottom: 1px solid #ddd;">
-                    <%= student.name %> - <%= student.email_id %>
-                </li>
-                <button class="archive_student_button" data-student-id="<%= student.id %>">Archive</button>
-            <% }); %>
-        <% } else { %>
-            <li style="padding: 12px; text-align: center;">No students found.</li>
-        <% } %>
-    </ul>
+<ul style="list-style-type: none; padding: 0; font-size: 1rem;">
+    <% if (locals.archived_students && Array.isArray(locals.archived_students.rows) && locals.archived_students.rows.length > 0) { %>
+        <% locals.archived_students.rows.forEach(student => { %>
+            <li style="padding: 8px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
+                <span style="line-height: 1.5;"><%= student.name %> - <%= student.email_id %></span>
+                <button class="unarchive_student_button" data-student-id="<%= student.id %>" style="padding: 8px 16px; background-color: #009f18; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: auto;">Unarchive</button>
+            </li>
+        <% }); %>
+    <% } else { %>
+        <li style="padding: 12px; text-align: center;">No students found.</li>
+    <% } %>
+</ul>
 
-    <!--Archived Jobs-->
+    
 
-    <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Archived Jobs Data</h2>
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-        <thead>
-        <tr>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Title</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Professor Name</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Author</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Conference</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Status</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Link</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Date</th>
-            <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Archive</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% if (locals.archived_jobs && Array.isArray(locals.archived_jobs.rows) && locals.archived_jobs.rows.length> 0) { %>
-            <% locals.archived_jobs.rows.forEach(job => { %>
-                <tr>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.title %></td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.prof_name %></td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.author %></td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.conference %></td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.status %></td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
-                        <a href="<%= job.link %>" style="color: #007bff; text-decoration: none;">Link</a>
-                    </td>
-                    <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 0.875rem; width: 150px; white-space: nowrap;">
-                        <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(',').join(' ') : '' %>
-                        <br>
-                        <%= job.date ? job.date.getFullYear() : '' %>
-                    </td>
-                    <button class="archive_job_button" data-job-id="<%= job.id %>">Un-Archive</button>
-                </tr>
-            <% }); %>
-        <% } else { %>
+<!-- Archived Jobs -->
+<h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Archived Jobs Data</h2>
+<table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+    <thead>
+    <tr>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Title</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Professor Name</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Author</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Conference</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Status</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Link</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Date</th>
+        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Unarchive</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% if (locals.archived_jobs && Array.isArray(locals.archived_jobs.rows) && locals.archived_jobs.rows.length > 0) { %>
+        <% locals.archived_jobs.rows.forEach(job => { %>
             <tr>
-                <td colspan="8" style="text-align: center; padding: 12px; font-size: 0.875rem;">No jobs found.</td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.title %></td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.prof_name %></td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.author %></td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.conference %></td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= job.status %></td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
+                    <a href="<%= job.link %>" style="color: #007bff; text-decoration: none;">Link</a>
+                </td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem; width: 150px; white-space: nowrap;">
+                    <%= job.date ? job.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(',').join(' ') : '' %>
+                    <br>
+                    <%= job.date ? job.date.getFullYear() : '' %>
+                </td>
+                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd;">
+                    <button class="unarchive_job_button" data-job-id="<%= job.id %>" style="padding: 8px 16px; background-color: #009f18; color: white; border: none; border-radius: 5px; cursor: pointer;">Unarchive</button>
+                </td>
             </tr>
-        <% } %>
-        </tbody>
-    </table>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="8" style="text-align: center; padding: 12px; font-size: 1rem;">No jobs found.</td>
+        </tr>
+    <% } %>
+    </tbody>
+</table>
 </div>
 
 
