@@ -9,6 +9,7 @@ import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
 import conferencesRouter from "./src/routes/conferences.js";
 import sampleRouter from "./src/routes/sampleboard.js";
+import paperRoute from "./src/routes/research_projects.js";
 import db from "./src/utils/db.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -49,6 +50,9 @@ app.get("/sampleboard", (req, res) => {
     res.render("sampleboard.ejs");
 });
 
+app.get("/research_projects", (req, res) => {
+    res.render("research_projects.ejs");
+});
 
 app.get("/login", (req, res) => {
     const error = req.query.error;

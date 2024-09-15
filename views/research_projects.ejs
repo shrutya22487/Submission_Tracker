@@ -17,7 +17,6 @@
                onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#303030'; this.style.color='#000';">
                Students
             </a>
-            
             <a class="btn btn-dark btn-lg" href="/research_projects" role="button" 
                style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;" 
                onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';" 
@@ -60,60 +59,13 @@
     </div>
 
     <!-- Working console section -->
-    <div class="col-md-6" style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
-      <div id="working-console">
+<div class="col-md-6" style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
+    <div id="working-console">
 
         <div class="jumbotron text-center" style="margin-bottom: 20px;">
-            <h1 style="font-size: 5rem; font-weight: bold;">Professor Dashboard</h1>
+            <h1 style="font-size: 5rem; font-weight: bold;">Research Projects</h1>
         
         </div>
-        
-        <!-- Section for adding students -->
-        <div class="container" style="position: relative;">
-            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;margin-top:40px;">Student Search</h2>
-            <form id="search-form" style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
-                <input type="text" id="search-bar" name="q" placeholder="Search" required 
-                       style="width: 100%; max-width: 600px; padding: 12px 20px; border: 1px solid #ccc; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s ease;" 
-                       autocomplete="off">
-            </form>
-            
-            <div id="results" style="position: absolute; z-index: 1000; background-color: white; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); top: 100%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px;">
-                <!-- Search results will be displayed here -->
-            </div>
-        </div>
-        <br>
-        
-        <div class="container">
-            <!-- Section for Students Under Professor -->
-            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Students Under Professor</h2>
-            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-                <thead>
-                    <tr>
-                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Name</th>
-                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Email</th>
-                        <th style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; background-color: #f2f2f2; font-weight: bold;">Archive</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (locals.unarchived_students && Array.isArray(locals.unarchived_students.rows) && locals.unarchived_students.rows.length > 0) { %>
-                        <% locals.unarchived_students.rows.forEach(student => { %>
-                            <tr>
-                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= student.name %></td>
-                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;"><%= student.email_id %></td>
-                                <td style="padding: 12px; text-align: center; border-bottom: 1px solid #ddd; font-size: 1rem;">
-                                    <button class="archive_student_button" data-student-id="<%= student.id %>" style="padding: 8px 16px; background-color: #a40000; color: white; border: none; border-radius: 5px; cursor: pointer;">Archive</button>
-                                </td>
-                                
-                            </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="4" style="padding: 12px; text-align: center;">No students found.</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        
             <!-- Table for Student Jobs -->
             <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Student Jobs Data</h2>
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
@@ -159,20 +111,6 @@
                 </tbody>
             </table>
         
-            <!-- Archived Students -->
-            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Archived Students</h2>
-        <ul style="list-style-type: none; padding: 0; font-size: 1rem;">
-            <% if (locals.archived_students && Array.isArray(locals.archived_students.rows) && locals.archived_students.rows.length > 0) { %>
-                <% locals.archived_students.rows.forEach(student => { %>
-                    <li style="padding: 8px 0; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center;">
-                        <span style="line-height: 1.5;"><%= student.name %> - <%= student.email_id %></span>
-                        <button class="unarchive_student_button" data-student-id="<%= student.id %>" style="padding: 8px 16px; background-color: #009f18; color: white; border: none; border-radius: 5px; cursor: pointer; margin-left: auto;">Unarchive</button>
-                    </li>
-                <% }); %>
-            <% } else { %>
-                <li style="padding: 12px; text-align: center;">No students found.</li>
-            <% } %>
-        </ul>
         
             
         
@@ -220,45 +158,12 @@
             <% } %>
             </tbody>
         </table>
-        </div>
+
         
         <br>
         <br>
         
         <script>
-            document.getElementById('search-bar').addEventListener('input', function() {
-                const query = this.value;
-                if (query.length > 0) {
-                    fetch(`/search?query=${query}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            const resultsDiv = document.getElementById('results');
-                            resultsDiv.innerHTML = '';
-                            data.forEach(student => {
-                                const container = document.createElement('div');
-                                container.className = 'tooltip-container';
-        
-                                const button = document.createElement('button');
-                                button.innerText = student.name;
-                                button.style = "width: 100%; padding: 10px 15px; margin-bottom: 10px; border: none; border-radius: 10px; background-color: #f9f9f9; text-align: left; font-size: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s ease;";
-        
-                                const tooltip = document.createElement('div');
-                                tooltip.className = 'tooltip';
-                                tooltip.innerText = `Add ${student.name}?`;
-        
-                                container.appendChild(button);
-                                container.appendChild(tooltip);
-                                container.addEventListener('click', () => {
-                                    selectStudent(student.id);
-                                });
-                                resultsDiv.appendChild(container);
-                            });
-                        })
-                        .catch(err => console.error('Error fetching students:', err));
-                } else {
-                    document.getElementById('results').innerHTML = '';
-                }
-            });
         
             document.querySelectorAll('.archive_student_button').forEach(button => {
                 button.addEventListener('click', function() {
@@ -330,8 +235,8 @@
                     .catch(err => console.error('Error selecting student:', err));
             }
         </script>
+        </div>
         
-      </div>
     </div>
 
     <!-- Static info section -->
@@ -344,8 +249,7 @@
         margin-left: 10px;
     }
 </style>
-</head>
-<body>
+
 
 <div class="col-md-3" style="background-color: #e9ecef; height: 100vh; right:0; position: fixed; z-index:4;">
 <div id="static-info">
