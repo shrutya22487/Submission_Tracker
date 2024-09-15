@@ -7,6 +7,8 @@
             <p class="lead"></p>
             <a class="btn btn-dark btn-lg" id="login-button" href="/login" role="button" style="opacity: 0; transition: opacity 1s;">Enter</a>
             <a class="btn btn-dark btn-lg" id="conf-button" href="/conferences" role="button" style="opacity: 0; transition: opacity 1s; margin-left:20px;">Conferences</a>
+            <a class="btn btn-dark btn-lg" id="samp-button" href="/sampleboard" role="button" style="opacity: 0; transition: opacity 1s; margin-left:20px;">new UI</a>
+
 
         </div>
 
@@ -32,10 +34,12 @@
         const typedTextElement = document.getElementById('typed-text');
         const loginButton = document.getElementById('login-button');
         const confButton = document.getElementById('conf-button');
+        const sampButton = document.getElementById('samp-button');
 
         typeWriter(typedTextElement, 'ReMa.', 150, () => {
             loginButton.style.opacity = 1; // Fade in the login button
             confButton.style.opacity = 1;
+            sampButton.style.opacity = 1;
         });
 
     

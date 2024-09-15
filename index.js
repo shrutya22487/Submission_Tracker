@@ -8,6 +8,7 @@ import session from "express-session";
 import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
 import conferencesRouter from "./src/routes/conferences.js";
+import sampleRouter from "./src/routes/sampleboard.js";
 import db from "./src/utils/db.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -42,6 +43,10 @@ app.use(conferencesRouter);
 
 app.get("/", (req, res) => {
     res.render("home.ejs");
+});
+
+app.get("/sampleboard", (req, res) => {
+    res.render("sampleboard.ejs");
 });
 
 
