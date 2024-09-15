@@ -250,7 +250,57 @@
                 });
         });
     });
+    document.querySelectorAll('.unarchive_student_button').forEach(button => {
+        button.addEventListener('click', function() {
+            const studentId = this.getAttribute('data-student-id');
 
+            fetch('/prof_dashboard/archive_student', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ student_id: studentId })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Student archived successfully.");
+                        window.location.reload();
+                    } else {
+                        alert("Failed to archive student.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while archiving the student.");
+                });
+        });
+    });
+
+    document.querySelectorAll('.unarchive_job_button').forEach(button => {
+        button.addEventListener('click', function() {
+            const job_id = this.getAttribute('data-job-id');
+
+            fetch('/prof_dashboard/archive_job', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ job_id: job_id })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Job archived successfully.");
+                        window.location.reload();
+                    } else {
+                        alert("Failed to archive Job.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while archiving the Job.");
+                });
+        });
+    });
     function selectStudent(student_id) {
         fetch('/prof_dashboard', {
             method: 'POST',
