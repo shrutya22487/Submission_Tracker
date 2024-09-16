@@ -1,12 +1,23 @@
 import express from 'express';
 import { Router } from "express";
-import db from "../utils/db.js";
-const router = Router();
+import db from "../../utils/db.js";
 import bodyParser from "body-parser";
-import * as utils from "../utils/utility_functions.js";
+import * as utils from "../../utils/utility_functions.js";
+import students from "./students.js";
+import research_projects from "./research_projects.js";
+import under_review_papers from "./under_review_papers.js";
+import sponsored_projects from "./sponsored_projects.js";
+import reading_list from "./reading_list.js";
+
+const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
+router.use(students);
+router.use(under_review_papers);
+router.use(research_projects);
+router.use(sponsored_projects);
+router.use(reading_list);
 
 router.post("/prof_dashboard/archive_student", async (req, res) => {
     try{

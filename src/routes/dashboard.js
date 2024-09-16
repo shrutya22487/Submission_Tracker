@@ -1,7 +1,7 @@
 import { Router } from "express";
 import db from "../utils/db.js";
 import student_dashboard from "./student_dashboard.js";
-import prof_dashboard from "./prof_dashboard.js";
+import prof_dashboard from "./prof_routes/prof_dashboard.js";
 
 const router = Router();
 

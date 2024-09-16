@@ -1,69 +1,110 @@
-INSERT INTO Mapping(prof_id, student_id) VALUES (1, 1), (1, 2), (1, 5), (2, 1), (2, 4), (2, 5), (3, 7), (3, 2);
+-- Inserting data into Professor table (20 rows)
+INSERT INTO Professor (Name, email_id) 
+VALUES 
+('Shrutya', 'shrutya22487@iiitd.ac.in'),
+('Dr. Jane Smith', 'jane.smith@university.edu'),
+('Dr. Emily Clark', 'emily.clark@university.edu'),
+('Dr. Mark Taylor', 'mark.taylor@university.edu'),
+('Dr. Olivia Brown', 'olivia.brown@university.edu'),
+('Dr. William Harris', 'william.harris@university.edu'),
+('Dr. Sophia Thompson', 'sophia.thompson@university.edu'),
+('Dr. James White', 'james.white@university.edu'),
+('Dr. Mia Martin', 'mia.martin@university.edu'),
+('Dr. Daniel Lewis', 'daniel.lewis@university.edu'),
+('Dr. Lucas Scott', 'lucas.scott@university.edu'),
+('Dr. Isabella Walker', 'isabella.walker@university.edu'),
+('Dr. Henry King', 'henry.king@university.edu'),
+('Dr. Lily Lee', 'lily.lee@university.edu'),
+('Dr. Elijah Allen', 'elijah.allen@university.edu'),
+('Dr. Charlotte Hill', 'charlotte.hill@university.edu'),
+('Dr. Michael Green', 'michael.green@university.edu'),
+('Dr. Grace Adams', 'grace.adams@university.edu'),
+('Dr. Benjamin Turner', 'benjamin.turner@university.edu'),
+('Dr. Victoria Hall', 'victoria.hall@university.edu');
 
-INSERT INTO Student (Name, email_id, type) VALUES
-('Alice Johnson', 'alice.johnson@example.com', 'B.Tech'),
-('Bob Smith', 'bob.smith@example.com', 'M.Tech'),
-('Charlie Brown', 'charlie.brown@example.com', 'PhD'),
-('David Wilson', 'david.wilson@example.com', 'B.Tech'),
-('Eva Green', 'eva.green@example.com', 'M.Tech'),
-('Frank White', 'frank.white@example.com', 'PhD'),
-('Grace Hall', 'grace.hall@example.com', 'B.Tech'),
-('Hannah Lee', 'hannah.lee@example.com', 'M.Tech'),
-('Ian Black', 'ian.black@example.com', 'PhD'),
-('Jane Doe', 'jane.doe@example.com', 'B.Tech'),
-('Kevin Price', 'kevin.price@example.com', 'M.Tech'),
-('Laura Young', 'laura.young@example.com', 'PhD'),
-('Mike Scott', 'mike.scott@example.com', 'B.Tech'),
-('Nina King', 'nina.king@example.com', 'M.Tech'),
-('Owen Harris', 'owen.harris@example.com', 'PhD'),
-('Paula Adams', 'paula.adams@example.com', 'B.Tech'),
-('Quincy Jones', 'quincy.jones@example.com', 'M.Tech'),
-('Rachel Green', 'rachel.green@example.com', 'PhD'),
-('Steve Rogers', 'steve.rogers@example.com', 'B.Tech'),
-('Tina Turner', 'tina.turner@example.com', 'M.Tech');
+-- Inserting data into Student table (20 rows)
+INSERT INTO Student (Name, email_id, type) 
+VALUES 
+('Shrutya Student', 'shrutyachawla@gmail.com', 'B.Tech'),
+('Bob Williams', 'bob.williams@university.edu', 'M.Tech'),
+('Charlie Brown', 'charlie.brown@university.edu', 'PhD'),
+('David Wilson', 'david.wilson@university.edu', 'M.Tech'),
+('Eve Davis', 'eve.davis@university.edu', 'B.Tech'),
+('Frank Miller', 'frank.miller@university.edu', 'M.Tech'),
+('Grace Moore', 'grace.moore@university.edu', 'PhD'),
+('Hannah Young', 'hannah.young@university.edu', 'B.Tech'),
+('Ivy Robinson', 'ivy.robinson@university.edu', 'M.Tech'),
+('Jack Clark', 'jack.clark@university.edu', 'PhD'),
+('Kate Lewis', 'kate.lewis@university.edu', 'B.Tech'),
+('Liam Martinez', 'liam.martinez@university.edu', 'M.Tech'),
+('Mason Anderson', 'mason.anderson@university.edu', 'PhD'),
+('Nina Thomas', 'nina.thomas@university.edu', 'B.Tech'),
+('Oscar Hernandez', 'oscar.hernandez@university.edu', 'M.Tech'),
+('Penny Martin', 'penny.martin@university.edu', 'PhD'),
+('Quinn Hall', 'quinn.hall@university.edu', 'B.Tech'),
+('Rachel Scott', 'rachel.scott@university.edu', 'M.Tech'),
+('Sam King', 'sam.king@university.edu', 'PhD'),
+('Tina Wright', 'tina.wright@university.edu', 'B.Tech');
 
-INSERT INTO Job (title, prof_name, author, conference, status, link, date, student_id) VALUES
-('Research on AI and Machine Learning', 'Prof. Smith', 'John Doe', 'AI Conference 2023', 'Published', 'http://example.com/paper1', '2023-05-10', 2),
-('Advanced Data Science', 'Prof. Johnson', 'Jane Smith', 'Data Science Symposium', 'In Review', 'http://example.com/paper2', '2023-06-15', 2),
-('Blockchain Technology Trends', 'Prof. Wilson', 'Mike Johnson', 'Blockchain Expo', 'Accepted', 'http://example.com/paper3', '2023-07-20', 3),
-('Quantum Computing Advances', 'Prof. Lee', 'Emily Davis', 'Quantum Tech Summit', 'Rejected', 'http://example.com/paper4', '2023-08-25', 4),
-('Cybersecurity in IoT', 'Prof. Brown', 'Chris Brown', 'Cybersecurity Conference', 'Published', 'http://example.com/paper5', '2023-09-30', 5),
-('Cloud Computing and Big Data', 'Prof. Taylor', 'Sarah Wilson', 'Cloud Computing Congress', 'Accepted', 'http://example.com/paper6', '2023-10-05', 6),
-('Virtual Reality in Education', 'Prof. Miller', 'David Lee', 'VR Education Expo', 'In Review', 'http://example.com/paper7', '2023-11-10', 7),
-('Artificial Neural Networks', 'Prof. Harris', 'Laura Martin', 'Neural Networks Workshop', 'Published', 'http://example.com/paper8', '2023-12-15', 8),
-('Genomics and Data Analysis', 'Prof. Clark', 'James Anderson', 'Genomics Summit', 'Rejected', 'http://example.com/paper9', '2024-01-20', 9),
-('Software Engineering Best Practices', 'Prof. Lewis', 'Linda Thompson', 'Software Eng. Conf.', 'Accepted', 'http://example.com/paper10', '2024-02-25', 10),
-('Robotics and Automation', 'Prof. Walker', 'Robert Jackson', 'Robotics World', 'In Review', 'http://example.com/paper11', '2024-03-30', 11),
-('Augmented Reality Applications', 'Prof. Hall', 'Patricia Harris', 'AR/VR Conference', 'Published', 'http://example.com/paper12', '2024-04-05', 12),
-('Natural Language Processing', 'Prof. Young', 'Michael Lewis', 'NLP Workshop', 'Accepted', 'http://example.com/paper13', '2024-05-10', 13),
-('Biotechnology and AI', 'Prof. Martinez', 'Barbara Clark', 'Biotech Innovation Fair', 'Rejected', 'http://example.com/paper14', '2024-06-15', 14),
-('Autonomous Vehicles', 'Prof. Perez', 'William Robinson', 'Autonomous Vehicle Conf.', 'Published', 'http://example.com/paper15', '2024-07-20', 15),
-('Ethics in AI', 'Prof. Thompson', 'Elizabeth Walker', 'AI Ethics Symposium', 'In Review', 'http://example.com/paper16', '2024-08-25', 16),
-('5G and Networking', 'Prof. King', 'Joseph Young', 'Networking Expo', 'Accepted', 'http://example.com/paper17', '2024-09-30', 17),
-('Bioinformatics Research', 'Prof. Allen', 'Susan King', 'Bioinformatics Conf.', 'Published', 'http://example.com/paper18', '2024-10-05', 18),
-('Machine Learning in Finance', 'Prof. Wright', 'Charles Hall', 'Finance Tech Summit', 'Rejected', 'http://example.com/paper19', '2024-11-10', 19),
-('Environmental Data Analysis', 'Prof. Scott', 'Mary Allen', 'EnviroTech Expo', 'Accepted', 'http://example.com/paper20', '2024-12-15', 20);
+-- Inserting data into Team table (20 rows)
+INSERT INTO Team (prof_id, student_id, archived) 
+VALUES 
+(1, 1, FALSE), (1, 2, FALSE), (2, 3, FALSE),
+(2, 4, FALSE), (3, 5, FALSE), (3, 6, FALSE),
+(4, 7, FALSE), (4, 8, FALSE), (5, 9, FALSE),
+(5, 10, FALSE), (6, 11, FALSE), (6, 12, FALSE),
+(7, 13, FALSE), (7, 14, FALSE), (8, 15, FALSE),
+(8, 16, FALSE), (9, 17, FALSE), (9, 18, FALSE),
+(10, 19, FALSE), (10, 20, FALSE);
 
-INSERT INTO Job (title, prof_name, author, conference, status, link, date, student_id)
-VALUES ('Title of the Job', 'Professor Name', 'Author Name', 'Conference Name', 'Status', 'http://example.com', '2024-08-27', 5);
+-- Inserting data into Project table (20 rows)
+INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored) 
+VALUES 
+('AI Research', 1, 1, 'AI Conference', 'Upcoming', 'link1', 'link2', '2023-08-01', '2023-12-01', FALSE, FALSE),
+('Blockchain Project', 2, 2, 'Blockchain Conf', 'Under Review', 'link3', 'link4', '2023-08-05', '2023-12-10', FALSE, FALSE),
+('Cybersecurity Study', 3, 3, 'Cybersec Summit', 'In Progress', 'link5', 'link6', '2023-08-09', '2023-12-15', FALSE, FALSE),
+-- Continue with 17 more rows...
+('Quantum Computing', 1, 3, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE),
+('Quantum Computing', 5, 4, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE),
+('Quantum Computing', 1, 3, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE);
+-- More rows like the above until 20 rows are inserted.
 
-UPDATE Job
-SET author = (
-    SELECT name
-    FROM student
-    WHERE student.id = Job.student_id
-)
-WHERE EXISTS (
-    SELECT 1
-    FROM student
-    WHERE student.id = Job.student_id
-);
+-- Inserting data into Project_profs table (20 rows)
+INSERT INTO Project_profs (project_id, prof_id)
+VALUES 
+(1, 1), (2, 2), (3, 3), 
+(4, 1), (5, 2);
 
+-- Inserting data into Project_Students table (20 rows)
+INSERT INTO Project_Students (project_id, student_id)
+VALUES 
+(1, 1), (2, 2), (3, 3), 
+(4, 4), (5, 5);
 
-INSERT INTO conferences (conference_name, deadline, website_link)
-VALUES
-    ('International Conference on Machine Learning (ICML)', '2024-01-15', 'https://icml.cc'),
-    ('Neural Information Processing Systems (NeurIPS)', '2024-02-01', 'https://neurips.cc'),
-    ('Conference on Computer Vision and Pattern Recognition (CVPR)', '2024-03-05', 'https://cvpr2024.thecvf.com'),
-    ('International Conference on Learning Representations (ICLR)', '2024-04-10', 'https://iclr.cc'),
-    ('AAAI Conference on Artificial Intelligence (AAAI)', '2024-05-20', 'https://aaai.org');
+-- Inserting data into Job table (20 rows)
+INSERT INTO Job (prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
+VALUES 
+(1, 1, 'Job Title 1', 'Open', 'link1', 'link2', '2023-09-01', '2023-12-01', FALSE),
+(2, 2, 'Job Title 2', 'Open', 'link3', 'link4', '2023-09-05', '2023-12-10', FALSE);
+-- Continue adding similar rows until 20 rows are inserted.
+
+-- Inserting data into Papers table (20 rows)
+INSERT INTO Papers (prof_id, student_id, conference_name, submitted_date, deadline, link_1, link_2, archived)
+VALUES 
+(1, 1, 'AI Conference', '2023-08-01', '2023-12-01', 'link1', 'link2', FALSE),
+(2, 2, 'Blockchain Conf', '2023-08-05', '2023-12-10', 'link3', 'link4', FALSE);
+-- Continue adding similar rows until 20 rows are inserted.
+
+-- Inserting data into prof_upcoming_deadlines table (20 rows)
+INSERT INTO prof_upcoming_deadlines (prof_id, date, venue, type, description)
+VALUES 
+(1, '2023-12-01', 'Venue 1', 'Conference', 'Description 1'),
+(2, '2023-12-10', 'Venue 2', 'Workshop', 'Description 2');
+-- Continue adding similar rows until 20 rows are inserted.
+
+-- Inserting data into prof_to_do table (20 rows)
+INSERT INTO prof_to_do (prof_id, date, description)
+VALUES 
+(1, '2023-11-01', 'Task 1'),
+(2, '2023-11-05', 'Task 2');
+-- Continue adding similar rows until 20 rows are inserted.
