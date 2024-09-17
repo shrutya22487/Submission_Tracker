@@ -1,7 +1,7 @@
 document.getElementById('search-bar').addEventListener('input', function() {
     const query = this.value;
     if (query.length > 0) {
-        fetch(`/search?query=${query}`)
+        fetch(`/search_students?query=${query}`)
             .then(response => response.json())
             .then(data => {
                 const resultsDiv = document.getElementById('results');
@@ -84,6 +84,7 @@ document.querySelectorAll('.archive_job_button').forEach(button => {
     });
 });
 
+// helper function
 function selectStudent(student_id) {
     fetch('/prof_dashboard', {
         method: 'POST',
@@ -101,3 +102,30 @@ function selectStudent(student_id) {
         })
         .catch(err => console.error('Error selecting student:', err));
 }
+
+//deleting the student
+document.querySelectorAll('.delete_student_button').forEach(button => {
+    button.addEventListener('click', function() {
+        const studentId = this.getAttribute('data-student-id');
+
+        fetch('/delete_student', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ student_id: studentId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Student deleted successfully.");
+                    window.location.reload();
+                } else {
+                    alert("Failed to delete student.");
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the student.");
+            });
+    });
+});

@@ -16,14 +16,14 @@ function isStudent(email) {
 }
 
 router.get("/dashboard", (req, res) => {
-    console.log(req.user);
+    // console.log(req.user);
     if (req.isAuthenticated()) {
         try {
             if (isStudent(req.user.email_id)) {
                 res.redirect("/student_dashboard");
             }
             else
-                res.redirect("/prof_dashboard");
+                res.redirect("/prof_dashboard/students");
         } catch (err) {
             console.log(err);
             res.status(500).send("Server error");

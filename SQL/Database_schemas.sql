@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS Job
     FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE CASCADE
 );
 
-CREATE TABLE Papers
+CREATE TABLE IF NOT EXISTS Papers
 (
     paper_id        SERIAL PRIMARY KEY,
     prof_id         INT  NOT NULL,
