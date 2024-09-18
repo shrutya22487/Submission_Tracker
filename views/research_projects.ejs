@@ -336,4 +336,101 @@ function removeItem(element) {
     </div>
 </div>
 
+<!--added code for adding a job by the prof-->
+
+<h1>Add a New Job</h1>
+<form id="addJobForm">
+    <label for="project_id">Project ID:</label>
+    <input type="number" id="project_id" name="project_id" required><br><br>
+
+    <label for="title">Job Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="status">Status:</label>
+    <input type="text" id="status" name="status" required><br><br>
+
+    <label for="link_1">Link 1:</label>
+    <input type="url" id="link_1" name="link_1"><br><br>
+
+    <label for="link_2">Link 2:</label>
+    <input type="url" id="link_2" name="link_2"><br><br>
+
+    <label for="submitted_date">Submitted Date:</label>
+    <input type="date" id="submitted_date" name="submitted_date" required><br><br>
+
+    <label for="deadline_date">Deadline Date:</label>
+    <input type="date" id="deadline_date" name="deadline_date" required><br><br>
+
+    <button type="submit">Add Job</button>
+</form>
+
+<!--added code for adding a project by the prof-->
+
+<h1>Add a New Project</h1>
+<form id="addProjectForm">
+    <label for="title">Project Title:</label>
+    <input type="text" id="title" name="title" required><br><br>
+
+    <label for="conference">Conference:</label>
+    <input type="text" id="conference" name="conference"><br><br>
+
+    <label for="status">Status:</label>
+    <input type="text" id="status" name="status"><br><br>
+
+    <label for="link_1">Link 1:</label>
+    <input type="url" id="link_1" name="link_1"><br><br>
+
+    <label for="link_2">Link 2:</label>
+    <input type="url" id="link_2" name="link_2"><br><br>
+
+    <label for="submitted_date">Submitted Date:</label>
+    <input type="date" id="submitted_date" name="submitted_date"><br><br>
+
+    <label for="deadline_date">Deadline Date:</label>
+    <input type="date" id="deadline_date" name="deadline_date"><br><br>
+
+    <label for="sponsored">Sponsored:</label>
+    <input type="checkbox" id="sponsored" name="sponsored"><br><br>
+
+    <button type="submit">Add Project</button>
+</form>
+
+<!--editting a project -->
+
+<form id="editProjectForm">
+    <input type="hidden" id="edit_project_id" value="123">
+
+    <label for="edit_title">Project Title:</label>
+    <input type="text" id="edit_title" value="Current Title"><br><br>
+
+    <label for="edit_conference">Conference:</label>
+    <input type="text" id="edit_conference" value="Current Conference"><br><br>
+
+    <label for="edit_status">Status:</label>
+    <input type="text" id="edit_status" value="Current Status"><br><br>
+
+    <label for="edit_link_1">Link 1:</label>
+    <input type="url" id="edit_link_1" value="http://currentlink1.com"><br><br>
+
+    <label for="edit_link_2">Link 2:</label>
+    <input type="url" id="edit_link_2" value="http://currentlink2.com"><br><br>
+
+    <label for="edit_submitted_date">Submitted Date:</label>
+    <input type="date" id="edit_submitted_date" value="2024-09-01"><br><br>
+
+    <label for="edit_deadline_date">Deadline Date:</label>
+    <input type="date" id="edit_deadline_date" value="2024-12-01"><br><br>
+
+    <label for="edit_archived">Archived:</label>
+    <input type="checkbox" id="edit_archived"><br><br>
+
+    <label for="edit_sponsored">Sponsored:</label>
+    <input type="checkbox" id="edit_sponsored"><br><br>
+
+    <button class="edit_project" data-project-id="123">Edit Project</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="prof_script.js"> </script>
 <%- include('partials/footer') %>

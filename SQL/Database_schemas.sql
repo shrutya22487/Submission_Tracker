@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS Project
 (
     id               SERIAL PRIMARY KEY,
     title            VARCHAR(1000) NOT NULL,
-    prof_table_id    INT           NOT NULL,
+    prof_table_id    INT,
     student_table_id INT,
     conference       VARCHAR(1000),
     status           VARCHAR(1000) CHECK (status IN ('Upcoming', 'Under Review', 'In Progress')),
@@ -36,13 +36,13 @@ CREATE TABLE IF NOT EXISTS Project
     sponsored        BOOLEAN DEFAULT FALSE
 );
 
-
 CREATE TABLE IF NOT EXISTS Project_profs
 (
     project_id INT NOT NULL,
     prof_id    INT NOT NULL,
     PRIMARY KEY (project_id, prof_id),
-    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE
+    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
+    FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Project_Students
@@ -50,12 +50,14 @@ CREATE TABLE IF NOT EXISTS Project_Students
     project_id INT NOT NULL,
     student_id    INT NOT NULL,
     PRIMARY KEY (project_id, student_id),
-    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE
+    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Job
 (
     id             SERIAL PRIMARY KEY,
+    project_id      INT NOT NULL,
     prof_id        INT           NOT NULL,
     student_id     INT,
     title          VARCHAR(1000) NOT NULL,
@@ -64,8 +66,9 @@ CREATE TABLE IF NOT EXISTS Job
     link_2         VARCHAR(1000),
     submitted_date DATE,
     deadline_date  DATE,
-    archived       BOOLEAN DEFAULT FALSE,
+--     archived       BOOLEAN DEFAULT FALSE, TODO: ask about this, do we need this, ease of functionality
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE CASCADE
 );
 
@@ -101,3 +104,44 @@ CREATE TABLE IF NOT EXISTS prof_to_do
     description VARCHAR(1000),
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
+
+SELECT
+    p.id AS project_id,
+    p.title AS project_title,
+    p.conference AS project_conference,
+    p.status AS project_status,
+    p.link_1 AS project_link_1,
+    p.link_2 AS project_link_2,
+    p.submitted_date AS project_submitted_date,
+    p.deadline_date AS project_deadline_date,
+    p.sponsored AS project_sponsored,
+    s.id AS student_id,
+    s.Name AS student_name,
+    s.type AS student_degree,
+    j.id AS job_id,
+    j.title AS job_title,
+    j.status AS job_status,
+    j.link_1 AS job_link_1,
+    j.link_2 AS job_link_2,
+    j.submitted_date AS job_submitted_date,
+    j.deadline_date AS job_deadline_date
+FROM
+    Project p
+JOIN
+    Project_profs pp ON p.id = pp.project_id
+JOIN
+    Project_Students ps ON p.id = ps.project_id
+JOIN
+    Student s ON ps.student_id = s.id
+LEFT JOIN
+    Job j ON p.prof_table_id = j.prof_id AND ps.student_id = j.student_id
+WHERE
+    p.archived = FALSE
+    AND pp.prof_id = 1
+GROUP BY
+    p.id,
+    s.id,
+    j.id
+ORDER BY
+    p.id, s.id;
+

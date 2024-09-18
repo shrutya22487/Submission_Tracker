@@ -89,7 +89,7 @@ router.get("/prof_dashboard/students", async (req, res) => {
         "ORDER BY \n" +
         "    s.type, s.Name;", [prof_id,]);
 
-    res.render("prof_students.ejs", student_details);
+    res.render("sampleboard.ejs", student_details);
 });
 
 export default router;
