@@ -82,10 +82,10 @@ VALUES
 (4, 4), (5, 5);
 
 -- Inserting data into Job table (20 rows)
-INSERT INTO Job (prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
+INSERT INTO Job (project_id,prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
 VALUES 
-(1, 1, 'Job Title 1', 'Open', 'link1', 'link2', '2023-09-01', '2023-12-01', FALSE),
-(2, 2, 'Job Title 2', 'Open', 'link3', 'link4', '2023-09-05', '2023-12-10', FALSE);
+(1,1, 1, 'Job Title 1', 'Open', 'link1', 'link2', '2023-09-01', '2023-12-01', FALSE),
+(1,2, 2, 'Job Title 2', 'Open', 'link3', 'link4', '2023-09-05', '2023-12-10', FALSE);
 -- Continue adding similar rows until 20 rows are inserted.
 
 -- Inserting data into Papers table (20 rows)
