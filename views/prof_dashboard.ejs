@@ -59,8 +59,10 @@
 
     </div>
 
-    <!-- Working console section -->
+   
     <div class="col-md-6" style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
+<!--  
+
       <div id="working-console">
 
         <div class="jumbotron text-center" style="margin-bottom: 20px;">
@@ -68,7 +70,7 @@
         
         </div>
         
-        <!-- Section for adding students -->
+       
         <div class="container" style="position: relative;">
             <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;margin-top:40px;">Student Search</h2>
             <form id="search-form" style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
@@ -78,13 +80,13 @@
             </form>
             
             <div id="results" style="position: absolute; z-index: 1000; background-color: white; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); top: 100%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px;">
-                <!-- Search results will be displayed here -->
+                
             </div>
         </div>
         <br>
         
         <div class="container">
-            <!-- Section for Students Under Professor -->
+           
             <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Students Under Professor</h2>
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                 <thead>
@@ -114,7 +116,6 @@
                 </tbody>
             </table>
         
-            <!-- Table for Student Jobs -->
             <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Student Jobs Data</h2>
             <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                 <thead>
@@ -159,7 +160,6 @@
                 </tbody>
             </table>
         
-            <!-- Archived Students -->
             <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Archived Students</h2>
         <ul style="list-style-type: none; padding: 0; font-size: 1rem;">
             <% if (locals.archived_students && Array.isArray(locals.archived_students.rows) && locals.archived_students.rows.length > 0) { %>
@@ -176,7 +176,6 @@
         
             
         
-        <!-- Archived Jobs -->
         <h2 style="font-size: 2rem; font-weight: bold; margin-top: 40px; margin-bottom: 20px;">Archived Jobs Data</h2>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
             <thead>
@@ -332,6 +331,36 @@
         </script>
         
       </div>
+      -->
+
+    <h1>Students</h1>
+    <% if (student_details.length > 0) { %>
+        <ul>
+            <% let currentType = ''; %>
+            <% student_details.forEach(function(student) { %>
+                <% if (student.degree !== currentType) { %>
+                    <% if (currentType !== '') { %>
+                        </ul>
+                    <% } %>
+                    <li><strong><%= student.degree %></strong>
+                    <ul>
+                    <% currentType = student.degree; %>
+                <% } %>
+                <li>
+                    <%= student.student_name %>
+                    <ul>
+                        <li>Project Title: <%= student.project_title %></li>
+                    </ul>
+                </li>
+            <% }); %>
+            </ul>
+        </ul>
+    <% } else { %>
+        <p>No students found.</p>
+    <% } %>
+
+
+    
     </div>
 
     <!-- Static info section -->
