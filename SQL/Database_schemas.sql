@@ -1,10 +1,13 @@
+-- DROP DATABASE rema_db;
+-- CREATE DATABASE rema_db;
+
 CREATE TABLE IF NOT EXISTS Professor
 (
     id       SERIAL PRIMARY KEY,
     Name     VARCHAR(50) NOT NULL,
     email_id VARCHAR(50) UNIQUE NOT NULL
 );
-
+SELECT * from Team where prof_id = 1;
 CREATE TABLE IF NOT EXISTS Student
 (
     id       SERIAL PRIMARY KEY,
@@ -104,4 +107,44 @@ CREATE TABLE IF NOT EXISTS prof_to_do
     description VARCHAR(1000),
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
+
+SELECT
+    p.id AS project_id,
+    p.title AS project_title,
+    p.conference AS project_conference,
+    p.status AS project_status,
+    p.link_1 AS project_link_1,
+    p.link_2 AS project_link_2,
+    p.submitted_date AS project_submitted_date,
+    p.deadline_date AS project_deadline_date,
+    p.sponsored AS project_sponsored,
+    s.id AS student_id,
+    s.Name AS student_name,
+    s.type AS student_degree,
+    j.id AS job_id,
+    j.title AS job_title,
+    j.status AS job_status,
+    j.link_1 AS job_link_1,
+    j.link_2 AS job_link_2,
+    j.submitted_date AS job_submitted_date,
+    j.deadline_date AS job_deadline_date
+FROM
+    Project p
+JOIN
+    Project_profs pp ON p.id = pp.project_id
+JOIN
+    Project_Students ps ON p.id = ps.project_id
+JOIN
+    Student s ON ps.student_id = s.id
+LEFT JOIN
+    Job j ON p.prof_table_id = j.prof_id AND ps.student_id = j.student_id
+WHERE
+    p.archived = FALSE
+    AND pp.prof_id = 1
+GROUP BY
+    p.id,
+    s.id,
+    j.id
+ORDER BY
+    p.id, s.id;
 

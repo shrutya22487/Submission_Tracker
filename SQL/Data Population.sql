@@ -1,7 +1,7 @@
 -- Inserting data into Professor table (20 rows)
 INSERT INTO Professor (Name, email_id) 
 VALUES 
-('Shrutya', 'shrutya22487@iiitd.ac.in'),
+('Shrutya', 'shrutyachawla@gmail.com'),
 ('Dr. Jane Smith', 'jane.smith@university.edu'),
 ('Dr. Emily Clark', 'emily.clark@university.edu'),
 ('Dr. Mark Taylor', 'mark.taylor@university.edu'),
@@ -25,7 +25,7 @@ VALUES
 -- Inserting data into Student table (20 rows)
 INSERT INTO Student (Name, email_id, type) 
 VALUES 
-('Shrutya Student', 'shrutyachawla@gmail.com', 'B.Tech'),
+('Shrutya Student', 'shrutya22487@iiitd.ac.in', 'B.Tech'),
 ('Bob Williams', 'bob.williams@university.edu', 'M.Tech'),
 ('Charlie Brown', 'charlie.brown@university.edu', 'PhD'),
 ('David Wilson', 'david.wilson@university.edu', 'M.Tech'),

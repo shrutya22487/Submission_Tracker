@@ -7,6 +7,10 @@ import {fileURLToPath} from "url";
 import path from "path";
 const router = Router();
 
+// TODO: make different divisions for phd, mtech, btech to display them
+// TODO: connect functionality for archiving
+// TODO: do the same for research_projects
+
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
@@ -20,10 +24,9 @@ router.get('/search_students', async (req, res) => {
         // Get students not mapped to the current professor
         const data = await db.query(
             "SELECT Student.name, Student.id FROM Student WHERE Student.id NOT IN (SELECT Team.student_id FROM Team WHERE Team.prof_id = $1)",
-            [prof_id]
+            [prof_id,]
         );
 
-        // Ensure we are filtering the rows property of the data object
         const results = data.rows.filter(item =>
             item.name.toLowerCase().includes(query.toLowerCase())
         );
@@ -34,6 +37,30 @@ router.get('/search_students', async (req, res) => {
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
+    }
+});
+
+router.post('/prof_dashboard/add_student', async (req, res) => {
+    try {
+        // console.log(req.body);
+        const {student_id} = req.body;
+
+        let prof_id = await utils.get_prof_id(req,res);
+
+        if (!student_id) {
+            return res.status(400).send("Student ID is required");
+        }
+
+        // Execute the query to add a mapping between professor and student
+        await db.query(
+            "INSERT INTO Team (prof_id, student_id) VALUES ($1, $2)",
+            [prof_id, student_id]
+        );
+
+        res.redirect(`/prof_dashboard/students`);
+    } catch (err) {
+        console.error("Error adding student:", err);
+        res.status(500).send("Error adding student");
     }
 });
 
@@ -52,6 +79,7 @@ router.post('/delete_student', async (req, res) => {
         res.status(500).send("Internal server error");
     }
 });
+
 router.post("/prof_dashboard/archive_student", async (req, res) => {
     try{
         const {student_id} = req.body;
@@ -68,7 +96,7 @@ router.get("/prof_dashboard/students", async (req, res) => {
     await utils.check_authentication_prof(req, res);
     const prof_id = await utils.get_prof_id(req, res);
 
-    const student_details = await db.query("SELECT\n" +
+    const student_details_phd = await db.query("SELECT\n" +
         "    s.id AS student_id,\n" +
         "    s.Name AS student_name,\n" +
         "    s.type AS degree,\n" +
@@ -88,7 +116,7 @@ router.get("/prof_dashboard/students", async (req, res) => {
         "    s.type, s.Name, p.title, s.id, p.id \n" +
         "ORDER BY \n" +
         "    s.type, s.Name;", [prof_id,]);
-
+    // console.log(student_details.rows)
     res.render("prof_dashboard.ejs", {
         student_details : student_details.rows
     });
