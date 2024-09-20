@@ -5,10 +5,12 @@ import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
 import {fileURLToPath} from "url";
 import path from "path";
+import {parse} from "dotenv";
 const router = Router();
 
 // TODO: make different divisions for phd, mtech, btech to display them
 // TODO: connect functionality for archiving
+// TODO: connect functionality for deleting
 // TODO: do the same for research_projects
 
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -66,14 +68,13 @@ router.post('/prof_dashboard/add_student', async (req, res) => {
 
 // for deleting student
 router.post('/delete_student', async (req, res) => {
-    const {student_id} = req.student_id;
+    const { student_id } = req.body;
 
     try {
-        let prof_id = await utils.get_prof_id(req,res);
-
-        // Get all students in the database
         await db.query(
-            "DELETE FROM Team WHERE student_id = $1 AND prof_id = $2;", [student_id, prof_id]);
+            "DELETE FROM Team WHERE student_id = $1 AND prof_id = $2;", [student_id, await utils.get_prof_id(req,res)]);
+        res.redirect(`/prof_dashboard/students`);
+
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
@@ -81,45 +82,72 @@ router.post('/delete_student', async (req, res) => {
 });
 
 router.post("/prof_dashboard/archive_student", async (req, res) => {
-    try{
-        const {student_id} = req.body;
-        await db.query("UPDATE Mapping SET archived = NOT archived WHERE student_id = $1 AND prof_id = $2", [student_id, await utils.get_prof_id(req, res)]);
-        res.redirect(`/prof_dashboard`);
-    }
-    catch (err) {
+    try {
+
+        const { student_id } = req.body;
+
+        await db.query("UPDATE Team SET archived = NOT archived WHERE student_id = $1 AND prof_id = $2", [student_id, await utils.get_prof_id(req, res)]);
+
+        res.redirect(`/prof_dashboard/students`);
+    } catch (err) {
         console.error("Error archiving student:", err);
         res.status(500).send("Error archiving student");
     }
 });
 
+
 router.get("/prof_dashboard/students", async (req, res) => {
     await utils.check_authentication_prof(req, res);
     const prof_id = await utils.get_prof_id(req, res);
 
-    const student_details_phd = await db.query("SELECT\n" +
+    const student_details_unarchived = await db.query("SELECT\n" +
         "    s.id AS student_id,\n" +
         "    s.Name AS student_name,\n" +
         "    s.type AS degree,\n" +
-        "    p.title AS project_title,\n" +
-        "    p.id    AS project_id \n" +
-        "FROM \n" +
-        "    Project AS p \n" +
-        "JOIN \n" +
-        "    Project_Students AS ps ON p.id = ps.project_id \n" +
-        "JOIN \n" +
-        "    Student AS s ON ps.student_id = s.id \n" +
-        "JOIN \n" +
-        "    Project_profs AS pp ON pp.project_id = p.id \n" +
-        "WHERE \n" +
-        "    pp.prof_id = $1 \n" +
-        "GROUP BY \n" +
-        "    s.type, s.Name, p.title, s.id, p.id \n" +
-        "ORDER BY \n" +
-        "    s.type, s.Name;", [prof_id,]);
-    // console.log(student_details.rows)
-    res.render("prof_dashboard.ejs", {
-        student_details : student_details.rows
+        "    COALESCE(p.title, 'No Project Assigned') AS project_title\n" +
+        "\n" +
+        "FROM\n" +
+        "    Student s\n" +
+        "LEFT JOIN\n" +
+        "    Project_Students ps ON s.id = ps.student_id\n" +
+        "LEFT JOIN\n" +
+        "    Project p ON ps.project_id = p.id\n" +
+        "JOIN\n" +
+        "    Team t ON s.id = t.student_id\n" +
+        "WHERE\n" +
+        "    t.prof_id = $1 AND t.archived = FALSE\n" +
+        "GROUP BY\n" +
+        "    s.id, s.Name, s.type, p.title, p.id\n" +
+        "ORDER BY\n" +
+        "    s.type, s.Name;",[prof_id]);
+
+    const student_details_archived = await db.query("SELECT\n" +
+        "    s.id AS student_id,\n" +
+        "    s.Name AS student_name,\n" +
+        "    s.type AS degree,\n" +
+        "    COALESCE(p.title, 'No Project Assigned') AS project_title\n" +
+        "\n" +
+        "FROM\n" +
+        "    Student s\n" +
+        "LEFT JOIN\n" +
+        "    Project_Students ps ON s.id = ps.student_id\n" +
+        "LEFT JOIN\n" +
+        "    Project p ON ps.project_id = p.id\n" +
+        "JOIN\n" +
+        "    Team t ON s.id = t.student_id\n" +
+        "WHERE\n" +
+        "    t.prof_id = $1 AND t.archived = TRUE\n" +
+        "GROUP BY\n" +
+        "    s.id, s.Name, s.type, p.title, p.id\n" +
+        "ORDER BY\n" +
+        "    s.type, s.Name;",[prof_id]);
+
+    res.render("prof_students.ejs", {
+        student_details_unarchived : student_details_unarchived,
+        student_details_archived : student_details_archived
     });
 });
 
 export default router;
+
+

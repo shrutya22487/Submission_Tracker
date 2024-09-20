@@ -60,7 +60,7 @@ router.use(reading_list);
 //         res.locals.unarchived_jobs = unarchived_jobs;
 //
 //         // TODO: Do error handling here
-//         res.render("prof_dashboard.ejs", {
+//         res.render("prof_students.ejs", {
 //             prof_id: prof_id,
 //         });
 //     } catch (err) {

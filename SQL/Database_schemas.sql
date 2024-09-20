@@ -7,7 +7,6 @@ CREATE TABLE IF NOT EXISTS Professor
     Name     VARCHAR(50) NOT NULL,
     email_id VARCHAR(50) UNIQUE NOT NULL
 );
-SELECT * from Team where prof_id = 1;
 CREATE TABLE IF NOT EXISTS Student
 (
     id       SERIAL PRIMARY KEY,
@@ -147,4 +146,24 @@ GROUP BY
     j.id
 ORDER BY
     p.id, s.id;
+SELECT * from Team where student_id = 5;
+SELECT
+    s.id AS student_id,
+    s.Name AS student_name,
+    s.type AS degree,
+    COALESCE(p.title, 'No Project Assigned') AS project_title
 
+FROM
+    Student s
+LEFT JOIN
+    Project_Students ps ON s.id = ps.student_id
+LEFT JOIN
+    Project p ON ps.project_id = p.id
+JOIN
+    Team t ON s.id = t.student_id
+WHERE
+    t.prof_id = 1
+GROUP BY
+    s.id, s.Name, s.type, p.title, p.id
+ORDER BY
+    s.type, s.Name;
