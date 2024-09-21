@@ -3,26 +3,69 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-// TODO: create functionality to add multiple profs
-// TODO: Check if ids are being properly captured
 
 const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
-// add student to project, this uses the search route in the students.js
-router.post('/add_student_to_project', async (req, res) => {
-    // TODO: create AJAX and HTML
+//archive project
+router.post("/prof_dashboard/archive_project", async (req, res) => {
     try {
-        await db.query("INSERT INTO project_students (project_id, student_id) VALUES ($1, $2);", [req.project_id, req.student_id]);
+
+        const { project_id } = req.body;
+
+        await db.query("UPDATE Project SET archived = NOT archived WHERE id = $1", [project_id,]);
+
+        res.redirect(`/prof_dashboard/research_projects`);
+    } catch (err) {
+        console.error("Error archiving project:", err);
+        res.status(500).send("Error archiving project");
+    }
+});
+
+// for searching students
+router.get('/search_students_prof', async (req, res) => {
+    const {query} = req.query;
+    try {
+        let prof_id = await utils.get_prof_id(req, res);
+
+        // Get students not mapped to the current professor
+        const data = await db.query(
+            "SELECT Student.name, Student.id FROM Student WHERE Student.id IN (SELECT Team.student_id FROM Team WHERE Team.prof_id = $1)",
+            [prof_id,]
+        );
+
+        const results = data.rows.filter(item =>
+            item.name.toLowerCase().includes(query.toLowerCase())
+        );
+        // console.log(results);
+        res.json(results);
+
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
     }
 });
 
-//editing a project
+// add student to project, this uses the search route in the students.js
+router.post('/prof_dashboard/add_student_to_project', async (req, res) => {
+
+    try {
+        await db.query(`
+            INSERT INTO project_students (project_id, student_id) 
+            VALUES ($1, $2)
+            ON CONFLICT (project_id, student_id) DO NOTHING;
+        `, [req.body.project_id, req.body.student_id]);
+        res.redirect("/prof_dashboard/research_projects");
+
+    } catch (error) {
+        console.error("Error executing query:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+//TODO editing a project
 router.post('/edit_project', async (req, res) => {
     // TODO: create AJAX and HTML
     try {
@@ -45,10 +88,12 @@ router.post('/edit_project', async (req, res) => {
 });
 
 //deleting a project
-router.post('/delete_project', async (req, res) => {
-    // TODO: create AJAX and HTML
+router.post('/prof_dashboard/delete_project', async (req, res) => {
+    const { project_id } = req.body;
+
     try {
-        await db.query("DELETE FROM Project WHERE id = $1", [req.project_id]);
+        await db.query("DELETE FROM Project WHERE id = $1", [project_id]);
+        res.redirect("/prof_dashboard/research_projects");
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
@@ -58,7 +103,6 @@ router.post('/delete_project', async (req, res) => {
 // adding project
 router.post('/add_project', async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
-    // TODO: create AJAX and HTML
 
     try {
 
@@ -83,7 +127,7 @@ router.post('/add_project', async (req, res) => {
     }
 });
 
-// To add a job by the Professor
+//TODO To add a job by the Professor
 router.post('/prof_dashboard/add_job', async (req, res) => {
     // TODO fix the project_id to map to the project
 
@@ -105,6 +149,7 @@ router.post('/prof_dashboard/add_job', async (req, res) => {
             ]
         );
         res.status(200).send("Job added successfully");
+        res.redirect("/prof_dashboard/research_projects");
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
@@ -113,52 +158,72 @@ router.post('/prof_dashboard/add_job', async (req, res) => {
 
 //Main Dashboard
 router.get("/prof_dashboard/research_projects", async (req, res) => {
-    // TODO: create AJAX and HTML
-
     await utils.check_authentication_prof(req, res);
     const prof_id = await utils.get_prof_id(req, res);
+    const project_details_unarchived = await db.query(`
+    SELECT
+        P.id AS project_id,
+        P.title AS project_title,
+        P.conference AS project_conference,
+        P.status AS project_status,
+        P.link_1 AS project_link_1,
+        P.link_2 AS project_link_2,
+        P.submitted_date AS project_submitted_date,
+        P.deadline_date AS project_deadline_date,
+        J.id AS job_id,
+        J.title AS job_title,
+        J.status AS job_status,
+        J.link_1 AS job_link_1,
+        J.link_2 AS job_link_2,
+        J.submitted_date AS job_submitted_date,
+        J.deadline_date AS job_deadline_date,
+        PS.student_id AS student_id,
+        S.Name AS student_name
+    FROM Project_profs
+    JOIN Project P ON P.id = Project_profs.project_id
+    LEFT JOIN Project_Students PS ON P.id = PS.project_id
+    LEFT JOIN Student S ON S.id = PS.student_id
+    LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
+    WHERE Project_profs.prof_id = $1 AND P.archived = FALSE
+    GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date, P.deadline_date,
+             J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
+                 ORDER BY PS.student_id;
+;
+`, [prof_id]);
+    const project_details_archived = await db.query(`
+    SELECT
+        P.id AS project_id,
+        P.title AS project_title,
+        P.conference AS project_conference,
+        P.status AS project_status,
+        P.link_1 AS project_link_1,
+        P.link_2 AS project_link_2,
+        P.submitted_date AS project_submitted_date,
+        P.deadline_date AS project_deadline_date,
+        J.id AS job_id,
+        J.title AS job_title,
+        J.status AS job_status,
+        J.link_1 AS job_link_1,
+        J.link_2 AS job_link_2,
+        J.submitted_date AS job_submitted_date,
+        J.deadline_date AS job_deadline_date,
+        PS.student_id AS student_id,
+        S.Name AS student_name
+    FROM Project_profs
+    JOIN Project P ON P.id = Project_profs.project_id
+    LEFT JOIN Project_Students PS ON P.id = PS.project_id
+    LEFT JOIN Student S ON S.id = PS.student_id
+    LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
+    WHERE Project_profs.prof_id = $1 AND P.archived = TRUE
+    GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date, P.deadline_date,
+             J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
+                 ORDER BY PS.student_id;
 
-    const project_details = await db.query("SELECT\n" +
-        "    p.id AS project_id,\n" +
-        "    p.title AS project_title,\n" +
-        "    p.conference AS project_conference,\n" +
-        "    p.status AS project_status,\n" +
-        "    p.link_1 AS project_link_1,\n" +
-        "    p.link_2 AS project_link_2,\n" +
-        "    p.submitted_date AS project_submitted_date,\n" +
-        "    p.deadline_date AS project_deadline_date,\n" +
-        "    p.sponsored AS project_sponsored,\n" +
-        "    s.id AS student_id,\n" +
-        "    s.Name AS student_name,\n" +
-        "    s.type AS student_degree,\n" +
-        "    j.id AS job_id,\n" +
-        "    j.title AS job_title,\n" +
-        "    j.status AS job_status,\n" +
-        "    j.link_1 AS job_link_1,\n" +
-        "    j.link_2 AS job_link_2,\n" +
-        "    j.submitted_date AS job_submitted_date,\n" +
-        "    j.deadline_date AS job_deadline_date\n" +
-        "FROM\n" +
-        "    Project p\n" +
-        "JOIN\n" +
-        "    Project_profs pp ON p.id = pp.project_id\n" +
-        "JOIN\n" +
-        "    Project_Students ps ON p.id = ps.project_id\n" +
-        "JOIN\n" +
-        "    Student s ON ps.student_id = s.id\n" +
-        "LEFT JOIN\n" +
-        "    Job j ON p.id = j.project_id AND s.id = j.student_id\n" +
-        "WHERE\n" +
-        "    p.archived = FALSE\n" +
-        "    AND pp.prof_id = $1\n" +
-        "GROUP BY\n" +
-        "    p.id,\n" +
-        "    s.id,\n" +
-        "    j.id\n" +
-        "ORDER BY\n" +
-        "    p.id, s.id;\n", [prof_id,]);
+`, [prof_id]);
 
-    res.render("research_projects.ejs", project_details);
+
+    res.render("research_projects.ejs", {project_details_unarchived : project_details_unarchived,
+    project_details_archived : project_details_archived,});
 });
 
 export default router;

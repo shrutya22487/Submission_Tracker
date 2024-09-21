@@ -8,11 +8,6 @@ import path from "path";
 import {parse} from "dotenv";
 const router = Router();
 
-// TODO: make different divisions for phd, mtech, btech to display them
-// TODO: connect functionality for archiving
-// TODO: connect functionality for deleting
-// TODO: do the same for research_projects
-
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 

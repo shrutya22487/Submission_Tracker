@@ -1,6 +1,7 @@
 -- Inserting data into Professor table (20 rows)
 INSERT INTO Professor (Name, email_id) 
-VALUES 
+VALUES
+('Prabal', 'prabalmintora@gmail.com'),
 ('Shrutya', 'shrutyachawla@gmail.com'),
 ('Dr. Jane Smith', 'jane.smith@university.edu'),
 ('Dr. Emily Clark', 'emily.clark@university.edu'),
@@ -77,34 +78,12 @@ VALUES
 
 -- Inserting data into Project_Students table (20 rows)
 INSERT INTO Project_Students (project_id, student_id)
-VALUES 
-(1, 1), (2, 2), (3, 3), 
-(4, 4), (5, 5);
+VALUES (1, 3), (1, 2), (1, 1);
+
 
 -- Inserting data into Job table (20 rows)
 INSERT INTO Job (project_id,prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
 VALUES 
-(1,1, 1, 'Job Title 1', 'Open', 'link1', 'link2', '2023-09-01', '2023-12-01', FALSE),
+(1,1, 2, 'Job Title 2', 'Open1', 'link1', 'link2', '2023-10-01', '2023-10-09', FALSE),
 (1,2, 2, 'Job Title 2', 'Open', 'link3', 'link4', '2023-09-05', '2023-12-10', FALSE);
--- Continue adding similar rows until 20 rows are inserted.
 
--- Inserting data into Papers table (20 rows)
-INSERT INTO Papers (prof_id, student_id, conference_name, submitted_date, deadline, link_1, link_2, archived)
-VALUES 
-(1, 1, 'AI Conference', '2023-08-01', '2023-12-01', 'link1', 'link2', FALSE),
-(2, 2, 'Blockchain Conf', '2023-08-05', '2023-12-10', 'link3', 'link4', FALSE);
--- Continue adding similar rows until 20 rows are inserted.
-
--- Inserting data into prof_upcoming_deadlines table (20 rows)
-INSERT INTO prof_upcoming_deadlines (prof_id, date, venue, type, description)
-VALUES 
-(1, '2023-12-01', 'Venue 1', 'Conference', 'Description 1'),
-(2, '2023-12-10', 'Venue 2', 'Workshop', 'Description 2');
--- Continue adding similar rows until 20 rows are inserted.
-
--- Inserting data into prof_to_do table (20 rows)
-INSERT INTO prof_to_do (prof_id, date, description)
-VALUES 
-(1, '2023-11-01', 'Task 1'),
-(2, '2023-11-05', 'Task 2');
--- Continue adding similar rows until 20 rows are inserted.

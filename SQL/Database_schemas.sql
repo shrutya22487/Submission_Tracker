@@ -37,6 +37,33 @@ CREATE TABLE IF NOT EXISTS Project
     archived         BOOLEAN DEFAULT FALSE,
     sponsored        BOOLEAN DEFAULT FALSE
 );
+SELECT
+        P.id AS project_id,
+        P.title AS project_title,
+        P.conference AS project_conference,
+        P.status AS project_status,
+        P.link_1 AS project_link_1,
+        P.link_2 AS project_link_2,
+        P.submitted_date AS project_submitted_date,
+        P.deadline_date AS project_deadline_date,
+        J.id AS job_id,
+        J.title AS job_title,
+        J.status AS job_status,
+        J.link_1 AS job_link_1,
+        J.link_2 AS job_link_2,
+        J.submitted_date AS job_submitted_date,
+        J.deadline_date AS job_deadline_date,
+        PS.student_id AS student_id,
+        S.Name AS student_name
+    FROM Project_profs
+    JOIN Project P ON P.id = Project_profs.project_id
+    LEFT JOIN Project_Students PS ON P.id = PS.project_id
+    LEFT JOIN Student S ON S.id = PS.student_id
+    LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
+    WHERE Project_profs.prof_id = 1 AND P.archived = FALSE
+    GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date, P.deadline_date,
+             J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
+                 ORDER BY PS.student_id;
 
 CREATE TABLE IF NOT EXISTS Project_profs
 (
@@ -107,63 +134,4 @@ CREATE TABLE IF NOT EXISTS prof_to_do
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
 
-SELECT
-    p.id AS project_id,
-    p.title AS project_title,
-    p.conference AS project_conference,
-    p.status AS project_status,
-    p.link_1 AS project_link_1,
-    p.link_2 AS project_link_2,
-    p.submitted_date AS project_submitted_date,
-    p.deadline_date AS project_deadline_date,
-    p.sponsored AS project_sponsored,
-    s.id AS student_id,
-    s.Name AS student_name,
-    s.type AS student_degree,
-    j.id AS job_id,
-    j.title AS job_title,
-    j.status AS job_status,
-    j.link_1 AS job_link_1,
-    j.link_2 AS job_link_2,
-    j.submitted_date AS job_submitted_date,
-    j.deadline_date AS job_deadline_date
-FROM
-    Project p
-JOIN
-    Project_profs pp ON p.id = pp.project_id
-JOIN
-    Project_Students ps ON p.id = ps.project_id
-JOIN
-    Student s ON ps.student_id = s.id
-LEFT JOIN
-    Job j ON p.prof_table_id = j.prof_id AND ps.student_id = j.student_id
-WHERE
-    p.archived = FALSE
-    AND pp.prof_id = 1
-GROUP BY
-    p.id,
-    s.id,
-    j.id
-ORDER BY
-    p.id, s.id;
-SELECT * from Team where student_id = 5;
-SELECT
-    s.id AS student_id,
-    s.Name AS student_name,
-    s.type AS degree,
-    COALESCE(p.title, 'No Project Assigned') AS project_title
 
-FROM
-    Student s
-LEFT JOIN
-    Project_Students ps ON s.id = ps.student_id
-LEFT JOIN
-    Project p ON ps.project_id = p.id
-JOIN
-    Team t ON s.id = t.student_id
-WHERE
-    t.prof_id = 1
-GROUP BY
-    s.id, s.Name, s.type, p.title, p.id
-ORDER BY
-    s.type, s.Name;
