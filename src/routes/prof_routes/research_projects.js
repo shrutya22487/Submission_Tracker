@@ -65,24 +65,54 @@ router.post('/prof_dashboard/add_student_to_project', async (req, res) => {
     }
 });
 
-//TODO editing a project
-router.post('/edit_project', async (req, res) => {
-    // TODO: create AJAX and HTML
+// for editing the project
+
+// Fetch project details to pre-fill the form
+router.get('/get_project/:id', async (req, res) => {
     try {
-        await db.query("UPDATE Project SET\n" +
-            "    title = $1,\n" +
-            "    conference = $2,\n" +
-            "    status = $3,\n" +
-            "    link_1 = $4,\n" +
-            "    link_2 = $5,\n" +
-            "    submitted_date = $6,\n" +
-            "    deadline_date = $7,\n" +
-            "    archived = $8,\n" +
-            "    sponsored = $9\n" +
-            "WHERE \n" +
-            "    id = $10;", [req.title, req.conference, req.status, req.link_1, req.link_2, req.submitted_date, req.deadline_date,req.archived ,req.sponsored, req.project_id]);
+        const project = await db.query("SELECT * FROM Project WHERE id = $1", [req.params.id]);
+        res.json(project.rows[0]);
     } catch (error) {
-        console.error("Error executing query:", error);
+        console.error("Error fetching project:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+router.post('/edit_project', async (req, res) => {
+    try {
+
+        const currentProject = await db.query("SELECT * FROM Project WHERE id = $1", [req.body.project_id]);
+
+        const project = currentProject.rows[0];
+
+        await db.query(`
+            UPDATE Project SET
+                title = $1,
+                conference = $2,
+                status = $3,
+                link_1 = $4,
+                link_2 = $5,
+                submitted_date = $6,
+                deadline_date = $7,
+                archived = $8,
+                sponsored = $9
+            WHERE id = $10
+        `, [
+            req.body.title || project.title,
+            req.body.conference || project.conference,
+            req.body.status || project.status,
+            req.body.link_1 || project.link_1,
+            req.body.link_2 || project.link_2,
+            req.body.submitted_date || project.submitted_date,
+            req.body.deadline_date || project.deadline_date,
+            project.archived,
+            req.body.sponsored !== undefined ? req.body.sponsored : project.sponsored,
+            req.body.project_id
+        ]);
+
+        res.redirect("/prof_dashboard/research_projects");
+    } catch (error) {
+        console.error("Error updating project:", error);
         res.status(500).send("Internal server error");
     }
 });
@@ -127,10 +157,8 @@ router.post('/add_project', async (req, res) => {
     }
 });
 
-//TODO To add a job by the Professor
+//TODO To add a job by the Professor for future uses
 router.post('/prof_dashboard/add_job', async (req, res) => {
-    // TODO fix the project_id to map to the project
-
     const prof_id = await utils.get_prof_id(req, res);
 
     try {
@@ -161,66 +189,64 @@ router.get("/prof_dashboard/research_projects", async (req, res) => {
     await utils.check_authentication_prof(req, res);
     const prof_id = await utils.get_prof_id(req, res);
     const project_details_unarchived = await db.query(`
-    SELECT
-        P.id AS project_id,
-        P.title AS project_title,
-        P.conference AS project_conference,
-        P.status AS project_status,
-        P.link_1 AS project_link_1,
-        P.link_2 AS project_link_2,
-        P.submitted_date AS project_submitted_date,
-        P.deadline_date AS project_deadline_date,
-        J.id AS job_id,
-        J.title AS job_title,
-        J.status AS job_status,
-        J.link_1 AS job_link_1,
-        J.link_2 AS job_link_2,
-        J.submitted_date AS job_submitted_date,
-        J.deadline_date AS job_deadline_date,
-        PS.student_id AS student_id,
-        S.Name AS student_name
-    FROM Project_profs
-    JOIN Project P ON P.id = Project_profs.project_id
-    LEFT JOIN Project_Students PS ON P.id = PS.project_id
-    LEFT JOIN Student S ON S.id = PS.student_id
-    LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
-    WHERE Project_profs.prof_id = $1 AND P.archived = FALSE
-    GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date, P.deadline_date,
-             J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
-                 ORDER BY PS.student_id;
-;
-`, [prof_id]);
+    SELECT P.id             AS project_id,
+       P.title          AS project_title,
+       P.conference     AS project_conference,
+       P.status         AS project_status,
+       P.link_1         AS project_link_1,
+       P.link_2         AS project_link_2,
+       P.submitted_date AS project_submitted_date,
+       P.deadline_date  AS project_deadline_date,
+       J.id             AS job_id,
+       J.title          AS job_title,
+       J.status         AS job_status,
+       J.link_1         AS job_link_1,
+       J.link_2         AS job_link_2,
+       J.submitted_date AS job_submitted_date,
+       J.deadline_date  AS job_deadline_date,
+       PS.student_id    AS student_id,
+       S.Name           AS student_name
+FROM Project_profs
+         JOIN Project P ON P.id = Project_profs.project_id
+         LEFT JOIN Project_Students PS ON P.id = PS.project_id
+         LEFT JOIN Student S ON S.id = PS.student_id
+         LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
+WHERE Project_profs.prof_id = $1
+  AND P.archived = FALSE
+GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date,
+         P.deadline_date,
+         J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
+ORDER BY P.id, PS.student_id;`, [prof_id]);
+
     const project_details_archived = await db.query(`
-    SELECT
-        P.id AS project_id,
-        P.title AS project_title,
-        P.conference AS project_conference,
-        P.status AS project_status,
-        P.link_1 AS project_link_1,
-        P.link_2 AS project_link_2,
-        P.submitted_date AS project_submitted_date,
-        P.deadline_date AS project_deadline_date,
-        J.id AS job_id,
-        J.title AS job_title,
-        J.status AS job_status,
-        J.link_1 AS job_link_1,
-        J.link_2 AS job_link_2,
-        J.submitted_date AS job_submitted_date,
-        J.deadline_date AS job_deadline_date,
-        PS.student_id AS student_id,
-        S.Name AS student_name
-    FROM Project_profs
-    JOIN Project P ON P.id = Project_profs.project_id
-    LEFT JOIN Project_Students PS ON P.id = PS.project_id
-    LEFT JOIN Student S ON S.id = PS.student_id
-    LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
-    WHERE Project_profs.prof_id = $1 AND P.archived = TRUE
-    GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date, P.deadline_date,
-             J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
-                 ORDER BY PS.student_id;
-
-`, [prof_id]);
-
+    SELECT P.id             AS project_id,
+       P.title          AS project_title,
+       P.conference     AS project_conference,
+       P.status         AS project_status,
+       P.link_1         AS project_link_1,
+       P.link_2         AS project_link_2,
+       P.submitted_date AS project_submitted_date,
+       P.deadline_date  AS project_deadline_date,
+       J.id             AS job_id,
+       J.title          AS job_title,
+       J.status         AS job_status,
+       J.link_1         AS job_link_1,
+       J.link_2         AS job_link_2,
+       J.submitted_date AS job_submitted_date,
+       J.deadline_date  AS job_deadline_date,
+       PS.student_id    AS student_id,
+       S.Name           AS student_name
+FROM Project_profs
+         JOIN Project P ON P.id = Project_profs.project_id
+         LEFT JOIN Project_Students PS ON P.id = PS.project_id
+         LEFT JOIN Student S ON S.id = PS.student_id
+         LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
+WHERE Project_profs.prof_id = $1
+  AND P.archived = TRUE
+GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date,
+         P.deadline_date,
+         J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
+ORDER BY P.id, PS.student_id;`, [prof_id]);
 
     res.render("research_projects.ejs", {project_details_unarchived : project_details_unarchived,
     project_details_archived : project_details_archived,});

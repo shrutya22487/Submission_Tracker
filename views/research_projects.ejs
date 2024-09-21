@@ -67,20 +67,6 @@
 
                 </div>
 
-                <!-- Section for adding students -->
-                <div class="container" style="position: relative;">
-                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;margin-top:40px;">Student Search</h2>
-                    <form id="search-form" style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
-                        <input type="text" id="search-bar" name="q" placeholder="Search" required
-                               style="width: 100%; max-width: 600px; padding: 12px 20px; border: 1px solid #ccc; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s ease;"
-                               autocomplete="off">
-                    </form>
-
-                    <div id="results" style="position: absolute; z-index: 1000; background-color: white; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); top: 100%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px;">
-                        <!-- Search results will be displayed here -->
-                    </div>
-                </div>
-
                 <!-- FOR ADDING A PROJECT-->
                 <form id="addProjectForm">
                     <div>
@@ -161,8 +147,72 @@
                             <button class="archive_project_button" data-project-id="<%= detail.project_id %>">Archive</button>
                             <button class="delete_project_button" data-project-id="<%= detail.project_id %>">Delete</button>
                         <!--FOR ADDING NEW STUDENTS TO THIS PROJECT-->
-                            <input type="text" id="student-search-project-<%= detail.project_id %>" data-project-id="<%= detail.project_id %>" placeholder="Type student name..." oninput="searchStudents(<%= detail.project_id %>)">
-                            <div id="student-results"></div>
+
+                            <button onclick="toggleSearchBar(<%= detail.project_id %>)" style="margin-top: 10px;">
+                                Add Student to Project
+                            </button>
+
+                            <!-- Hidden Search Bar Container -->
+                            <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; position: relative; margin-top: 20px;">
+                                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Student Search</h2>
+                                <form id="search-form" style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
+                                    <input type="text" id="student-search-project-<%= detail.project_id %>" data-project-id="<%= detail.project_id %>" placeholder="Type student name..." oninput="searchStudents(<%= detail.project_id %>)" required
+                                           style="width: 100%; max-width: 600px; padding: 12px 20px; border: 1px solid #ccc; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s ease;" autocomplete="off">
+                                </form>
+
+                                <div id="student-results-<%= detail.project_id %>" style="position: absolute; z-index: 1000; background-color: white; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); top: 100%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px;">
+                                    <!-- Search results will be displayed here -->
+                                </div>
+                            </div>
+
+                            <!-- form for editing-->
+                            <button onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+
+                            <div id="edit-project-modal" class="modal" style="display: none;">
+                                <div class="modal-content">
+                                    <span class="close-button" onclick="closeEditModal()">&times;</span>
+                                    <h2>Edit Project</h2>
+                                    <form id="edit-project-form">
+                                        <input type="hidden" id="search-project_id" name="project_id">
+                                        <div>
+                                            <label for="title">Project Title:</label>
+                                            <input type="text" id="search-title" name="title" value="">
+                                        </div>
+                                        <div>
+                                            <label for="conference">Conference:</label>
+                                            <input type="text" id="search-conference" name="conference">
+                                        </div>
+                                        <div>
+                                            <label for="status">Status:</label>
+                                            <input type="text" id="search-status" name="status">
+                                        </div>
+                                        <div>
+                                            <label for="link_1">Link 1:</label>
+                                            <input type="url" id="search-link_1" name="link_1">
+                                        </div>
+                                        <div>
+                                            <label for="link_2">Link 2:</label>
+                                            <input type="url" id="search-link_2" name="link_2">
+                                        </div>
+                                        <div>
+                                            <label for="submitted_date">Submitted Date:</label>
+                                            <input type="date" id="search-submitted_date" name="submitted_date">
+                                        </div>
+                                        <div>
+                                            <label for="deadline_date">Deadline Date:</label>
+                                            <input type="date" id="search-deadline_date" name="deadline_date">
+                                        </div>
+                                        <div>
+                                            <label for="sponsored">Sponsored:</label>
+                                            <input type="checkbox" id="search-sponsored" name="sponsored">
+                                        </div>
+                                        <button type="submit">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Edit button for each project -->
+
                         </li>
 
                         <!-- Initialize student list for this project -->
@@ -383,8 +433,82 @@
         margin-left: 10px;
     }
 </style>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    // Open the edit modal and fetch the project details
+    function openEditModal(projectId) {
+        // Open the modal
+        document.getElementById('edit-project-modal').style.display = 'block';
+
+        // Fetch current project details to pre-fill the form
+        fetch(`/get_project/${projectId}`)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                // Pre-fill the form with existing project data
+                document.getElementById('search-project_id').value = data.id;
+                document.getElementById('search-title').value = data.title || '';
+                document.getElementById('search-conference').value = data.conference || '';
+                document.getElementById('search-status').value = data.status || '';
+                document.getElementById('search-link_1').value = data.link_1 || '';
+                document.getElementById('search-link_2').value = data.link_2 || '';
+                document.getElementById('search-submitted_date').value = data.submitted_date ? data.submitted_date.split('T')[0] : '';
+                document.getElementById('search-deadline_date').value = data.deadline_date ? data.deadline_date.split('T')[0] : '';
+                document.getElementById('search-sponsored').checked = data.sponsored;
+            });
+    }
+
+    // Close the modal
+    function closeEditModal() {
+        document.getElementById('edit-project-modal').style.display = 'none';
+    }
+
+    // Submit the edit form via AJAX
+    document.getElementById('edit-project-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const projectId = document.getElementById('search-project_id').value;
+        const title = document.getElementById('search-title').value;
+        const conference = document.getElementById('search-conference').value;
+        const status = document.getElementById('search-status').value;
+        const link_1 = document.getElementById('search-link_1').value;
+        const link_2 = document.getElementById('search-link_2').value;
+        const submitted_date = document.getElementById('search-submitted_date').value;
+        const deadline_date = document.getElementById('search-deadline_date').value;
+        const sponsored = document.getElementById('search-sponsored').checked;
+
+        // Send AJAX request to update project details
+        fetch('/edit_project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                project_id: projectId,
+                title: title,
+                conference: conference,
+                status: status,
+                link_1: link_1,
+                link_2: link_2,
+                submitted_date: submitted_date,
+                deadline_date: deadline_date,
+                sponsored: sponsored
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Project updated successfully');
+                    window.location.reload();  // Reload page after successful update
+                } else {
+                    alert('Error updating project');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating project:', error);
+                alert('An error occurred.');
+            });
+    });
     $(document).ready(function() {
         $('#addProjectForm').submit(function(event) {
             event.preventDefault(); // Prevent the default form submission
@@ -471,12 +595,22 @@
         });
     });
 
-    // To display new students to add in the project
+    // Toggle search bar visibility
+    function toggleSearchBar(projectId) {
+        const searchBar = document.getElementById(`search-bar-${projectId}`);
+        if (searchBar.style.display === 'none') {
+            searchBar.style.display = 'block';
+        } else {
+            searchBar.style.display = 'none';
+        }
+    }
+
+    // Search function (unchanged)
     async function searchStudents(projectId) {
         const query = document.getElementById(`student-search-project-${projectId}`).value;
 
         if (query.length === 0) {
-            document.getElementById('student-results').innerHTML = '';
+            document.getElementById(`student-results-${projectId}`).innerHTML = '';
             return;
         }
 
@@ -490,9 +624,9 @@
         }
     }
 
-    // to display the results of the added students
+    // Display results for the specific project
     function displayResults(students, projectId) {
-        const resultsDiv = document.getElementById('student-results');
+        const resultsDiv = document.getElementById(`student-results-${projectId}`);
         resultsDiv.innerHTML = ''; // Clear previous results
 
         students.forEach(student => {
@@ -509,7 +643,7 @@
         });
     }
 
-    // to finally hit the add route
+    // Add student function (unchanged)
     async function addStudentToProfessor(studentId, projectId) {
         try {
             const response = await fetch('/prof_dashboard/add_student_to_project', {
@@ -524,7 +658,6 @@
             });
 
             if (response.ok) {
-
                 alert('Student successfully added!');
                 window.location.reload();
             } else {

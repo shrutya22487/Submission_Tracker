@@ -134,4 +134,3 @@ CREATE TABLE IF NOT EXISTS prof_to_do
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
 
-
