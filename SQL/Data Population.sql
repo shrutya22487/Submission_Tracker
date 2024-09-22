@@ -50,40 +50,74 @@ VALUES
 -- Inserting data into Team table (20 rows)
 INSERT INTO Team (prof_id, student_id, archived) 
 VALUES 
-(1, 1, FALSE), (1, 2, FALSE), (2, 3, FALSE),
-(2, 4, FALSE), (3, 5, FALSE), (3, 6, FALSE),
-(4, 7, FALSE), (4, 8, FALSE), (5, 9, FALSE),
-(5, 10, FALSE), (6, 11, FALSE), (6, 12, FALSE),
-(7, 13, FALSE), (7, 14, FALSE), (8, 15, FALSE),
-(8, 16, FALSE), (9, 17, FALSE), (9, 18, FALSE),
-(10, 19, FALSE), (10, 20, FALSE);
+(1, 1, FALSE), (1, 2, FALSE), (1, 3, FALSE),
+(1, 4, FALSE), (1, 5, FALSE), (1, 6, FALSE),
+(1, 7, FALSE), (1, 8, FALSE), (1, 9, FALSE),
+(2, 1, FALSE), (2, 2, FALSE), (2, 3, FALSE),
+(2, 4, FALSE), (2, 5, FALSE), (2, 6, FALSE),
+(2, 7, FALSE), (2, 8, FALSE), (2, 9, FALSE);
 
--- Inserting data into Project table (20 rows)
-INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored) 
-VALUES 
-('AI Research', 1, 1, 'AI Conference', 'Upcoming', 'link1', 'link2', '2023-08-01', '2023-12-01', FALSE, FALSE),
-('Blockchain Project', 2, 2, 'Blockchain Conf', 'Under Review', 'link3', 'link4', '2023-08-05', '2023-12-10', FALSE, FALSE),
-('Cybersecurity Study', 3, 3, 'Cybersec Summit', 'In Progress', 'link5', 'link6', '2023-08-09', '2023-12-15', FALSE, FALSE),
--- Continue with 17 more rows...
-('Quantum Computing', 1, 3, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE),
-('Quantum Computing', 5, 4, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE),
-('Quantum Computing', 1, 3, 'Quantum Conf', 'In Progress', 'link21', 'link22', '2023-08-10', '2023-12-10', FALSE, FALSE);
--- More rows like the above until 20 rows are inserted.
+INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored)
+VALUES
+('Quantum Computing', 1, 1, 'ICML 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-01', '2024-01-15', false, true),
+('Deep Learning Advances', 2, 2, 'NeurIPS 2024', 'Reviewing', 'http://linktoconference.com', 'http://linktopaper.com', '2023-10-01', '2024-02-20', false, true),
+('AI in Healthcare', 3, 3, 'JMLR 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-08-15', '2024-03-30', false, true),
+('Robotics and AI', 4, 4, 'CVPR 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-07-01', '2024-04-25', false, true),
+('NLP Fundamentals', 5, 5, 'ACL 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2023-06-20', '2024-05-18', false, true),
+('Blockchain Technology', 6, 6, 'Crypto 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-10', '2024-06-30', false, false),
+('Sustainable Computing', 7, 7, 'SIGCOMM 2024', 'Reviewing', 'http://linktoconference.com', 'http://linktopaper.com', '2023-05-25', '2024-07-22', false, false),
+('Data Privacy', 8, 8, 'SP 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-11-05', '2024-08-15', false, false),
+('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false),
+('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false);
 
--- Inserting data into Project_profs table (20 rows)
+
+
 INSERT INTO Project_profs (project_id, prof_id)
-VALUES 
-(1, 1), (2, 2), (3, 3), 
-(4, 1), (5, 2);
+VALUES
+(1, 1), (2, 1), (3, 1),
+(4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10 , 1),(1, 2), (2, 2), (3, 2),
+(4, 2), (5, 2), (6, 2),
+(7, 2), (8, 2), (9, 2),
+(10, 2);
 
 -- Inserting data into Project_Students table (20 rows)
 INSERT INTO Project_Students (project_id, student_id)
-VALUES (1, 3), (1, 2), (1, 1);
+VALUES (1, 1), (1, 2), (1, 3),
+(1, 4), (2, 5), (2, 1), (2, 2), (2, 3), (3, 1), (3 , 2),(3, 3), (4, 2), (5, 2), (5, 1), (4, 3),
+(7, 6), (8, 6), (9, 8),
+(10, 7);
 
 
--- Inserting data into Job table (20 rows)
-INSERT INTO Job (project_id,prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
-VALUES 
-(1,1, 2, 'Job Title 2', 'Open1', 'link1', 'link2', '2023-10-01', '2023-10-09', FALSE),
-(1,2, 2, 'Job Title 2', 'Open', 'link3', 'link4', '2023-09-05', '2023-12-10', FALSE);
+INSERT INTO Job (project_id, prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
+VALUES
+(1, 2, 1, 'Data Analysis Task', 'In Progress', 'https://link1.com', 'https://link2.com', '2023-06-10', '2023-09-15', false),
+(2, 2, 2, 'AI Research', 'Completed', 'https://link3.com', 'https://link4.com', '2023-03-11', '2023-06-01', true),
+(3, 2, 3, 'Web Development', 'Not Started', 'https://link5.com', 'https://link6.com', '2023-07-20', '2023-11-01', false),
+(4, 2, 4, 'Quantum Computing Study', 'In Progress', 'https://link7.com', 'https://link8.com', '2023-02-15', '2023-10-12', false),
+(5, 2, 5, 'Cloud Infrastructure Setup', 'Completed', 'https://link9.com', 'https://link10.com', '2023-01-18', '2023-04-29', true),
+(6, 2, 6, 'Cybersecurity Analysis', 'Not Started', 'https://link11.com', 'https://link12.com', '2023-08-08', '2023-12-15', false),
+(7, 2, 7, 'Blockchain Study', 'In Progress', 'https://link13.com', 'https://link14.com', '2023-05-21', '2023-09-01', false),
+(8, 2, 8, 'Mobile App Development', 'Completed', 'https://link15.com', 'https://link16.com', '2023-02-25', '2023-05-30', true),
+(9, 2, 9, 'Database Optimization', 'In Progress', 'https://link17.com', 'https://link18.com', '2023-04-10', '2023-08-20', false),
+(10, 2, 1, 'Game Development Project', 'Not Started', 'https://link19.com', 'https://link20.com', '2023-09-01', '2023-12-15', false),
+(1, 2, 1, 'Artificial Intelligence Project', 'Completed', 'https://link21.com', 'https://link22.com', '2023-01-11', '2023-03-22', true),
+(2, 2, 2, 'Big Data Analytics', 'In Progress', 'https://link23.com', 'https://link24.com', '2023-05-30', '2023-09-01', false),
+(3, 2, 3, 'Machine Learning Pipeline', 'Not Started', 'https://link25.com', 'https://link26.com', '2023-07-10', '2023-11-05', false),
+(4, 2, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true),
+
+(1, 1, 1, 'Data Analysis Task', 'In Progress', 'https://link1.com', 'https://link2.com', '2023-06-10', '2023-09-15', false),
+(2, 1, 2, 'AI Research', 'Completed', 'https://link3.com', 'https://link4.com', '2023-03-11', '2023-06-01', true),
+(3, 1, 3, 'Web Development', 'Not Started', 'https://link5.com', 'https://link6.com', '2023-07-20', '2023-11-01', false),
+(4, 1, 4, 'Quantum Computing Study', 'In Progress', 'https://link7.com', 'https://link8.com', '2023-02-15', '2023-10-12', false),
+(5, 1, 5, 'Cloud Infrastructure Setup', 'Completed', 'https://link9.com', 'https://link10.com', '2023-01-18', '2023-04-29', true),
+(6, 1, 6, 'Cybersecurity Analysis', 'Not Started', 'https://link11.com', 'https://link12.com', '2023-08-08', '2023-12-15', false),
+(7, 1, 7, 'Blockchain Study', 'In Progress', 'https://link13.com', 'https://link14.com', '2023-05-21', '2023-09-01', false),
+(8, 1, 8, 'Mobile App Development', 'Completed', 'https://link15.com', 'https://link16.com', '2023-02-25', '2023-05-30', true),
+(9, 1, 9, 'Database Optimization', 'In Progress', 'https://link17.com', 'https://link18.com', '2023-04-10', '2023-08-20', false),
+(10, 1, 1, 'Game Development Project', 'Not Started', 'https://link19.com', 'https://link20.com', '2023-09-01', '2023-12-15', false),
+(1, 1, 1, 'Artificial Intelligence Project', 'Completed', 'https://link21.com', 'https://link22.com', '2023-01-11', '2023-03-22', true),
+(2, 1, 2, 'Big Data Analytics', 'In Progress', 'https://link23.com', 'https://link24.com', '2023-05-30', '2023-09-01', false),
+(3, 1, 3, 'Machine Learning Pipeline', 'Not Started', 'https://link25.com', 'https://link26.com', '2023-07-10', '2023-11-05', false),
+(4, 1, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true);
+
 

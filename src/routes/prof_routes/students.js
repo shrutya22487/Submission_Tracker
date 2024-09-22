@@ -10,7 +10,7 @@ const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
-
+// TODO: Fix archiving issue here, multiple jobs then multiple names in archived list
 // For searching a student to add in the projects
 router.get('/search_students', async (req, res) => {
     const {query} = req.query;

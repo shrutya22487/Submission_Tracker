@@ -65,7 +65,7 @@ router.post('/prof_dashboard/add_student_to_project', async (req, res) => {
     }
 });
 
-// for editing the project
+////////////////////////////// for editing the project //////////////////////////////////////////
 
 // Fetch project details to pre-fill the form
 router.get('/get_project/:id', async (req, res) => {
@@ -94,9 +94,8 @@ router.post('/edit_project', async (req, res) => {
                 link_2 = $5,
                 submitted_date = $6,
                 deadline_date = $7,
-                archived = $8,
-                sponsored = $9
-            WHERE id = $10
+                archived = $8
+            WHERE id = $9
         `, [
             req.body.title || project.title,
             req.body.conference || project.conference,
@@ -106,7 +105,6 @@ router.post('/edit_project', async (req, res) => {
             req.body.submitted_date || project.submitted_date,
             req.body.deadline_date || project.deadline_date,
             project.archived,
-            req.body.sponsored !== undefined ? req.body.sponsored : project.sponsored,
             req.body.project_id
         ]);
 
@@ -116,6 +114,8 @@ router.post('/edit_project', async (req, res) => {
         res.status(500).send("Internal server error");
     }
 });
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
 //deleting a project
 router.post('/prof_dashboard/delete_project', async (req, res) => {
@@ -138,9 +138,9 @@ router.post('/add_project', async (req, res) => {
 
         const result = await db.query(
             `INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored)
-            VALUES ($1, NULL, NULL, $2, $3, $4, $5, $6, $7, FALSE, $8)
+            VALUES ($1, NULL, NULL, $2, $3, $4, $5, $6, $7, FALSE, FALSE)
             RETURNING id;`,
-            [req.body.title || null, req.body.conference || null, req.body.status || null, req.body.link_1 || null, req.body.link_2 || null, req.body.submitted_date || null, req.body.deadline_date || null, req.body.sponsored || 'FALSE']
+            [req.body.title || null, req.body.conference || null, req.body.status || null, req.body.link_1 || null, req.body.link_2 || null, req.body.submitted_date || null, req.body.deadline_date || null,]
         );
 
         const new_project_id = result.rows[0].id;
@@ -212,7 +212,7 @@ FROM Project_profs
          LEFT JOIN Student S ON S.id = PS.student_id
          LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
 WHERE Project_profs.prof_id = $1
-  AND P.archived = FALSE
+  AND P.archived = FALSE AND P.sponsored = FALSE
 GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date,
          P.deadline_date,
          J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date
@@ -242,7 +242,7 @@ FROM Project_profs
          LEFT JOIN Student S ON S.id = PS.student_id
          LEFT JOIN Job J ON P.id = J.project_id AND J.student_id = S.id
 WHERE Project_profs.prof_id = $1
-  AND P.archived = TRUE
+  AND P.archived = TRUE AND P.sponsored = FALSE
 GROUP BY P.id, PS.student_id, S.Name, J.id, P.conference, P.status, P.link_1, P.link_2, P.submitted_date,
          P.deadline_date,
          J.title, J.status, J.link_1, J.link_2, J.submitted_date, J.deadline_date

@@ -80,12 +80,12 @@
                     </div>
 
                     <div>
-                            <label for="status">Status</label>
-                            <select id="status" name="status" required>
-                                <option value="Upcoming">Upcoming</option>
-                                <option value="Under Review">Under Review</option>
-                                <option value="In Progress">In Progress</option>
-                            </select>
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="In Progress">In Progress</option>
+                        </select>
 
                     </div>
 
@@ -141,7 +141,7 @@
                             | Deadline: <%= detail.project_deadline_date ? detail.project_deadline_date.toDateString() : 'N/A' %>
                             <button class="archive_project_button" data-project-id="<%= detail.project_id %>">Archive</button>
                             <button class="delete_project_button" data-project-id="<%= detail.project_id %>">Delete</button>
-                        <!--FOR ADDING NEW STUDENTS TO THIS PROJECT-->
+                            <!--FOR ADDING NEW STUDENTS TO THIS PROJECT-->
 
                             <button onclick="toggleSearchBar(<%= detail.project_id %>)" style="margin-top: 10px;">
                                 Add Student to Project
@@ -468,7 +468,7 @@
         const deadline_date = document.getElementById('search-deadline_date').value;
 
         // Send AJAX request to update project details
-        fetch('/edit_project', {
+        fetch('/edit_project_sponsored', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -497,6 +497,8 @@
                 alert('An error occurred.');
             });
     });
+
+    // Adding the project
     $(document).ready(function() {
         $('#addProjectForm').submit(function(event) {
             event.preventDefault(); // Prevent the default form submission
@@ -512,12 +514,12 @@
 
             $.ajax({
                 type: 'POST',
-                url: '/add_project',
+                url: '/add_project_sponsored',
                 contentType: 'application/json',  // Set content type to JSON
                 data: JSON.stringify(formData),   // Stringify formData for JSON payload
                 success: function(response) {
                     alert('Project added successfully');
-                    window.location.href = '/prof_dashboard/research_projects'; // Redirect on success
+                    window.location.href = '/prof_dashboard/sponsored_projects'; // Redirect on success
                 },
                 error: function(error) {
                     console.error('Error:', error);
@@ -533,7 +535,7 @@
         button.addEventListener('click', function () {
             const projectId = this.getAttribute('data-project-id');
 
-            fetch('/prof_dashboard/archive_project', {
+            fetch('/prof_dashboard/archive_project_sponsored', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -655,7 +657,6 @@
             alert('An error occurred.');
         }
     }
-
 
     function addDeadline() {
         let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
