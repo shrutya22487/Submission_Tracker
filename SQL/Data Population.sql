@@ -121,3 +121,10 @@ VALUES
 (4, 1, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true);
 
 
+INSERT INTO deadlines (deadline) VALUES
+('Project Report: September 20, 2024'),
+('Assignment 3 Submission: September 25, 2024');
+
+INSERT INTO todos (task) VALUES
+('Complete UDP Pinger assignment'),
+('Prepare for Midterm Exam');
