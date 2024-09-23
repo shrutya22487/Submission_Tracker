@@ -1,7 +1,7 @@
 -- Inserting data into Professor table (20 rows)
 INSERT INTO Professor (Name, email_id) 
 VALUES
-('Prabal', 'prabalmintora@gmail.com'),
+('Prabal', 'prabalminotra@gmail.com'),
 ('Shrutya', 'shrutyachawla@gmail.com'),
 ('Dr. Jane Smith', 'jane.smith@university.edu'),
 ('Dr. Emily Clark', 'emily.clark@university.edu'),
@@ -121,10 +121,18 @@ VALUES
 (4, 1, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true);
 
 
-INSERT INTO deadlines (deadline) VALUES
-('Project Report: September 20, 2024'),
-('Assignment 3 Submission: September 25, 2024');
+-- Inserting data into the deadlines table
+INSERT INTO deadlines (prof_id, deadline) VALUES
+(1, 'Submit final grades by October 5th, 2024'),
+(2, 'Prepare midterm exam papers by October 10th, 2024'),
+(1, 'Review research proposals by November 1st, 2024'),
+(3, 'Submit conference abstracts by September 30th, 2024'),
+(2, 'Complete annual report by December 15th, 2024');
 
-INSERT INTO todos (task) VALUES
-('Complete UDP Pinger assignment'),
-('Prepare for Midterm Exam');
+-- Inserting data into the todos table
+INSERT INTO todos (prof_id, task, completed) VALUES
+(1, 'Grade assignment 3', FALSE),
+(2, 'Organize research workshop', TRUE),
+(1, 'Prepare lecture notes for next week', FALSE),
+(3, 'Send feedback on project proposals', TRUE),
+(2, 'Schedule meetings with PhD students', FALSE);
