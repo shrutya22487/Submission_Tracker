@@ -1,45 +1,87 @@
-<% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) &&
-        student_details_unarchived.rows.length> 0) { %>
+<% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) &&
+        project_details_unarchived.rows.length> 0) { %>
+    <ul style="font-size: 1.2rem;">
+    <% let currentProjectId= 0; %>
 
-    <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
-        <% let currentType='' ; %>
-        <% let current_id='' ; %>
-        <% student_details_unarchived.rows.forEach(function(student) { %>
-            <% if (student.degree !==currentType) { %>
-                <% if (currentType !=='' ) { %>
-                    </ul> <!-- Closing tag for  student degree -->
-                <% } %>
+    <% project_details_unarchived.rows.forEach(function(detail) { %>
 
-                <li>
-                    <strong>
-                        <%= student.degree %>
-                    </strong>
-                <ul style="padding-left: 20px;"> <!-- Opening tag for  student degree -->
-                    <% currentType=student.degree; %>
+        <!-- Start of Project -->
+        <% if (currentProjectId !== detail.project_id) { %>
+            <!-- Close previous project's students list if not the first iteration -->
+            <% if (currentProjectId > 0) { %>
+                </ul> <!-- Close previous project's student list -->
+                </ul> <!-- Close previous project's list -->
             <% } %>
-            <%if (student.student_id !== current_id){%>
-                <% if (current_id !=='' ) { %>
-                    </ul> <!-- Closing tag for projects -->
-                    </li> <!-- Closing tag for student name -->
-                <% } %>
-                <%current_id = student.student_id;%>
-                <li style="margin-bottom: 15px;">  <!-- Opening tag for  student name -->
-                    <%= student.student_name %>
-                    <div class="button-group" style="margin-top: 10px;">
-                        <button class="btn btn-warning archive_student_button"
-                                data-student-id="<%= student.student_id %>">Archive</button>
-                        <button class="btn btn-danger delete_student_button"
-                                data-student-id="<%= student.student_id %>">Delete</button>
-                    </div>
-                    <ul>
 
-            <%}%>
-            <li>Project Title: <%= student.project_title %>
+            <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+            <strong>Project: <%= detail.project_title %></strong> (Conference: <%=detail.project_conference %>, Status: <%= detail.project_status %>)
+            <br>
+            <a href="<%= detail.project_link_1 %>">Link 1</a> | <a
+                    href="<%= detail.project_link_2 %>">Link 2</a>
+            <br>
+            Submitted: <%= detail.project_submitted_date ? detail.project_submitted_date.toDateString() : 'N/A' %> | Deadline:
+            <%= detail.project_deadline_date ? detail.project_deadline_date.toDateString() : 'N/A' %>
+            <br>
+            <!-- Flex container to align buttons horizontally -->
+            <div
+                    class="d-flex justify-content-start align-items-center mt-2">
+                <button
+                        class="btn btn-sm btn-warning archive_project_button mr-2"
+                        data-project-id="<%= detail.project_id %>">Archive</button>
+                <button
+                        class="btn btn-sm btn-danger delete_project_button mr-2"
+                        data-project-id="<%= detail.project_id %>">Delete</button>
+                <button class="btn btn-sm btn-info mr-2"
+                        onclick="toggleSearchBar(<%=detail.project_id%>)">Add
+                    Student</button>
+                <button class="btn btn-sm btn-secondary"
+                        onclick="openEditModal(<%=detail.project_id%>)">Edit
+                    Project</button>
+            </div>
+
+            <!-- Hidden Search Bar Container -->
+            <div id="search-bar-<%= detail.project_id %>"
+                 class="search-bar-container"
+                 style="display: none; margin-top: 20px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student
+                    Search</h3>
+
+                <!-- Search Form -->
+                <form id="search-form"
+                      class="d-flex justify-content-center align-items-center"
+                      style="margin-bottom: 20px;">
+                    <input type="text"
+                           id="student-search-project-<%= detail.project_id %>"
+                           data-project-id="<%= detail.project_id %>"
+                           placeholder="Type student name..."
+                           oninput="searchStudents(<%= detail.project_id %>)"
+                           class="form-control"
+                           style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); "
+                           autocomplete="off" required>
+                </form>
+
+                <!-- Search Results Box -->
+                <div id="student-results-<%= detail.project_id %>"
+                     class="results-box" style="display: none;">
+                    <!-- Search results will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Initialize student list for this project -->
+            <ul class="student-list" style="margin-top: 10px;">
+                <% currentProjectId=detail.project_id; %>
+                <!-- Reset student for each new project -->
+        <% } %>
+
+            <li class="student-list-item">
+                <strong>Student: <%= detail.student_name%></strong>
             </li>
-            <% }); %>
-        </ul>
+            </ul>
+            <!-- Close the final student/job list -->
+        </ul> <!-- Close the final project list -->
     </li>
-    </ul>
-<% } else { %>
-    <p>No students found.</p>
+    <% } )%>
+<% } %>
+<% else { %>
+    <p>No projects found.</p>
 <% } %>
