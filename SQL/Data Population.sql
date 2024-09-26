@@ -121,6 +121,31 @@ VALUES
 (4, 1, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true);
 
 
+INSERT INTO Conferences (prof_id, date, title, link)
+VALUES
+(1, '2024-09-01', 'AI Conference 2024', 'https://aiconf2024.com'),
+(1, '2024-09-15', 'Deep Learning Summit', 'https://deeplearningsummit.com'),
+(1, '2024-10-05', 'NLP Workshop', 'https://nlpworkshop.com'),
+(2, '2024-09-20', 'Data Science Symposium', 'https://datasciencesymposium.com'),
+(2, '2024-10-10', 'Big Data Expo', 'https://bigdataexpo.com'),
+(2, '2024-11-01', 'Quantum Computing Forum', 'https://quantumforum.com'),
+(3, '2024-08-28', 'Cloud Computing Conference', 'https://cloudcomputingconf.com'),
+(3, '2024-09-12', 'Blockchain Seminar', 'https://blockchainseminar.com'),
+(3, '2024-09-30', 'Edge AI Conference', 'https://edgeaiconference.com'),
+(4, '2024-08-30', 'Robotics Conference', 'https://roboticsconf.com'),
+(4, '2024-09-25', 'Autonomous Systems Expo', 'https://autonomousexpo.com'),
+(4, '2024-10-12', 'Smart Cities Conference', 'https://smartcitiesconference.com'),
+(5, '2024-08-26', 'Cybersecurity Forum', 'https://cybersecurityforum.com'),
+(5, '2024-09-18', 'IoT Summit', 'https://iotsummit.com'),
+(5, '2024-10-02', 'AR/VR Expo', 'https://arvrexpo.com'),
+(6, '2024-08-29', 'Software Engineering Conference', 'https://softengconf.com'),
+(6, '2024-09-19', 'DevOps World', 'https://devopsworld.com'),
+(6, '2024-10-07', 'SaaS Symposium', 'https://saassymposium.com'),
+(7, '2024-09-05', 'Green Tech Conference', 'https://greentechconference.com'),
+(7, '2024-09-22', 'Energy Efficiency Expo', 'https://energyefficiencyexpo.com');
+
+
+
 -- Inserting data into the deadlines table
 INSERT INTO deadlines (prof_id, deadline) VALUES
 (1, 'Submit final grades by October 5th, 2024'),
@@ -129,10 +154,15 @@ INSERT INTO deadlines (prof_id, deadline) VALUES
 (3, 'Submit conference abstracts by September 30th, 2024'),
 (2, 'Complete annual report by December 15th, 2024');
 
--- Inserting data into the todos table
-INSERT INTO todos (prof_id, task, completed) VALUES
-(1, 'Grade assignment 3', FALSE),
-(2, 'Organize research workshop', TRUE),
-(1, 'Prepare lecture notes for next week', FALSE),
-(3, 'Send feedback on project proposals', TRUE),
-(2, 'Schedule meetings with PhD students', FALSE);
+INSERT INTO todos (prof_id, task)
+VALUES
+    (1, 'Complete assignment 1'),
+    (1, 'Read machine learning article'),
+    (2, 'Prepare class materials'),
+    (2, 'Review random forest model'),
+    (3, 'Submit research paper'),
+    (3, 'Attend conference call'),
+    (4, 'Update SVM model'),
+    (4, 'Draft email to collaborators'),
+    (5, 'Revise project proposal'),
+    (5, 'Schedule team meeting');

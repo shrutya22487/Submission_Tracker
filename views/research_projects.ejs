@@ -58,7 +58,6 @@
 
             </div>
 
-
             <!-- Working console section -->
             <div class="col-md-6"
                 style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
@@ -297,10 +296,7 @@
                                 <% } %>
                     </div>
                 </div> <!-- End of working console -->
-            </div> <!-- End of column -->
-
-
-
+            </div>
 
             <!--Prof to do section-->
             <div class="col-md-3 col-sm-3 col-3"
@@ -338,35 +334,17 @@
                     <div class="card">
                         <div class="card-body">
                             <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List</h2>
-                            <ul class="list-unstyled" id="todo-list" style="padding-left: 20px;">
-                                <li>
-                                    <input type="checkbox" id="task1" name="task1">
-                                    <label for="task1">Complete UDP Pinger assignment</label>
-                                    <span class="remove-btn" onclick="removeItem(this)"
-                                        style="margin-left: 10px; cursor: pointer;">x</span>
+                            <ul class="list-unstyled" id="todoList" style="padding-left: 20px;"></ul>
+                            <!-- Template for each to-do item (invisible initially) -->
+                            <template id="todoItemTemplate">
+                                <li data-id="">
+                                    <span class="task-text"></span>
+                                    <button class="delete-todo">Delete</button>
                                 </li>
-                                <li>
-                                    <input type="checkbox" id="task2" name="task2">
-                                    <label for="task2">Prepare for Midterm Exam</label>
-                                    <span class="remove-btn" onclick="removeItem(this)"
-                                        style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="task3" name="task3">
-                                    <label for="task3">Finish Project Report Draft</label>
-                                    <span class="remove-btn" onclick="removeItem(this)"
-                                        style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                                <li>
-                                    <input type="checkbox" id="task4" name="task4">
-                                    <label for="task4">Read 2 Research Papers</label>
-                                    <span class="remove-btn" onclick="removeItem(this)"
-                                        style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                            </ul>
+                            </template>
+
                             <!-- Edit Button to Add To-Do -->
-                            <button class="btn btn-primary btn-sm" style="background-color: #808080;"
-                                onclick="addTodo()">Edit</button>
+                            <button class="btn btn-primary btn-sm" style="background-color:#808080" onclick="addTodo()">Edit</button>
                         </div>
                     </div>
                 </div>
@@ -696,22 +674,79 @@
                 ul.appendChild(li);
             }
         }
+        ////////////////////////////// TO-DO FUNCTIONS ///////////////////////////////////
+
+        // function to get the todos
+        function fetchTodos() {
+            $.ajax({
+                url: '/prof_dashboard/todo',
+                type: 'GET',
+                success: function (data) {
+                    const todoList = $('#todoList');
+                    todoList.empty(); // Clear the current list
+
+                    if (data.length > 0) {
+                        data.forEach(todo => {
+                            const template = $('#todoItemTemplate').html();
+                            const newTodo = $(template).clone();
+
+                            newTodo.attr('data-id', todo.id);
+                            newTodo.find('.task-text').text(todo.task);
+                            newTodo.find('.delete-todo').click(() => deleteTodo(todo.id));
+                            todoList.append(newTodo);
+                        });
+                    } else {
+                        todoList.append('<li>No tasks found</li>');
+                    }
+                },
+                error: function () {
+                    alert('Error fetching tasks');
+                }
+            });
+        }
 
         // Function to add a new To-Do item
         function addTodo() {
             let todo = prompt("Enter the new To-Do item:");
             if (todo) {
-                const ul = document.getElementById('todo-list');
-                const li = document.createElement('li');
-                li.innerHTML = `<input type="checkbox"> ${todo}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-                ul.appendChild(li);
+
+                // Make an AJAX request to add the task to the server
+                $.ajax({
+                    url: '/prof_dashboard/add_todo',  // Ensure this URL matches your route
+                    type: 'POST',
+                    data: { task: todo },
+                    success: function () {
+                        fetchTodos();
+
+                    },
+                    error: function () {
+                        alert('Error adding task');
+                    }
+                });
             }
         }
 
-        // Function to remove an item from the list
-        function removeItem(element) {
-            element.parentElement.remove();
+        // Function to delete a to-do task
+        function deleteTodo(todoId) {
+            $.ajax({
+                url: '/prof_dashboard/delete_todo',
+                type: 'POST',
+                data: { todo_id: todoId },
+                success: function () {
+                    fetchTodos();
+                },
+                error: function () {
+                    alert('Error deleting task');
+                }
+            });
         }
+
+        // Fetch and display the tasks when the page loads
+        $(document).ready(function () {
+            fetchTodos();
+        });
+        /////////////////////////////////////////////////////////////////////////////////
+
     </script>
 
     <%- include('partials/footer') %>

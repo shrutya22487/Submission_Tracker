@@ -89,18 +89,32 @@ CREATE TABLE IF NOT EXISTS Papers
     FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE SET NULL
 );
 
-
-CREATE TABLE IF NOT EXISTS deadlines (
+CREATE TABLE IF NOT EXISTS Conferences
+(
     prof_id INT NOT NULL,
-    id SERIAL PRIMARY KEY,
-    deadline TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id      SERIAL PRIMARY KEY,
+    date    DATE,
+    title  TEXT NOT NULL,
+    link  TEXT,
+    FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS todos (
-    prof_id INT  NOT NULL,
-    id SERIAL PRIMARY KEY,
-    task TEXT NOT NULL,
+
+CREATE TABLE IF NOT EXISTS deadlines
+(
+    prof_id   INT  NOT NULL,
+    id        SERIAL PRIMARY KEY,
+    deadline  TEXT NOT NULL,
     completed BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS todos
+(
+    prof_id INT  NOT NULL,
+    id      SERIAL PRIMARY KEY,
+    task    TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );

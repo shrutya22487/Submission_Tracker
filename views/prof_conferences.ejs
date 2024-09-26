@@ -1,18 +1,10 @@
 <%- include('partials/header') %>
 
-<!--  -->
-<!-- TO USE THIS, JUST ADD ENTIRE EJS CODE TO THE WORKING CONSOLE SECTION -->
-<!-- TO USE THIS, JUST ADD ENTIRE EJS CODE TO THE WORKING CONSOLE SECTION -->
-<!-- TO USE THIS, JUST ADD ENTIRE EJS CODE TO THE WORKING CONSOLE SECTION -->
-<!-- TO USE THIS, JUST ADD ENTIRE EJS CODE TO THE WORKING CONSOLE SECTION -->
-<!-- TO USE THIS, JUST ADD ENTIRE EJS CODE TO THE WORKING CONSOLE SECTION -->
-<!--  -->
-
 <div class="container-fluid">
     <div class="row">
-    
 
-    <!-- Nav bar section -->
+
+        <!-- Nav bar section -->
         <div class="col-md-3 sidebar" style="background-color: #e9ecef; height:100vh; position:fixed; z-index : 2;">
             <div class="jumbotron text-center" style="margin-bottom: 20px;">
                 <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
@@ -65,79 +57,106 @@
 
 
         </div>
-    <!-- Working console section -->
-    <div class="col-md-6" style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
-      <div id="working-console">
 
-        <div class="jumbotron text-center" style="margin-bottom: 20px;">
-            <h1 style="font-size: 5rem; font-weight: bold;">Professor Dashboard</h1>
-        
-        </div>
-        
-        <!-- Section for adding students -->
-        <div class="container" style="position: relative;">
-            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;margin-top:40px;">Student Search</h2>
-            <form id="search-form" style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
-                <input type="text" id="search-bar" name="q" placeholder="Search" required 
-                       style="width: 100%; max-width: 600px; padding: 12px 20px; border: 1px solid #ccc; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s ease;" 
-                       autocomplete="off">
-            </form>
-            
-            <div id="results" style="position: absolute; z-index: 1000; background-color: white; width: 100%; max-width: 600px; left: 50%; transform: translateX(-50%); top: 100%; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 10px;">
-                <!-- Search results will be displayed here -->
+        <!-- Working console section -->
+        <div class="col-md-6" style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
+            <div id="working-console">
+
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 5rem; font-weight: bold;">Conferences</h1>
+                </div>
+
+                <!--Conferences-->
+
+                <table border="1">
+                    <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Link</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="conference-table-body">
+                    <% if (conferences && Array.isArray(conferences.rows)) {%>
+                        <% conferences.rows.forEach(function(conference) { %>
+                            <tr data-id="<%= conference.id %>">
+                                <td><%= conference.date %></td>
+                                <td><%= conference.title %></td>
+                                <td><a href="<%= conference.link %>">Link</a></td>
+                                <td>
+                                    <button class="delete-btn" data-id="<%= conference.id %>">Delete</button>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <%}%>
+                    </tbody>
+                </table>
+
+                <h2>Add Conference</h2>
+                <form id="add-conference-form">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" ><br>
+
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required><br>
+
+                    <label for="link">Link:</label>
+                    <input type="url" id="link" name="link"><br>
+
+                    <button type="submit">Add Conference</button>
+                </form>
+                <br>
+                <br>
             </div>
         </div>
-        <br>
-        <br>
-      </div>
-    </div>
 
-   <!-- Static Info Section -->
+        <!-- Static Info Section -->
 
-<div class="col-md-3" style="background-color: #e9ecef; height: 100vh; right:0; position: fixed; z-index:4;">
-<div id="static-info">
-    <!-- Title Section -->
-    <div class="jumbotron text-center" style="margin-bottom: 20px;">
-        <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
-    </div>
+        <div class="col-md-3" style="background-color: #e9ecef; height: 100vh; right:0; position: fixed; z-index:4;">
+            <div id="static-info">
+                <!-- Title Section -->
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
+                </div>
 
-    <!-- Upcoming Deadlines Card -->
-    <div class="card" style="margin-bottom: 20px;">
-        <div class="card-body">
-            <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">Upcoming Deadlines</h2>
-            <ul class="list-unstyled" id="deadlines-list" style="padding-left: 20px;">
-                <li>Project Report: September 20, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
-                <li>Assignment 3 Submission: September 25, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
-                <li>Midterm Exam: October 5, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
-                <li>Research Proposal: October 10, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
-            </ul>
-            <!-- Edit Button to Add Deadline -->
-            <button class="btn btn-primary btn-sm" style="background-color:#808080"onclick="addDeadline()">Edit</button>
+                <!-- Upcoming Deadlines Card -->
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-body">
+                        <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">Upcoming Deadlines</h2>
+                        <ul class="list-unstyled" id="deadlines-list" style="padding-left: 20px;">
+                            <li>Project Report: September 20, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
+                            <li>Assignment 3 Submission: September 25, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
+                            <li>Midterm Exam: October 5, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
+                            <li>Research Proposal: October 10, 2024<span class="remove-btn" onclick="removeItem(this)">x</span></li>
+                        </ul>
+                        <!-- Edit Button to Add Deadline -->
+                        <button class="btn btn-primary btn-sm" style="background-color:#808080"onclick="addDeadline()">Edit</button>
+                    </div>
+                </div>
+
+                <!-- To-Do List Card -->
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List</h2>
+                        <ul class="list-unstyled" id="todoList" style="padding-left: 20px;"></ul>
+                        <!-- Template for each to-do item (invisible initially) -->
+                        <template id="todoItemTemplate">
+                            <li data-id="">
+                                <span class="task-text"></span>
+                                <button class="delete-todo">Delete</button>
+                            </li>
+                        </template>
+
+                        <!-- Edit Button to Add To-Do -->
+                        <button class="btn btn-primary btn-sm" style="background-color:#808080" onclick="addTodo()">Edit</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- To-Do List Card -->
-    <div class="card">
-        <div class="card-body">
-            <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List</h2>
-            <ul class="list-unstyled" id="todoList" style="padding-left: 20px;"></ul>
-            <!-- Template for each to-do item (invisible initially) -->
-            <template id="todoItemTemplate">
-                <li data-id="">
-                    <span class="task-text"></span>
-                    <button class="delete-todo">Delete</button>
-                </li>
-            </template>
-
-            <!-- Edit Button to Add To-Do -->
-            <button class="btn btn-primary btn-sm" style="background-color:#808080" onclick="addTodo()">Edit</button>
-        </div>
     </div>
 </div>
-</div>
-    </div>
-</div>
-
 <style>
     .remove-btn {
         cursor: pointer;
@@ -146,9 +165,59 @@
         margin-left: 10px;
     }
 </style>
+
 <!-- JavaScript -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+    ///////////////////////CONFERENCES FUNCTIONS //////////////////////////////////
+
+    $(document).ready(function() {
+        // Delete conference
+        $('#conference-table-body').on('click', '.delete-btn', function() {
+            const conferenceId = $(this).data('id');
+            $.ajax({
+                url: '/prof_dashboard/delete_conference',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ conference_id: conferenceId }),
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(error) {
+                    alert("Error deleting conference.");
+                }
+            });
+        });
+
+        // Add conference
+        $('#add-conference-form').submit(function(e) {
+            e.preventDefault();
+            const formData = {
+                date: $('#date').val(),
+                title: $('#title').val(),
+                link: $('#link').val()
+            };
+            $.ajax({
+                url: '/prof_dashboard/add_conference',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function(response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function(error) {
+                    alert("Error adding conference.");
+                }
+            });
+        });
+    });
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+
     document.getElementById('search-bar').addEventListener('input', function() {
         const query = this.value;
         if (query.length > 0) {

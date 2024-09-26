@@ -7,7 +7,7 @@ const router = Router();
 router.get('/conferences', async (req, res) => {
     try {
         const conferencesResult = await db.query(`SELECT * FROM conferences`);
-        res.render("conferences.ejs", { conferences: conferencesResult.rows });
+        res.render("prof_conferences.ejs", { conferences: conferencesResult.rows });
     } catch (err) {
         console.error("Error fetching conferences:", err);
         res.status(500).send("Server error");

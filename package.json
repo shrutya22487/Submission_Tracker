@@ -19,7 +19,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "jquery": "^3.7.1",
-    "nodemon": "^3.1.5",
+    "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oidc": "^0.1.0",

@@ -2,8 +2,6 @@
 
     <div class="container-fluid">
         <div class="row">
-
-
             <!-- Nav bar section -->
             <div class="col-md-3 sidebar" style="background-color: #e9ecef; height:100vh; position:fixed; z-index : 2;">
                 <div class="jumbotron text-center" style="margin-bottom: 20px;">
@@ -535,27 +533,17 @@
                     <div class="card">
                         <div class="card-body">
                             <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List</h2>
-                            <ul class="list-unstyled" id="todo-list" style="padding-left: 20px;">
-                                <li><input type="checkbox" id="task1" name="task1">
-                                    <label for="task1">Complete UDP Pinger assignment</label>
-                                    <span class="remove-btn" onclick="removeItem(this)">x</span>
+                            <ul class="list-unstyled" id="todoList" style="padding-left: 20px;"></ul>
+                            <!-- Template for each to-do item (invisible initially) -->
+                            <template id="todoItemTemplate">
+                                <li data-id="">
+                                    <span class="task-text"></span>
+                                    <button class="delete-todo">Delete</button>
                                 </li>
-                                <li><input type="checkbox" id="task2" name="task2">
-                                    <label for="task2">Prepare for Midterm Exam</label>
-                                    <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                </li>
-                                <li><input type="checkbox" id="task3" name="task3">
-                                    <label for="task3">Finish Project Report Draft</label>
-                                    <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                </li>
-                                <li><input type="checkbox" id="task4" name="task4">
-                                    <label for="task4">Read 2 Research Papers</label>
-                                    <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                </li>
-                            </ul>
+                            </template>
+
                             <!-- Edit Button to Add To-Do -->
-                            <button class="btn btn-primary btn-sm" style="background-color:#808080"
-                                onclick="addTodo()">Edit</button>
+                            <button class="btn btn-primary btn-sm" style="background-color:#808080" onclick="addTodo()">Edit</button>
                         </div>
                     </div>
                 </div>
@@ -563,7 +551,9 @@
         </div>
     </div>
 
-    <style>
+
+
+<style>
         .search-bar-container {
             position: relative;
             /* Keep relative positioning for the container */
@@ -669,278 +659,334 @@
         }
     </style>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        // Open the edit modal and fetch the project details
-        function openEditModal(projectId) {
-            // Open the modal
-            document.getElementById('edit-project-modal').style.display = 'block';
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Open the edit modal and fetch the project details
+    function openEditModal(projectId) {
+        // Open the modal
+        document.getElementById('edit-project-modal').style.display = 'block';
 
-            // Fetch current project details to pre-fill the form
-            fetch(`/get_project/${projectId}`)
-                .then(response => response.json())
-                .then(data => {
-                    // console.log(data);
-                    // Pre-fill the form with existing project data
-                    document.getElementById('search-project_id').value = data.id;
-                    document.getElementById('search-title').value = data.title || '';
-                    document.getElementById('search-conference').value = data.conference || '';
-                    document.getElementById('search-status').value = data.status || '';
-                    document.getElementById('search-link_1').value = data.link_1 || '';
-                    document.getElementById('search-link_2').value = data.link_2 || '';
-                    document.getElementById('search-submitted_date').value = data.submitted_date ? data.submitted_date.split('T')[0] : '';
-                    document.getElementById('search-deadline_date').value = data.deadline_date ? data.deadline_date.split('T')[0] : '';
+        // Fetch current project details to pre-fill the form
+        fetch(`/get_project/${projectId}`)
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                // Pre-fill the form with existing project data
+                document.getElementById('search-project_id').value = data.id;
+                document.getElementById('search-title').value = data.title || '';
+                document.getElementById('search-conference').value = data.conference || '';
+                document.getElementById('search-status').value = data.status || '';
+                document.getElementById('search-link_1').value = data.link_1 || '';
+                document.getElementById('search-link_2').value = data.link_2 || '';
+                document.getElementById('search-submitted_date').value = data.submitted_date ? data.submitted_date.split('T')[0] : '';
+                document.getElementById('search-deadline_date').value = data.deadline_date ? data.deadline_date.split('T')[0] : '';
+            });
+    }
+
+    // Close the modal
+    function closeEditModal() {
+        document.getElementById('edit-project-modal').style.display = 'none';
+    }
+
+    // Submit the edit form via AJAX
+    document.getElementById('edit-project-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const projectId = document.getElementById('search-project_id').value;
+        const title = document.getElementById('search-title').value;
+        const conference = document.getElementById('search-conference').value;
+        const status = document.getElementById('search-status').value;
+        const link_1 = document.getElementById('search-link_1').value;
+        const link_2 = document.getElementById('search-link_2').value;
+        const submitted_date = document.getElementById('search-submitted_date').value;
+        const deadline_date = document.getElementById('search-deadline_date').value;
+
+        // Send AJAX request to update project details
+        fetch('/edit_project_sponsored', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                project_id: projectId,
+                title: title,
+                conference: conference,
+                status: status,
+                link_1: link_1,
+                link_2: link_2,
+                submitted_date: submitted_date,
+                deadline_date: deadline_date,
+            })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Project updated successfully');
+                    window.location.reload();  // Reload page after successful update
+                } else {
+                    alert('Error updating project');
+                }
+            })
+            .catch(error => {
+                console.error('Error updating project:', error);
+                alert('An error occurred.');
+            });
+    });
+
+    // Adding the project
+    $(document).ready(function () {
+        $('#addProjectForm').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            const formData = {
+                title: $('#title').val(),
+                conference: $('#conference').val(),
+                status: $('#status').val(),
+                link_1: $('#link_1').val(),
+                link_2: $('#link_2').val(),
+                submitted_date: $('#submitted_date').val(),
+                deadline_date: $('#deadline_date').val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/add_project_sponsored',
+                contentType: 'application/json',  // Set content type to JSON
+                data: JSON.stringify(formData),   // Stringify formData for JSON payload
+                success: function (response) {
+                    alert('Project added successfully');
+                    window.location.href = '/prof_dashboard/sponsored_projects'; // Redirect on success
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while adding the project');
+                }
+            });
+
+        });
+    });
+
+    // Archiving the student
+    document.querySelectorAll('.archive_project_button').forEach(button => {
+        button.addEventListener('click', function () {
+            const projectId = this.getAttribute('data-project-id');
+
+            fetch('/prof_dashboard/archive_project_sponsored', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ project_id: projectId })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("Project archived successfully.");
+                        window.location.reload();
+                    } else {
+                        alert("Failed to archive Project.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while archiving the project.");
                 });
+        });
+    });
+
+    // Deleting the student
+    document.querySelectorAll('.delete_project_button').forEach(button => {
+        button.addEventListener('click', function () {
+            const projectId = this.getAttribute('data-project-id');
+
+            fetch('/prof_dashboard/delete_project', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ project_id: projectId })
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert("project deleted successfully.");
+                        window.location.reload();
+                    } else {
+                        alert("Failed to delete project.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while deleting the project.");
+                });
+        });
+    });
+
+    // Toggle search bar visibility
+    function toggleSearchBar(projectId) {
+        const searchBar = document.getElementById(`search-bar-${projectId}`);
+        if (searchBar.style.display === 'none') {
+            searchBar.style.display = 'block';
+        } else {
+            searchBar.style.display = 'none';
+        }
+    }
+
+    // Search function
+    async function searchStudents(projectId) {
+        const query = document.getElementById(`student-search-project-${projectId}`).value;
+
+        const resultsDiv = document.getElementById(`student-results-${projectId}`);
+
+        // Clear results if input is empty
+        if (query.length === 0) {
+            resultsDiv.innerHTML = ''; // Clear previous results
+            resultsDiv.style.display = 'none'; // Hide results box
+            return;
         }
 
-        // Close the modal
-        function closeEditModal() {
-            document.getElementById('edit-project-modal').style.display = 'none';
+        try {
+            const response = await fetch(`/search_students_prof?query=${encodeURIComponent(query)}`);
+            const students = await response.json();
+
+            displayResults(students, projectId);  // Pass projectId to the display function
+        } catch (error) {
+            console.error('Error fetching students:', error);
+        }
+    }
+
+    // Display results for the specific project
+    function displayResults(students, projectId) {
+        const resultsDiv = document.getElementById(`student-results-${projectId}`);
+        resultsDiv.innerHTML = ''; // Clear previous results
+
+        if (students.length === 0) {
+            resultsDiv.style.display = 'none'; // Hide if no results
+            return;
+        } else {
+            resultsDiv.style.display = 'block'; // Show results box
         }
 
-        // Submit the edit form via AJAX
-        document.getElementById('edit-project-form').addEventListener('submit', function (e) {
-            e.preventDefault();
+        students.forEach(student => {
+            const button = document.createElement('button');
+            button.textContent = student.name;
+            button.className = 'student-button';
+            button.setAttribute('data-id', student.id);
 
-            const projectId = document.getElementById('search-project_id').value;
-            const title = document.getElementById('search-title').value;
-            const conference = document.getElementById('search-conference').value;
-            const status = document.getElementById('search-status').value;
-            const link_1 = document.getElementById('search-link_1').value;
-            const link_2 = document.getElementById('search-link_2').value;
-            const submitted_date = document.getElementById('search-submitted_date').value;
-            const deadline_date = document.getElementById('search-deadline_date').value;
+            button.addEventListener('click', () => {
+                addStudentToProfessor(student.id, projectId); // Pass projectId
+            });
 
-            // Send AJAX request to update project details
-            fetch('/edit_project_sponsored', {
+            resultsDiv.appendChild(button);
+        });
+    }
+
+    // Add student function
+    async function addStudentToProfessor(studentId, projectId) {
+        try {
+            const response = await fetch('/prof_dashboard/add_student_to_project', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    project_id: projectId,
-                    title: title,
-                    conference: conference,
-                    status: status,
-                    link_1: link_1,
-                    link_2: link_2,
-                    submitted_date: submitted_date,
-                    deadline_date: deadline_date,
+                    student_id: studentId,
+                    project_id: projectId
                 })
-            })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Project updated successfully');
-                        window.location.reload();  // Reload page after successful update
-                    } else {
-                        alert('Error updating project');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error updating project:', error);
-                    alert('An error occurred.');
-                });
-        });
-
-        // Adding the project
-        $(document).ready(function () {
-            $('#addProjectForm').submit(function (event) {
-                event.preventDefault(); // Prevent the default form submission
-                const formData = {
-                    title: $('#title').val(),
-                    conference: $('#conference').val(),
-                    status: $('#status').val(),
-                    link_1: $('#link_1').val(),
-                    link_2: $('#link_2').val(),
-                    submitted_date: $('#submitted_date').val(),
-                    deadline_date: $('#deadline_date').val(),
-                };
-
-                $.ajax({
-                    type: 'POST',
-                    url: '/add_project_sponsored',
-                    contentType: 'application/json',  // Set content type to JSON
-                    data: JSON.stringify(formData),   // Stringify formData for JSON payload
-                    success: function (response) {
-                        alert('Project added successfully');
-                        window.location.href = '/prof_dashboard/sponsored_projects'; // Redirect on success
-                    },
-                    error: function (error) {
-                        console.error('Error:', error);
-                        alert('An error occurred while adding the project');
-                    }
-                });
-
             });
-        });
 
-        // Archiving the student
-        document.querySelectorAll('.archive_project_button').forEach(button => {
-            button.addEventListener('click', function () {
-                const projectId = this.getAttribute('data-project-id');
-
-                fetch('/prof_dashboard/archive_project_sponsored', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ project_id: projectId })
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("Project archived successfully.");
-                            window.location.reload();
-                        } else {
-                            alert("Failed to archive Project.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("An error occurred while archiving the project.");
-                    });
-            });
-        });
-
-        // Deleting the student
-        document.querySelectorAll('.delete_project_button').forEach(button => {
-            button.addEventListener('click', function () {
-                const projectId = this.getAttribute('data-project-id');
-
-                fetch('/prof_dashboard/delete_project', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ project_id: projectId })
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("project deleted successfully.");
-                            window.location.reload();
-                        } else {
-                            alert("Failed to delete project.");
-                        }
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                        alert("An error occurred while deleting the project.");
-                    });
-            });
-        });
-
-        // Toggle search bar visibility
-        function toggleSearchBar(projectId) {
-            const searchBar = document.getElementById(`search-bar-${projectId}`);
-            if (searchBar.style.display === 'none') {
-                searchBar.style.display = 'block';
+            if (response.ok) {
+                alert('Student successfully added!');
+                window.location.reload();
             } else {
-                searchBar.style.display = 'none';
+                alert('Error adding student.');
             }
+        } catch (error) {
+            console.error('Error adding student:', error);
+            alert('An error occurred.');
         }
+    }
 
-        // Search function (unchanged)
-        async function searchStudents(projectId) {
-            const query = document.getElementById(`student-search-project-${projectId}`).value;
-
-            const resultsDiv = document.getElementById(`student-results-${projectId}`);
-
-            // Clear results if input is empty
-            if (query.length === 0) {
-                resultsDiv.innerHTML = ''; // Clear previous results
-                resultsDiv.style.display = 'none'; // Hide results box
-                return;
-            }
-
-            try {
-                const response = await fetch(`/search_students_prof?query=${encodeURIComponent(query)}`);
-                const students = await response.json();
-
-                displayResults(students, projectId);  // Pass projectId to the display function
-            } catch (error) {
-                console.error('Error fetching students:', error);
-            }
+    function addDeadline() {
+        let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
+        if (deadline) {
+            const ul = document.getElementById('deadlines-list');
+            const li = document.createElement('li');
+            li.innerHTML = `${deadline}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
+            ul.appendChild(li);
         }
+    }
 
+    ////////////////////////////// TO-DO FUNCTIONS ///////////////////////////////////
 
-        // Display results for the specific project
-        function displayResults(students, projectId) {
+    // function to get the todos
+    function fetchTodos() {
+        $.ajax({
+            url: '/prof_dashboard/todo',
+            type: 'GET',
+            success: function (data) {
+                const todoList = $('#todoList');
+                todoList.empty(); // Clear the current list
 
+                if (data.length > 0) {
+                    data.forEach(todo => {
+                        const template = $('#todoItemTemplate').html();
+                        const newTodo = $(template).clone();
 
-            const resultsDiv = document.getElementById(`student-results-${projectId}`);
-            resultsDiv.innerHTML = ''; // Clear previous results
-
-            if (students.length === 0) {
-                resultsDiv.style.display = 'none'; // Hide if no results
-                return;
-            } else {
-                resultsDiv.style.display = 'block'; // Show results box
-            }
-
-            students.forEach(student => {
-                const button = document.createElement('button');
-                button.textContent = student.name;
-                button.className = 'student-button';
-                button.setAttribute('data-id', student.id);
-
-                button.addEventListener('click', () => {
-                    addStudentToProfessor(student.id, projectId); // Pass projectId
-                });
-
-                resultsDiv.appendChild(button);
-            });
-        }
-
-        // Add student function (unchanged)
-        async function addStudentToProfessor(studentId, projectId) {
-            try {
-                const response = await fetch('/prof_dashboard/add_student_to_project', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        student_id: studentId,
-                        project_id: projectId
-                    })
-                });
-
-                if (response.ok) {
-                    alert('Student successfully added!');
-                    window.location.reload();
+                        newTodo.attr('data-id', todo.id);
+                        newTodo.find('.task-text').text(todo.task);
+                        newTodo.find('.delete-todo').click(() => deleteTodo(todo.id));
+                        todoList.append(newTodo);
+                    });
                 } else {
-                    alert('Error adding student.');
+                    todoList.append('<li>No tasks found</li>');
                 }
-            } catch (error) {
-                console.error('Error adding student:', error);
-                alert('An error occurred.');
+            },
+            error: function () {
+                alert('Error fetching tasks');
             }
-        }
+        });
+    }
 
-        function addDeadline() {
-            let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
-            if (deadline) {
-                const ul = document.getElementById('deadlines-list');
-                const li = document.createElement('li');
-                li.innerHTML = `${deadline}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-                ul.appendChild(li);
+    // Function to add a new To-Do item
+    function addTodo() {
+        let todo = prompt("Enter the new To-Do item:");
+        if (todo) {
+
+            // Make an AJAX request to add the task to the server
+            $.ajax({
+                url: '/prof_dashboard/add_todo',  // Ensure this URL matches your route
+                type: 'POST',
+                data: { task: todo },
+                success: function () {
+                    fetchTodos();
+
+                },
+                error: function () {
+                    alert('Error adding task');
+                }
+            });
+        }
+    }
+
+    // Function to delete a to-do task
+    function deleteTodo(todoId) {
+        $.ajax({
+            url: '/prof_dashboard/delete_todo',
+            type: 'POST',
+            data: { todo_id: todoId },
+            success: function () {
+                fetchTodos();
+            },
+            error: function () {
+                alert('Error deleting task');
             }
-        }
+        });
+    }
 
-        // Function to add a new To-Do item
-        function addTodo() {
-            let todo = prompt("Enter the new To-Do item:");
-            if (todo) {
-                const ul = document.getElementById('todo-list');
-                const li = document.createElement('li');
-                li.innerHTML = `<input type="checkbox"> ${todo}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-                ul.appendChild(li);
-            }
-        }
+    // Fetch and display the tasks when the page loads
+    $(document).ready(function () {
+        fetchTodos();
+    });
+    /////////////////////////////////////////////////////////////////////////////////
 
-        // Function to remove an item from the list
-        function removeItem(element) {
-            element.parentElement.remove();
-        }
-    </script>
+
+</script>
 
     <%- include('partials/footer') %>
