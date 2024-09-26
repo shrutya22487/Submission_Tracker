@@ -1,0 +1,45 @@
+<% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) &&
+        student_details_unarchived.rows.length> 0) { %>
+
+    <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
+        <% let currentType='' ; %>
+        <% let current_id='' ; %>
+        <% student_details_unarchived.rows.forEach(function(student) { %>
+            <% if (student.degree !==currentType) { %>
+                <% if (currentType !=='' ) { %>
+                    </ul> <!-- Closing tag for  student degree -->
+                <% } %>
+
+                <li>
+                    <strong>
+                        <%= student.degree %>
+                    </strong>
+                <ul style="padding-left: 20px;"> <!-- Opening tag for  student degree -->
+                    <% currentType=student.degree; %>
+            <% } %>
+            <%if (student.student_id !== current_id){%>
+                <% if (current_id !=='' ) { %>
+                    </ul> <!-- Closing tag for projects -->
+                    </li> <!-- Closing tag for student name -->
+                <% } %>
+                <%current_id = student.student_id;%>
+                <li style="margin-bottom: 15px;">  <!-- Opening tag for  student name -->
+                    <%= student.student_name %>
+                    <div class="button-group" style="margin-top: 10px;">
+                        <button class="btn btn-warning archive_student_button"
+                                data-student-id="<%= student.student_id %>">Archive</button>
+                        <button class="btn btn-danger delete_student_button"
+                                data-student-id="<%= student.student_id %>">Delete</button>
+                    </div>
+                    <ul>
+
+            <%}%>
+            <li>Project Title: <%= student.project_title %>
+            </li>
+            <% }); %>
+        </ul>
+    </li>
+    </ul>
+<% } else { %>
+    <p>No students found.</p>
+<% } %>
