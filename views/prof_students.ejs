@@ -4,59 +4,8 @@
         <div class="row">
 
             <!-- Nav bar section -->
-            <div class="col-md-3 sidebar" style="background-color: #e9ecef; height:100vh; position:fixed; z-index : 2;">
-                <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
-
-                </div>
-                <nav class="nav flex-column" style="margin:10px;">
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/students" role="button"
-                        style="color: #000; font-weight:bold; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #303030; border-width:2px;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#303030'; this.style.color='#000';">
-                        Students
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/research_projects" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#fff'; this.style.color='#000';">
-                        Research Projects
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/under_review_papers" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#fff'; this.style.color='#000';">
-                        Under Review Papers
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/sponsored_projects" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#fff'; this.style.color='#000';">
-                        Sponsored Projects
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/reading_list" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #ccc;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#ccc'; this.style.color='#000';">
-                        Reading List
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/prof_dashboard/conferences" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;"
-                        onmouseover="this.style.backgroundColor='#303030'; this.style.borderColor='#303030'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#fff'; this.style.color='#000';">
-                        Conferences
-                    </a>
-                    <a class="btn btn-dark btn-lg" href="/logout" role="button"
-                        style="color:black; margin-top: 0.5%; margin-bottom:1%; padding:3%; background-color: #fff; border-color: #fff;"
-                        onmouseover="this.style.backgroundColor='#a40000'; this.style.borderColor='#a40000'; this.style.color='#fff';"
-                        onmouseout="this.style.backgroundColor='#fff'; this.style.borderColor='#fff'; this.style.color='#000';">
-                        Logout
-                    </a>
-                </nav>
-
-
-            </div>
-<!--            Working Console-->
+            <%- include('partials/nav_bar.ejs')%>
+            <!--Working Console-->
             <div class="col-md-6"
                 style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
                 <div class="jumbotron text-center" style="margin-bottom: 20px;">
@@ -240,61 +189,11 @@
             </div>
 
             <!--todos and deadlines-->
-            <div class="col-md-3 col-sm-3 col-3"
-                style="background-color: #e9ecef; height: 100vh; right: 0; position: fixed; z-index: 10; padding: 20px;">
-                <div id="static-info">
-                    <!-- Title Section -->
-                    <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                        <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
-                    </div>
-
-                    <!-- Upcoming Deadlines Card -->
-                    <div class="card" style="margin-bottom: 20px;">
-                        <div class="card-body">
-                            <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">Upcoming Deadlines</h2>
-                            <ul class="list-unstyled" id="deadlines-list" style="padding-left: 20px;">
-                                <li>Project Report: September 20, 2024<span class="remove-btn"
-                                        onclick="removeItem(this)" style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                                <li>Assignment 3 Submission: September 25, 2024<span class="remove-btn"
-                                        onclick="removeItem(this)" style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                                <li>Midterm Exam: October 5, 2024<span class="remove-btn" onclick="removeItem(this)"
-                                        style="margin-left: 10px; cursor: pointer;">x</span></li>
-                                <li>Research Proposal: October 10, 2024<span class="remove-btn"
-                                        onclick="removeItem(this)" style="margin-left: 10px; cursor: pointer;">x</span>
-                                </li>
-                            </ul>
-                            <!-- Edit Button to Add Deadline -->
-                            <button class="btn btn-primary btn-sm" style="background-color: #808080;"
-                                onclick="addDeadline()">Add</button>
-                        </div>
-                    </div>
-
-                    <!-- To-Do List Card -->
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List</h2>
-                            <ul class="list-unstyled" id="todoList" style="padding-left: 20px;"></ul>
-                            <!-- Template for each to-do item (invisible initially) -->
-                            <template id="todoItemTemplate">
-                                <li data-id="">
-                                    <span class="task-text"></span>
-                                    <button class="delete-todo">Delete</button>
-                                </li>
-                            </template>
-
-                            <!-- Edit Button to Add To-Do -->
-                            <button class="btn btn-primary btn-sm" style="background-color:#808080" onclick="addTodo()">Edit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+            <%- include('partials/task_mgmt.ejs')%>
 
     </div>
-    </div>
+
+</div>
 <style>
     .body {
         font-size: 1rem;
@@ -521,7 +420,6 @@
     });
     }
 
-
         async function addStudentToProfessor(studentId) {
 
         try {
@@ -554,104 +452,6 @@
         ul.appendChild(li);
     }
     }
-
-        // Function to add a new To-Do item
-        function addTodo() {
-        let todo = prompt("Enter the new To-Do item:");
-        if (todo) {
-        const ul = document.getElementById('todo-list');
-        const li = document.createElement('li');
-        li.innerHTML = `<input type="checkbox"> ${todo}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-        ul.appendChild(li);
-    }
-    }
-
-        // Function to remove an item from the list
-        function removeItem(element) {
-        element.parentElement.remove();
-    }
-    function addDeadline() {
-        let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
-        if (deadline) {
-            const ul = document.getElementById('deadlines-list');
-            const li = document.createElement('li');
-            li.innerHTML = `${deadline}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-            ul.appendChild(li);
-        }
-    }
-
-    ////////////////////////////// TO-DO FUNCTIONS ///////////////////////////////////
-
-    // function to get the todos
-    function fetchTodos() {
-        $.ajax({
-            url: '/prof_dashboard/todo',
-            type: 'GET',
-            success: function (data) {
-                const todoList = $('#todoList');
-                todoList.empty(); // Clear the current list
-
-                if (data.length > 0) {
-                    data.forEach(todo => {
-                        const template = $('#todoItemTemplate').html();
-                        const newTodo = $(template).clone();
-
-                        newTodo.attr('data-id', todo.id);
-                        newTodo.find('.task-text').text(todo.task);
-                        newTodo.find('.delete-todo').click(() => deleteTodo(todo.id));
-                        todoList.append(newTodo);
-                    });
-                } else {
-                    todoList.append('<li>No tasks found</li>');
-                }
-            },
-            error: function () {
-                alert('Error fetching tasks');
-            }
-        });
-    }
-
-    // Function to add a new To-Do item
-    function addTodo() {
-        let todo = prompt("Enter the new To-Do item:");
-        if (todo) {
-
-            // Make an AJAX request to add the task to the server
-            $.ajax({
-                url: '/prof_dashboard/add_todo',  // Ensure this URL matches your route
-                type: 'POST',
-                data: { task: todo },
-                success: function () {
-                    fetchTodos();
-
-                },
-                error: function () {
-                    alert('Error adding task');
-                }
-            });
-        }
-    }
-
-    // Function to delete a to-do task
-    function deleteTodo(todoId) {
-        $.ajax({
-            url: '/prof_dashboard/delete_todo',
-            type: 'POST',
-            data: { todo_id: todoId },
-            success: function () {
-                fetchTodos();
-            },
-            error: function () {
-                alert('Error deleting task');
-            }
-        });
-    }
-
-    // Fetch and display the tasks when the page loads
-    $(document).ready(function () {
-        fetchTodos();
-    });
-    /////////////////////////////////////////////////////////////////////////////////
 </script>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>
