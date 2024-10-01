@@ -88,37 +88,28 @@ VALUES (1, 1), (1, 2), (1, 3),
 (10, 7);
 
 
-INSERT INTO Job (project_id, prof_id, student_id, title, status, link_1, link_2, submitted_date, deadline_date, archived)
+INSERT INTO meeting_notes (project_id, prof_id, notes)
 VALUES
-(1, 2, 1, 'Data Analysis Task', 'In Progress', 'https://link1.com', 'https://link2.com', '2023-06-10', '2023-09-15', false),
-(2, 2, 2, 'AI Research', 'Completed', 'https://link3.com', 'https://link4.com', '2023-03-11', '2023-06-01', true),
-(3, 2, 3, 'Web Development', 'Not Started', 'https://link5.com', 'https://link6.com', '2023-07-20', '2023-11-01', false),
-(4, 2, 4, 'Quantum Computing Study', 'In Progress', 'https://link7.com', 'https://link8.com', '2023-02-15', '2023-10-12', false),
-(5, 2, 5, 'Cloud Infrastructure Setup', 'Completed', 'https://link9.com', 'https://link10.com', '2023-01-18', '2023-04-29', true),
-(6, 2, 6, 'Cybersecurity Analysis', 'Not Started', 'https://link11.com', 'https://link12.com', '2023-08-08', '2023-12-15', false),
-(7, 2, 7, 'Blockchain Study', 'In Progress', 'https://link13.com', 'https://link14.com', '2023-05-21', '2023-09-01', false),
-(8, 2, 8, 'Mobile App Development', 'Completed', 'https://link15.com', 'https://link16.com', '2023-02-25', '2023-05-30', true),
-(9, 2, 9, 'Database Optimization', 'In Progress', 'https://link17.com', 'https://link18.com', '2023-04-10', '2023-08-20', false),
-(10, 2, 1, 'Game Development Project', 'Not Started', 'https://link19.com', 'https://link20.com', '2023-09-01', '2023-12-15', false),
-(1, 2, 1, 'Artificial Intelligence Project', 'Completed', 'https://link21.com', 'https://link22.com', '2023-01-11', '2023-03-22', true),
-(2, 2, 2, 'Big Data Analytics', 'In Progress', 'https://link23.com', 'https://link24.com', '2023-05-30', '2023-09-01', false),
-(3, 2, 3, 'Machine Learning Pipeline', 'Not Started', 'https://link25.com', 'https://link26.com', '2023-07-10', '2023-11-05', false),
-(4, 2, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true),
-
-(1, 1, 1, 'Data Analysis Task', 'In Progress', 'https://link1.com', 'https://link2.com', '2023-06-10', '2023-09-15', false),
-(2, 1, 2, 'AI Research', 'Completed', 'https://link3.com', 'https://link4.com', '2023-03-11', '2023-06-01', true),
-(3, 1, 3, 'Web Development', 'Not Started', 'https://link5.com', 'https://link6.com', '2023-07-20', '2023-11-01', false),
-(4, 1, 4, 'Quantum Computing Study', 'In Progress', 'https://link7.com', 'https://link8.com', '2023-02-15', '2023-10-12', false),
-(5, 1, 5, 'Cloud Infrastructure Setup', 'Completed', 'https://link9.com', 'https://link10.com', '2023-01-18', '2023-04-29', true),
-(6, 1, 6, 'Cybersecurity Analysis', 'Not Started', 'https://link11.com', 'https://link12.com', '2023-08-08', '2023-12-15', false),
-(7, 1, 7, 'Blockchain Study', 'In Progress', 'https://link13.com', 'https://link14.com', '2023-05-21', '2023-09-01', false),
-(8, 1, 8, 'Mobile App Development', 'Completed', 'https://link15.com', 'https://link16.com', '2023-02-25', '2023-05-30', true),
-(9, 1, 9, 'Database Optimization', 'In Progress', 'https://link17.com', 'https://link18.com', '2023-04-10', '2023-08-20', false),
-(10, 1, 1, 'Game Development Project', 'Not Started', 'https://link19.com', 'https://link20.com', '2023-09-01', '2023-12-15', false),
-(1, 1, 1, 'Artificial Intelligence Project', 'Completed', 'https://link21.com', 'https://link22.com', '2023-01-11', '2023-03-22', true),
-(2, 1, 2, 'Big Data Analytics', 'In Progress', 'https://link23.com', 'https://link24.com', '2023-05-30', '2023-09-01', false),
-(3, 1, 3, 'Machine Learning Pipeline', 'Not Started', 'https://link25.com', 'https://link26.com', '2023-07-10', '2023-11-05', false),
-(4, 1, 4, 'NLP Research', 'Completed', 'https://link27.com', 'https://link28.com', '2023-02-17', '2023-06-01', true);
+(1, 1, 'Meow.');
+-- (2, 1, 'Review of previous progress and upcoming tasks.'),
+-- (3, 4, 'Addressed issues with data collection methodology.'),
+-- (4, 3, 'Updated timeline for project completion.'),
+-- (5, 2, 'Reviewed literature for related research work.'),
+-- (1, 3, 'Brainstormed new ideas for experiment designs.'),
+-- (2, 4, 'Clarified expectations for deliverables.'),
+-- (3, 2, 'Scheduled next meeting and assigned tasks.'),
+-- (4, 1, 'Refined research hypothesis based on feedback.'),
+-- (5, 4, 'Finalized structure for research paper submission.'),
+-- (1, 2, 'Discussed new findings and analysis techniques.'),
+-- (2, 1, 'Reviewed previous meetings and set new goals.'),
+-- (3, 3, 'Tested preliminary results and adjustments needed.'),
+-- (4, 4, 'Presented findings from recent fieldwork.'),
+-- (5, 2, 'Collaborated on potential publication ideas.'),
+-- (1, 4, 'Scheduled presentations and prepared reports.'),
+-- (2, 3, 'Addressed challenges in experimental design.'),
+-- (3, 1, 'Reviewed feedback from conference submission.'),
+-- (4, 2, 'Updated dataset and data analysis techniques.'),
+-- (5, 3, 'Refined experimental approach based on feedback.');
 
 
 INSERT INTO Conferences (prof_id, date, title, link)
@@ -143,9 +134,6 @@ VALUES
 (6, '2024-10-07', 'SaaS Symposium', 'https://saassymposium.com'),
 (7, '2024-09-05', 'Green Tech Conference', 'https://greentechconference.com'),
 (7, '2024-09-22', 'Energy Efficiency Expo', 'https://energyefficiencyexpo.com');
-
-
-
 -- Inserting data into the deadlines table
 INSERT INTO deadlines (prof_id, deadline) VALUES
 (1, 'Submit final grades by October 5th, 2024'),

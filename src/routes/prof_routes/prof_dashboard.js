@@ -14,8 +14,6 @@ import conferences from "./conferences.js";
 
 const router = Router();
 
-// TODO: make HTML code better with templates
-// TODO: Fix Bullets
 // TODO: make meeting notes
 
 router.use(bodyParser.urlencoded({ extended: true }));

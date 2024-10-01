@@ -1,458 +1,307 @@
 <%- include('partials/header') %>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Nav bar section -->
-            <%- include('partials/nav_bar.ejs')%>
-
-            <!-- Working console section -->
-            <div class="col-md-6"
-                style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
-                <div id="working-console">
-
-                    <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                        <h1 style="font-size: 5rem; font-weight: bold;">Professor Dashboard</h1>
-
-                    </div>
-
-                    <!-- FOR ADDING A PROJECT -->
-                    <div class="collapsible-container" style="width: 100%;">
-
-                        <button class="collapsible" onclick="toggleCollapsible()"
-                            style="width: 100%; display: flex; justify-content: space-between; align-items: center; background-color: #fff; border: 1px solid #303030; outline: none;">
-                            Add Project
-                            <span class="arrow">▼</span>
-                        </button>
-
-
-
-                        <div class="collapsible-content" style="display: none; width: 100%;">
-                            <form id="addProjectForm"
-                                style="display: grid; gap: 15px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; width: 100%;">
-                                <div>
-                                    <label for="title">Title</label>
-                                    <input type="text" id="title" name="title" required
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <div>
-                                    <label for="conference">Conference</label>
-                                    <input type="text" id="conference" name="conference"
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <div>
-                                    <label for="status">Status</label>
-                                    <select id="status" name="status" required
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                        <option value="Upcoming">Upcoming</option>
-                                        <option value="Under Review">Under Review</option>
-                                        <option value="In Progress">In Progress</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <label for="link_1">Link 1</label>
-                                    <input type="url" id="link_1" name="link_1"
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <div>
-                                    <label for="link_2">Link 2</label>
-                                    <input type="url" id="link_2" name="link_2"
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <div>
-                                    <label for="submitted_date">Submitted Date</label>
-                                    <input type="date" id="submitted_date" name="submitted_date"
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <div>
-                                    <label for="deadline_date">Deadline Date</label>
-                                    <input type="date" id="deadline_date" name="deadline_date"
-                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                </div>
-
-                                <button type="submit" class="button-style"
-                                    style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add
-                                    Project</button>
-                            </form>
-                        </div>
-                    </div>
-
-                    <script>
-                        function toggleCollapsible() {
-                            const content = document.querySelector('.collapsible-content');
-                            const arrow = document.querySelector('.arrow');
-
-                            if (content.style.display === "none" || content.style.display === "") {
-                                content.style.display = "block";
-                                arrow.textContent = "▲"; // Change arrow direction
-                            } else {
-                                content.style.display = "none";
-
-                                arrow.textContent = "▼"; // Reset arrow direction
-                            }
-                        }
-                    </script>
-
-                    <style>
-                        .collapsible {
-                            background-color: #f1f1f1;
-                            color: #333;
-                            cursor: pointer;
-                            padding: 10px;
-                            border: none;
-                            border-radius: 5px;
-                            text-align: left;
-                            outline: none;
-                            font-size: 1.2rem;
-                            transition: background-color 0.3s ease;
-                            width: 100%;
-                            /* Make the button full width */
-                        }
-
-                        .collapsible:hover {
-                            background-color: #ddd;
-                        }
-
-                        .collapsible-content {
-                            padding: 0;
-                            width: 100%;
-                            /* Ensure the content is full width */
-                        }
-                    </style>
-
-
-
-                    <!-- FOR UNARCHIVED PROJECTS-->
-                    <div class="container" style="position: relative;">
-                        <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Research
-                            Projects</h1>
-
-                        <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) &&
-                            project_details_unarchived.rows.length> 0) { %>
-                            <ul style="font-size: 1.2rem;">
-                                <% let currentProjectId=null; %>
-                                    <% let currentStudentId=null; %>
-
-                                        <% project_details_unarchived.rows.forEach(function(detail, index) { %>
-
-                                            <!-- Start of Project -->
-                                            <% if (currentProjectId !==detail.project_id) { %>
-                                                <!-- Close previous project's students list if not the first iteration -->
-                                                <% if (index> 0) { %>
-                            </ul> <!-- Close previous project's student list -->
-                            <br>
-                            </ul> <!-- Close previous project's list -->
-                            <% } %>
-
-                                <!-- Display Project Details -->
-                                <li>
-                                    <strong>Project: <%= detail.project_title %></strong> (Conference: <%=
-                                        detail.project_conference %>, Status: <%= detail.project_status %>)
-                                            <br>
-                                            <a href="<%= detail.project_link_1 %>">Link 1</a> | <a
-                                                href="<%= detail.project_link_2 %>">Link 2</a>
-                                            <br>
-                                            Submitted: <%= detail.project_submitted_date ?
-                                                detail.project_submitted_date.toDateString() : 'N/A' %> | Deadline: <%=
-                                                    detail.project_deadline_date ?
-                                                    detail.project_deadline_date.toDateString() : 'N/A' %>
-
-                                                    <!-- Action Buttons -->
-                                                    <div style="margin-top: 10px;">
-                                                        <button class="button-style archive_project_button"
-                                                            data-project-id="<%= detail.project_id %>">Archive</button>
-                                                        <button class="button-style delete_project_button"
-                                                            data-project-id="<%= detail.project_id %>">Delete</button>
-                                                        <button class="button-style"
-                                                            onclick="toggleSearchBar(<%= detail.project_id %>)">Add
-                                                            Student to Project</button>
-                                                        <button class="button-style"
-                                                            onclick="openEditModal(<%= detail.project_id %>)">Edit
-                                                            Project</button>
-                                                    </div>
-
-                                                    <!-- Hidden Search Bar Container -->
-                                                    <div id="search-bar-<%= detail.project_id %>"
-                                                        class="search-bar-container"
-                                                        style="display: none; position: relative; margin-top: 20px;">
-                                                        <h2
-                                                            style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">
-                                                            Student Search</h2>
-                                                        <form id="search-form"
-                                                            style="margin-bottom: 20px; display: flex; justify-content: center; align-items: center;">
-                                                            <input type="text"
-                                                                id="student-search-project-<%= detail.project_id %>"
-                                                                data-project-id="<%= detail.project_id %>"
-                                                                placeholder="Type student name..."
-                                                                oninput="searchStudents(<%= detail.project_id %>)"
-                                                                required
-                                                                style="width: 100%; max-width: 600px; padding: 12px 20px; border: 1px solid #ccc; border-radius: 50px; font-size: 1rem; outline: none; transition: all 0.3s ease;"
-                                                                autocomplete="off">
-                                                        </form>
-
-                                                        <div id="student-results-<%= detail.project_id %>"
-                                                            class="results-box" style="display:none;">
-                                                            <!-- Search results will be displayed here -->
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Edit Project Modal -->
-                                                    <div id="edit-project-modal" class="modal" style="display: none;">
-                                                        <div class="modal-content"
-                                                            style="max-width: 500px; margin: auto; padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
-                                                            <span class="close-button" onclick="closeEditModal()"
-                                                                style="float: right; cursor: pointer; font-size: 1.5rem;">&times;</span>
-                                                            <h2 style="margin-bottom: 20px;">Edit Project</h2>
-                                                            <form id="edit-project-form"
-                                                                style="display: grid; gap: 15px;">
-                                                                <input type="hidden" id="search-project_id"
-                                                                    name="project_id">
-
-                                                                <div>
-                                                                    <label for="title">Project Title:</label>
-                                                                    <input type="text" id="search-title" name="title"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="conference">Conference:</label>
-                                                                    <input type="text" id="search-conference"
-                                                                        name="conference"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="status">Status:</label>
-                                                                    <input type="text" id="search-status" name="status"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="link_1">Link 1:</label>
-                                                                    <input type="url" id="search-link_1" name="link_1"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="link_2">Link 2:</label>
-                                                                    <input type="url" id="search-link_2" name="link_2"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="submitted_date">Submitted Date:</label>
-                                                                    <input type="date" id="search-submitted_date"
-                                                                        name="submitted_date"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <div>
-                                                                    <label for="deadline_date">Deadline Date:</label>
-                                                                    <input type="date" id="search-deadline_date"
-                                                                        name="deadline_date"
-                                                                        style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
-                                                                </div>
-                                                                <button type="submit" class="button-style"
-                                                                    style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Save
-                                                                    Changes</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-
-                                </li>
-
-
-
-
-
-                                <!-- Initialize student list for this project -->
-                                <ul style="font-weight:lighter;">
-                                    <% currentProjectId=detail.project_id; %>
-                                        <% currentStudentId=null; %> <!-- Reset student for each new project -->
-                                            <% } %>
-
-
-                                                <!-- Start of Student under this Project -->
-                                                <% if (currentStudentId !==detail.student_id) { %>
-                                                    <% if (currentStudentId !==null) { %>
-                                </ul> <!-- Close previous student's job list -->
-
-                                <% } %>
-
-                                    <!-- Display Student Details -->
-                                    <li>
-                                        <strong>Student: <%= detail.student_name %></strong>
-                                    </li>
-
-
-                                    <!-- Initialize job list for this student -->
-                                    <ul>
-                                        <% currentStudentId=detail.student_id; %>
-                                            <% } %>
-
-                                                <!-- Start of Job under this Student -->
-                                                <% if (detail.job_id) { %>
-                                                    <!-- <li>
-                                                        <strong>Job Title: <%= detail.job_title %></strong>
-                                                        <br>
-                                                        Status: <%= detail.job_status %>
-                                                            <br>
-                                                            <a href="<%= detail.job_link_1 %>">Link 1</a> | <a
-                                                                href="<%= detail.job_link_2 %>">Link 2</a>
-                                                            <br>
-                                                            Submitted: <%= detail.job_submitted_date ?
-                                                                detail.job_submitted_date.toDateString() : 'N/A' %> |
-                                                                Deadline: <%= detail.job_deadline_date ?
-                                                                    detail.job_deadline_date.toDateString() : 'N/A' %>
-                                                    </li> -->
-                                                    <% } %>
-
-                                                        <% }); %>
-
-                                    </ul> <!-- Close the final student/job list -->
-                                    </ul> <!-- Close the final project list -->
-
-                                    <% } else { %>
-                                        <p>No projects found.</p>
-                                        <% } %>
-
-                    </div>
-                    <STYLE>
-                        .button-style {
-                            background-color: #4CAF50;
-                            margin-bottom: 10px;
-                            /* Green background */
-                            color: white;
-                            /* White text */
-                            padding: 7px 7px;
-                            /* Padding */
-                            border: none;
-                            /* No border */
-                            border-radius: 5px;
-                            /* Rounded corners */
-                            cursor: pointer;
-                            /* Pointer cursor on hover */
-                            font-size: 1rem;
-                            /* Font size */
-                            transition: background-color 0.3s ease, transform 0.2s ease;
-                            /* Transition for background color and transform */
-                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                            /* Light shadow */
-                        }
-
-                        .button-style:hover {
-                            background-color: #45a049;
-                            /* Darker green on hover */
-                            transform: translateY(-2px);
-                            /* Slightly raise button on hover */
-                        }
-
-                        .button-style:active {
-                            transform: translateY(0);
-                            /* Reset on active */
-                            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
-                            /* Less shadow when clicked */
-                        }
-                    </STYLE>
-
-
-                    <br>
-                    <!-- FOR ARCHIVED PROJECTS-->
-                    <div class="container" style="position: relative;">
-                        <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Archived
-                            Projects</h1>
-
-                        <% if (project_details_archived && Array.isArray(project_details_archived.rows) &&
-                            project_details_archived.rows.length> 0) { %>
-                            <ul style="font-size: 1.2rem;">
-                                <% let currentProjectId=null; %>
-                                    <% let currentStudentId=null; %>
-
-                                        <% project_details_archived.rows.forEach(function(detail, index) { %>
-
-                                            <!-- Start of Project -->
-                                            <% if (currentProjectId !==detail.project_id) { %>
-                                                <!-- Close previous project's students list if not the first iteration -->
-                                                <% if (index> 0) { %>
-                            </ul> <!-- Close previous project's student list -->
-                            </ul> <!-- Close previous project's list -->
-                            <% } %>
-
-                                <!-- Display Project Details -->
-                                <li>
-                                    <strong>Project: <%= detail.project_title %></strong> (Conference: <%=
-                                        detail.project_conference %>, Status: <%= detail.project_status %>)
-                                            <br>
-                                            <a href="<%= detail.project_link_1 %>">Link 1</a> | <a
-                                                href="<%= detail.project_link_2 %>">Link 2</a>
-                                            <br>
-                                            Submitted: <%= detail.project_submitted_date ?
-                                                detail.project_submitted_date.toDateString() : 'N/A' %>
-                                                | Deadline: <%= detail.project_deadline_date ?
-                                                    detail.project_deadline_date.toDateString() : 'N/A' %>
-                                                    <button class="archive_project_button"
-                                                        data-project-id="<%= detail.project_id %>">Un-Archive</button>
-                                                    <button class="delete_project_button"
-                                                        data-project-id="<%= detail.project_id %>">Delete</button>
-
-                                </li>
-
-                                <!-- Initialize student list for this project -->
-                                <ul>
-                                    <% currentProjectId=detail.project_id; %>
-                                        <% currentStudentId=null; %> <!-- Reset student for each new project -->
-                                            <% } %>
-
-                                                <!-- Start of Student under this Project -->
-                                                <% if (currentStudentId !==detail.student_id) { %>
-                                                    <% if (currentStudentId !==null) { %>
-                                </ul> <!-- Close previous student's job list -->
-                                <% } %>
-
-                                    <!-- Display Student Details -->
-                                    <li>
-                                        <strong>Student: <%= detail.student_name %></strong>
-                                    </li>
-
-                                    <!-- Initialize job list for this student -->
-                                    <ul>
-                                        <% currentStudentId=detail.student_id; %>
-                                            <% } %>
-
-                                                <!-- Start of Job under this Student -->
-                                                <% if (detail.job_id) { %>
-                                                    <!-- <li>
-                                                        <strong>Job Title: <%= detail.job_title %></strong>
-                                                        <br>
-                                                        Status: <%= detail.job_status %>
-                                                            <br>
-                                                            <a href="<%= detail.job_link_1 %>">Link 1</a> | <a
-                                                                href="<%= detail.job_link_2 %>">Link 2</a>
-                                                            <br>
-                                                            Submitted: <%= detail.job_submitted_date ?
-                                                                detail.job_submitted_date.toDateString() : 'N/A' %>
-                                                                | Deadline: <%= detail.job_deadline_date ?
-                                                                    detail.job_deadline_date.toDateString() : 'N/A' %>
-                                                    </li> -->
-                                                    <% } %>
-
-                                                        <% }); %>
-                                    </ul> <!-- Close the final student/job list -->
-                                    </ul> <!-- Close the final project list -->
-                                    <% } else { %>
-                                        <p>No projects found.</p>
-                                        <% } %>
-
-
-                    </div>
-                    <br>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Nav bar section -->
+        <%- include('partials/nav_bar.ejs')%>
+
+        <!-- Working console section -->
+        <div class="col-md-6"
+            style="background-color: #fff; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;">
+            <div id="working-console">
+
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 5rem; font-weight: bold;">Professor Dashboard</h1>
 
                 </div>
-            </div>
 
-            <!--Prof to do section-->
-            <%- include('partials/task_mgmt.ejs')%>
+                <!-- FOR ADDING A PROJECT -->
+                <div class="collapsible-container" style="width: 100%;">
+
+                    <button class="collapsible" onclick="toggleCollapsible()"
+                        style="width: 100%; display: flex; justify-content: space-between; align-items: center; background-color: #fff; border: 1px solid #303030; outline: none;">
+                        Add Project
+                        <span class="arrow">▼</span>
+                    </button>
+
+                    <div class="collapsible-content" style="display: none; width: 100%;">
+                        <form id="addProjectForm"
+                            style="display: grid; gap: 15px; padding: 20px; background-color: #f9f9f9; border-radius: 10px; width: 100%;">
+                            <div>
+                                <label for="title">Title</label>
+                                <input type="text" id="title" name="title" required
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <div>
+                                <label for="conference">Conference</label>
+                                <input type="text" id="conference" name="conference"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <div>
+                                <label for="status">Status</label>
+                                <select id="status" name="status" required
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                                    <option value="Upcoming">Upcoming</option>
+                                    <option value="Under Review">Under Review</option>
+                                    <option value="In Progress">In Progress</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="link_1">Link 1</label>
+                                <input type="url" id="link_1" name="link_1"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <div>
+                                <label for="link_2">Link 2</label>
+                                <input type="url" id="link_2" name="link_2"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <div>
+                                <label for="submitted_date">Submitted Date</label>
+                                <input type="date" id="submitted_date" name="submitted_date"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <div>
+                                <label for="deadline_date">Deadline Date</label>
+                                <input type="date" id="deadline_date" name="deadline_date"
+                                    style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px;">
+                            </div>
+
+                            <button type="submit" class="button-style"
+                                style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Add
+                                Project</button>
+                        </form>
+                    </div>
+                </div>
+
+                <style>
+                    .collapsible {
+                        background-color: #f1f1f1;
+                        color: #333;
+                        cursor: pointer;
+                        padding: 10px;
+                        border: none;
+                        border-radius: 5px;
+                        text-align: left;
+                        outline: none;
+                        font-size: 1.2rem;
+                        transition: background-color 0.3s ease;
+                        width: 100%;
+                        /* Make the button full width */
+                    }
+
+                    .collapsible:hover {
+                        background-color: #ddd;
+                    }
+
+                    .collapsible-content {
+                        padding: 0;
+                        width: 100%;
+                        /* Ensure the content is full width */
+                    }
+                </style>
+
+                <!-- FOR UNARCHIVED PROJECTS-->
+                <div class="container mt-5">
+                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
+
+                    <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
+                        <ul style="font-size: 1.2rem;">
+                            <% project_details_unarchived.rows.forEach(function(detail) { %>
+                                <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                    <strong>Project:</strong> <%= detail.project_title %>
+                                    (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
+                                    <br>
+                                    <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
+                                    <br>
+                                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
+                                    | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+
+                                    <!-- Flex container to align buttons horizontally -->
+                                    <div class="d-flex justify-content-start align-items-center mt-2">
+                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" data-project-id="<%= detail.project_id %>">Archive</button>
+                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" data-project-id="<%= detail.project_id %>">Delete</button>
+                                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
+                                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                                    </div>
+
+                                    <!-- Hidden Search Bar Container -->
+                                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
+                                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+
+                                        <!-- Search Form -->
+                                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
+                                            <input type="text" id="student-search-project-<%= detail.project_id %>"
+                                                   data-project-id="<%= detail.project_id %>"
+                                                   placeholder="Type student name..."
+                                                   oninput="searchStudents(<%= detail.project_id %>)"
+                                                   class="form-control"
+                                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                                   autocomplete="off" required>
+                                        </form>
+
+                                        <!-- Search Results Box -->
+                                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
+                                            <!-- Search results will be displayed here -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Student List -->
+                                    <ul class="student-list" style="margin-top: 10px;">
+                                        <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
+                                    </ul>
+
+                                    <!-- Meeting Notes List -->
+                                    <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                        <li><strong>Meeting Notes:</strong></li>
+                                        <% if (detail.meeting_notes) { %>
+                                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                                <li><%= note %></li>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <li>No meeting notes available.</li>
+                                        <% } %>
+                                    </ul>
+
+                                    <!-- Add Meeting Notes Form -->
+                                    <form class="add-notes-form" style="margin-top: 10px;">
+                                        <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                        <div class="form-group">
+                                            <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                                            <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                                    </form>
+
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <p>No projects found.</p>
+                    <% } %>
+                </div>
+                <STYLE>
+                    .button-style {
+                        background-color: #4CAF50;
+                        margin-bottom: 10px;
+                        /* Green background */
+                        color: white;
+                        /* White text */
+                        padding: 7px 7px;
+                        /* Padding */
+                        border: none;
+                        /* No border */
+                        border-radius: 5px;
+                        /* Rounded corners */
+                        cursor: pointer;
+                        /* Pointer cursor on hover */
+                        font-size: 1rem;
+                        /* Font size */
+                        transition: background-color 0.3s ease, transform 0.2s ease;
+                        /* Transition for background color and transform */
+                        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        /* Light shadow */
+                    }
+
+                    .button-style:hover {
+                        background-color: #45a049;
+                        /* Darker green on hover */
+                        transform: translateY(-2px);
+                        /* Slightly raise button on hover */
+                    }
+
+                    .button-style:active {
+                        transform: translateY(0);
+                        /* Reset on active */
+                        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+                        /* Less shadow when clicked */
+                    }
+                </STYLE>
+
+                <br>
+                <!-- FOR ARCHIVED PROJECTS-->
+                <div class="container mt-5">
+                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Archived Projects</h2>
+
+                    <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
+                        <ul style="font-size: 1.2rem;">
+                            <% project_details_archived.rows.forEach(function(detail) { %>
+                                <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                    <strong>Project:</strong> <%= detail.project_title %>
+                                    (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
+                                    <br>
+                                    <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
+                                    <br>
+                                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
+                                    | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+
+                                    <!-- Flex container to align buttons horizontally -->
+                                    <div class="d-flex justify-content-start align-items-center mt-2">
+                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" data-project-id="<%= detail.project_id %>">Archive</button>
+                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" data-project-id="<%= detail.project_id %>">Delete</button>
+                                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
+                                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                                    </div>
+
+                                    <!-- Hidden Search Bar Container -->
+                                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
+                                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+
+                                        <!-- Search Form -->
+                                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
+                                            <input type="text" id="student-search-project-<%= detail.project_id %>"
+                                                   data-project-id="<%= detail.project_id %>"
+                                                   placeholder="Type student name..."
+                                                   oninput="searchStudents(<%= detail.project_id %>)"
+                                                   class="form-control"
+                                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                                   autocomplete="off" required>
+                                        </form>
+
+                                        <!-- Search Results Box -->
+                                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
+                                            <!-- Search results will be displayed here -->
+                                        </div>
+                                    </div>
+
+                                    <!-- Student List -->
+                                    <ul class="student-list" style="margin-top: 10px;">
+                                        <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
+                                    </ul>
+
+                                    <!-- Meeting Notes List -->
+                                    <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                        <li><strong>Meeting Notes:</strong></li>
+                                        <% if (detail.meeting_notes) { %>
+                                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                                <li><%= note %></li>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <li>No meeting notes available.</li>
+                                        <% } %>
+                                    </ul>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <p>No projects found.</p>
+                    <% } %>
+                </div>
+                <br>
+
+            </div>
         </div>
+
+        <!--Prof to do section-->
+        <%- include('partials/task_mgmt.ejs')%>
     </div>
+</div>
 
 <style>
         .search-bar-container {
@@ -562,6 +411,20 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    function toggleCollapsible() {
+        const content = document.querySelector('.collapsible-content');
+        const arrow = document.querySelector('.arrow');
+
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block";
+            arrow.textContent = "▲"; // Change arrow direction
+        } else {
+            content.style.display = "none";
+
+            arrow.textContent = "▼"; // Reset arrow direction
+        }
+    }
+
     // Open the edit modal and fetch the project details
     function openEditModal(projectId) {
         // Open the modal
@@ -665,9 +528,10 @@
         });
     });
 
-    // Archiving the student
+    // Archiving the Project
     document.querySelectorAll('.archive_project_button').forEach(button => {
         button.addEventListener('click', function () {
+            console.log("Mowe");
             const projectId = this.getAttribute('data-project-id');
 
             fetch('/prof_dashboard/archive_project_sponsored', {
@@ -813,6 +677,32 @@
             ul.appendChild(li);
         }
     }
+
+    // adding Meeting notes
+    function addMeetingNotes(project_id) {
+        const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
+
+        if (notes) {
+            $.ajax({
+                url: '/prof_dashboard/add_meeting_notes',
+                type: 'POST',
+                data: {
+                    project_id: project_id,
+                    notes: notes
+                },
+                success: function () {
+                    alert('Meeting notes successfully added!');
+                    window.location.reload();
+                },
+                error: function () {
+                    alert('Error adding meeting notes');
+                }
+            });
+        } else {
+            alert('Please enter meeting notes');
+        }
+    }
+
 </script>
 
-    <%- include('partials/footer') %>
+<%- include('partials/footer') %>

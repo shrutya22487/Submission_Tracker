@@ -22,21 +22,6 @@ CREATE TABLE IF NOT EXISTS Team
     archived BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE IF NOT EXISTS Project
-(
-    id               SERIAL PRIMARY KEY,
-    title            VARCHAR(1000) NOT NULL,
-    prof_table_id    INT,
-    student_table_id INT,
-    conference       VARCHAR(1000),
-    status           VARCHAR(1000) CHECK (status IN ('Submitted','Upcoming', 'Under Review', 'In Progress', 'Drafting', 'Rejected','Accepted', 'Reviewing')),
-    link_1           VARCHAR(1000),
-    link_2           VARCHAR(1000),
-    submitted_date   DATE,
-    deadline_date    DATE,
-    archived         BOOLEAN DEFAULT FALSE,
-    sponsored        BOOLEAN DEFAULT FALSE
-);
 
 CREATE TABLE IF NOT EXISTS Project_profs
 (
@@ -56,23 +41,17 @@ CREATE TABLE IF NOT EXISTS Project_Students
     FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Job
+CREATE TABLE IF NOT EXISTS meeting_notes
 (
-    id             SERIAL PRIMARY KEY,
-    project_id      INT NOT NULL,
-    prof_id        INT           NOT NULL,
-    student_id     INT,
-    title          VARCHAR(1000) NOT NULL,
-    status         VARCHAR(1000) NOT NULL,
-    link_1         VARCHAR(1000),
-    link_2         VARCHAR(1000),
-    submitted_date DATE,
-    deadline_date  DATE,
-    archived       BOOLEAN DEFAULT FALSE,
+    id         SERIAL PRIMARY KEY,
+    project_id INT  NOT NULL,
+    prof_id    INT  NOT NULL,
+    notes      TEXT NOT NULL,
+    date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
-    FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
-    FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE CASCADE
+    FOREIGN KEY (project_id) REFERENCES Project (id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS Papers
 (
@@ -117,4 +96,20 @@ CREATE TABLE IF NOT EXISTS todos
     task    TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Project
+(
+    id               SERIAL PRIMARY KEY,
+    title            VARCHAR(1000) NOT NULL,
+    prof_table_id    INT,
+    student_table_id INT,
+    conference       VARCHAR(1000),
+    status           VARCHAR(1000) CHECK (status IN ('Submitted','Upcoming', 'Under Review', 'In Progress', 'Drafting', 'Rejected','Accepted', 'Reviewing')),
+    link_1           VARCHAR(1000),
+    link_2           VARCHAR(1000),
+    submitted_date   DATE,
+    deadline_date    DATE,
+    archived         BOOLEAN DEFAULT FALSE,
+    sponsored        BOOLEAN DEFAULT FALSE
 );
