@@ -22,6 +22,21 @@ CREATE TABLE IF NOT EXISTS Team
     archived BOOLEAN DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS Project
+(
+    id               SERIAL PRIMARY KEY,
+    title            VARCHAR(1000) NOT NULL,
+    prof_table_id    INT,
+    student_table_id INT,
+    conference       VARCHAR(1000),
+    status           VARCHAR(1000) CHECK (status IN ('Submitted','Upcoming', 'Under Review', 'In Progress', 'Drafting', 'Rejected','Accepted', 'Reviewing')),
+    link_1           VARCHAR(1000),
+    link_2           VARCHAR(1000),
+    submitted_date   DATE,
+    deadline_date    DATE,
+    archived         BOOLEAN DEFAULT FALSE,
+    sponsored        BOOLEAN DEFAULT FALSE
+);
 
 CREATE TABLE IF NOT EXISTS Project_profs
 (
@@ -51,7 +66,6 @@ CREATE TABLE IF NOT EXISTS meeting_notes
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES Project (id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE IF NOT EXISTS Papers
 (
@@ -98,18 +112,3 @@ CREATE TABLE IF NOT EXISTS todos
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Project
-(
-    id               SERIAL PRIMARY KEY,
-    title            VARCHAR(1000) NOT NULL,
-    prof_table_id    INT,
-    student_table_id INT,
-    conference       VARCHAR(1000),
-    status           VARCHAR(1000) CHECK (status IN ('Submitted','Upcoming', 'Under Review', 'In Progress', 'Drafting', 'Rejected','Accepted', 'Reviewing')),
-    link_1           VARCHAR(1000),
-    link_2           VARCHAR(1000),
-    submitted_date   DATE,
-    deadline_date    DATE,
-    archived         BOOLEAN DEFAULT FALSE,
-    sponsored        BOOLEAN DEFAULT FALSE
-);

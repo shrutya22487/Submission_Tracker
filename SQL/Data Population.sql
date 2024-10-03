@@ -90,26 +90,25 @@ VALUES (1, 1), (1, 2), (1, 3),
 
 INSERT INTO meeting_notes (project_id, prof_id, notes)
 VALUES
-(1, 1, 'Meow.');
--- (2, 1, 'Review of previous progress and upcoming tasks.'),
--- (3, 4, 'Addressed issues with data collection methodology.'),
--- (4, 3, 'Updated timeline for project completion.'),
--- (5, 2, 'Reviewed literature for related research work.'),
--- (1, 3, 'Brainstormed new ideas for experiment designs.'),
--- (2, 4, 'Clarified expectations for deliverables.'),
--- (3, 2, 'Scheduled next meeting and assigned tasks.'),
--- (4, 1, 'Refined research hypothesis based on feedback.'),
--- (5, 4, 'Finalized structure for research paper submission.'),
--- (1, 2, 'Discussed new findings and analysis techniques.'),
--- (2, 1, 'Reviewed previous meetings and set new goals.'),
--- (3, 3, 'Tested preliminary results and adjustments needed.'),
--- (4, 4, 'Presented findings from recent fieldwork.'),
--- (5, 2, 'Collaborated on potential publication ideas.'),
--- (1, 4, 'Scheduled presentations and prepared reports.'),
--- (2, 3, 'Addressed challenges in experimental design.'),
--- (3, 1, 'Reviewed feedback from conference submission.'),
--- (4, 2, 'Updated dataset and data analysis techniques.'),
--- (5, 3, 'Refined experimental approach based on feedback.');
+(2, 1, 'Review of previous progress and upcoming tasks.'),
+(3, 4, 'Addressed issues with data collection methodology.'),
+(4, 3, 'Updated timeline for project completion.'),
+(5, 2, 'Reviewed literature for related research work.'),
+(1, 3, 'Brainstormed new ideas for experiment designs.'),
+(2, 4, 'Clarified expectations for deliverables.'),
+(3, 2, 'Scheduled next meeting and assigned tasks.'),
+(4, 1, 'Refined research hypothesis based on feedback.'),
+(5, 4, 'Finalized structure for research paper submission.'),
+(1, 2, 'Discussed new findings and analysis techniques.'),
+(2, 1, 'Reviewed previous meetings and set new goals.'),
+(3, 3, 'Tested preliminary results and adjustments needed.'),
+(4, 4, 'Presented findings from recent fieldwork.'),
+(5, 2, 'Collaborated on potential publication ideas.'),
+(1, 4, 'Scheduled presentations and prepared reports.'),
+(2, 3, 'Addressed challenges in experimental design.'),
+(3, 1, 'Reviewed feedback from conference submission.'),
+(4, 2, 'Updated dataset and data analysis techniques.'),
+(5, 3, 'Refined experimental approach based on feedback.');
 
 
 INSERT INTO Conferences (prof_id, date, title, link)

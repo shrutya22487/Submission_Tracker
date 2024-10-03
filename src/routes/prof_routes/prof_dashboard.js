@@ -14,7 +14,7 @@ import conferences from "./conferences.js";
 
 const router = Router();
 
-// TODO: make meeting notes
+// TODO: fix buttons, look at old ones
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
