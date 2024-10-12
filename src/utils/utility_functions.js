@@ -1,4 +1,5 @@
 import db from "../utils/db.js";
+import router from "../routes/prof_routes/under_review_papers.js";
 
 export async function get_prof_id(req, res) {
     const prof_id_result = await db.query(
@@ -35,5 +36,16 @@ export async function get_archived_jobs(req, res) {
 export async function check_authentication_prof(req, res) {
     if (!req.isAuthenticated()) {
         res.redirect(`/login`);
+    }
+}
+
+export async function get_prof_name(req, res, id) {
+    try {
+        const data = await db.query(
+            `SELECT Name FROM Professor WHERE id = $1`, [id,]);
+        return data.rows[0];
+    } catch (error) {
+        console.error("Error executing query:", error);
+        res.status(500).send("Internal server error");
     }
 }

@@ -12,7 +12,6 @@ router.use(express.json());
 //archive project
 router.post("/prof_dashboard/archive_project_sponsored", async (req, res) => {
     try {
-        console.log("MEOW");
         const { project_id } = req.body;
 
         await db.query("UPDATE Project SET archived = NOT archived WHERE id = $1", [project_id,]);
@@ -102,13 +101,13 @@ router.get("/prof_dashboard/sponsored_projects", async (req, res) => {
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students, -- Grouping students
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes -- Grouping notes with date
+    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM
     Project p
-JOIN
+LEFT JOIN
     Project_Students ps ON p.id = ps.project_id
-JOIN
+LEFT JOIN
     Student s ON ps.student_id = s.id
 JOIN
     Project_profs pp ON p.id = pp.project_id
@@ -116,7 +115,7 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored = TRUE
+WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored = TRUE AND p.paper = FALSE
 GROUP BY
     p.id
 ORDER BY
@@ -130,13 +129,13 @@ ORDER BY
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students, -- Grouping students
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes -- Grouping notes with date
+    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM
     Project p
-JOIN
+LEFT JOIN
     Project_Students ps ON p.id = ps.project_id
-JOIN
+LEFT JOIN
     Student s ON ps.student_id = s.id
 JOIN
     Project_profs pp ON p.id = pp.project_id
@@ -144,7 +143,7 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored = TRUE
+WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored = TRUE AND p.paper = FALSE
 GROUP BY
     p.id
 ORDER BY

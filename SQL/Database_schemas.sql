@@ -29,15 +29,15 @@ CREATE TABLE IF NOT EXISTS Project
     prof_table_id    INT,
     student_table_id INT,
     conference       VARCHAR(1000),
-    status           VARCHAR(1000) CHECK (status IN ('Submitted','Upcoming', 'Under Review', 'In Progress', 'Drafting', 'Rejected','Accepted', 'Reviewing')),
+    status           VARCHAR(1000),
     link_1           VARCHAR(1000),
     link_2           VARCHAR(1000),
     submitted_date   DATE,
     deadline_date    DATE,
     archived         BOOLEAN DEFAULT FALSE,
-    sponsored        BOOLEAN DEFAULT FALSE
+    sponsored        BOOLEAN DEFAULT FALSE,
+    paper        BOOLEAN DEFAULT FALSE
 );
-
 CREATE TABLE IF NOT EXISTS Project_profs
 (
     project_id INT NOT NULL,
@@ -65,21 +65,6 @@ CREATE TABLE IF NOT EXISTS meeting_notes
     date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
     FOREIGN KEY (project_id) REFERENCES Project (id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS Papers
-(
-    paper_id        SERIAL PRIMARY KEY,
-    prof_id         INT  NOT NULL,
-    student_id      INT  NOT NULL,
-    conference_name VARCHAR(1000),
-    submitted_date  DATE,
-    deadline        DATE NOT NULL,
-    link_1          VARCHAR(1000),
-    link_2          VARCHAR(1000),
-    archived        BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
-    FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS Conferences
@@ -112,3 +97,32 @@ CREATE TABLE IF NOT EXISTS todos
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
 
+
+
+SELECT
+    p.id AS project_id,
+    p.title AS project_title,
+    p.deadline_date AS deadline_data,
+    p.submitted_date AS submitted_data,
+    p.status AS status,
+    p.link_1 AS link_1,
+    p.link_2 AS link_2,
+    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+FROM
+    Project p
+LEFT JOIN
+    Project_Students ps ON p.id = ps.project_id
+LEFT JOIN
+    Student s ON ps.student_id = s.id
+JOIN
+    Project_profs pp ON p.id = pp.project_id
+JOIN
+    Professor pr ON pp.prof_id = pr.id
+LEFT JOIN
+    meeting_notes mn ON p.id = mn.project_id
+WHERE pr.id = 2 AND p.archived = FALSE AND p.sponsored =FALSE AND p.paper = FALSE
+GROUP BY
+    p.id
+ORDER BY
+    p.id;

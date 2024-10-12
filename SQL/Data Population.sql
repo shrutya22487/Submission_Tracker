@@ -56,7 +56,7 @@ VALUES
 (2, 1, FALSE), (2, 2, FALSE), (2, 3, FALSE),
 (2, 4, FALSE), (2, 5, FALSE), (2, 6, FALSE),
 (2, 7, FALSE), (2, 8, FALSE), (2, 9, FALSE);
-
+-- inserting projects
 INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored)
 VALUES
 ('Quantum Computing', 1, 1, 'ICML 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-01', '2024-01-15', false, true),
@@ -69,8 +69,6 @@ VALUES
 ('Data Privacy', 8, 8, 'SP 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-11-05', '2024-08-15', false, false),
 ('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false),
 ('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false);
-
-
 
 INSERT INTO Project_profs (project_id, prof_id)
 VALUES

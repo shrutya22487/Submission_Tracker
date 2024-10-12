@@ -14,8 +14,6 @@ import conferences from "./conferences.js";
 
 const router = Router();
 
-// TODO: fix buttons, look at old ones
-
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 router.use(students);
