@@ -107,6 +107,46 @@
                     }
                 </style>
 
+<!--                edit project modal-->
+                <div id="edit-project-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <span class="close-button" onclick="closeEditModal()">&times;</span>
+                        <h2>Edit Project</h2>
+                        <form id="edit-project-form">
+                            <input type="hidden" id="search-project_id" name="project_id">
+                            <div>
+                                <label for="title">Project Title:</label>
+                                <input type="text" id="search-title" name="title" value="">
+                            </div>
+                            <div>
+                                <label for="conference">Conference:</label>
+                                <input type="text" id="search-conference" name="conference">
+                            </div>
+                            <div>
+                                <label for="status">Status:</label>
+                                <input type="text" id="search-status" name="status">
+                            </div>
+                            <div>
+                                <label for="link_1">Link 1:</label>
+                                <input type="url" id="search-link_1" name="link_1">
+                            </div>
+                            <div>
+                                <label for="link_2">Link 2:</label>
+                                <input type="url" id="search-link_2" name="link_2">
+                            </div>
+                            <div>
+                                <label for="submitted_date">Submitted Date:</label>
+                                <input type="date" id="search-submitted_date" name="submitted_date">
+                            </div>
+                            <div>
+                                <label for="deadline_date">Deadline Date:</label>
+                                <input type="date" id="search-deadline_date" name="deadline_date">
+                            </div>
+                            <button type="submit" onclick="edit_project()">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+
                 <!-- FOR UNARCHIVED PROJECTS-->
                 <div class="container mt-5">
                     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
@@ -125,8 +165,8 @@
 
                                     <!-- Flex container to align buttons horizontally -->
                                     <div class="d-flex justify-content-start align-items-center mt-2">
-                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" data-project-id="<%= detail.project_id %>">Archive</button>
-                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" data-project-id="<%= detail.project_id %>">Delete</button>
+                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
                                         <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
                                         <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
                                     </div>
@@ -227,7 +267,7 @@
                 <br>
                 <!-- FOR ARCHIVED PROJECTS-->
                 <div class="container mt-5">
-                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Archived Projects</h2>
+                    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
 
                     <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
                         <ul style="font-size: 1.2rem;">
@@ -243,8 +283,8 @@
 
                                     <!-- Flex container to align buttons horizontally -->
                                     <div class="d-flex justify-content-start align-items-center mt-2">
-                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" data-project-id="<%= detail.project_id %>">Archive</button>
-                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" data-project-id="<%= detail.project_id %>">Delete</button>
+                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
                                         <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
                                         <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
                                     </div>
@@ -286,6 +326,17 @@
                                             <li>No meeting notes available.</li>
                                         <% } %>
                                     </ul>
+
+                                    <!-- Add Meeting Notes Form -->
+                                    <form class="add-notes-form" style="margin-top: 10px;">
+                                        <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                        <div class="form-group">
+                                            <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                                            <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                                    </form>
+
                                 </li>
                             <% }); %>
                         </ul>
@@ -453,9 +504,7 @@
     }
 
     // Submit the edit form via AJAX
-    document.getElementById('edit-project-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-
+    function edit_project() {
         const projectId = document.getElementById('search-project_id').value;
         const title = document.getElementById('search-title').value;
         const conference = document.getElementById('search-conference').value;
@@ -466,7 +515,7 @@
         const deadline_date = document.getElementById('search-deadline_date').value;
 
         // Send AJAX request to update project details
-        fetch('/edit_project_sponsored', {
+        fetch('/edit_project', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -494,94 +543,97 @@
                 console.error('Error updating project:', error);
                 alert('An error occurred.');
             });
-    });
+    }
 
     // Adding the project
-    $(document).ready(function () {
-        $('#addProjectForm').submit(function (event) {
-            event.preventDefault(); // Prevent the default form submission
-            const formData = {
-                title: $('#title').val(),
-                conference: $('#conference').val(),
-                status: $('#status').val(),
-                link_1: $('#link_1').val(),
-                link_2: $('#link_2').val(),
-                submitted_date: $('#submitted_date').val(),
-                deadline_date: $('#deadline_date').val(),
-            };
+    function add_project() {
+        // Get the form values
+        const formData = {
+            title: document.getElementById('title').value,
+            conference: document.getElementById('conference').value,
+            status: document.getElementById('status').value,
+            link_1: document.getElementById('link_1').value,
+            link_2: document.getElementById('link_2').value,
+            submitted_date: document.getElementById('submitted_date').value,
+            deadline_date: document.getElementById('deadline_date').value,
+        };
 
-            $.ajax({
-                type: 'POST',
-                url: '/add_project_sponsored',
-                contentType: 'application/json',  // Set content type to JSON
-                data: JSON.stringify(formData),   // Stringify formData for JSON payload
-                success: function (response) {
+        // Use fetch API to send data
+        fetch('/add_project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+            .then(response => {
+                if (response.ok) {
                     alert('Project added successfully');
-                    window.location.href = '/prof_dashboard/sponsored_projects'; // Redirect on success
-                },
-                error: function (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred while adding the project');
+                    window.location.href = '/prof_dashboard/research_projects'; // Redirect on success
+                } else {
+                    return response.json().then(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while adding the project');
+                    });
                 }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while adding the project');
             });
 
-        });
-    });
+        return false; // Prevent default form submission (page reload)
+    }
 
-    // Archiving the Project
-    document.querySelectorAll('.archive_project_button').forEach(button => {
-        button.addEventListener('click', function () {
-            console.log("Mowe");
-            const projectId = this.getAttribute('data-project-id');
+    // Archiving project
+    function archive_project(projectId) {
+        // const projectId = this.getAttribute('data-project-id');
 
-            fetch('/prof_dashboard/archive_project_sponsored', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ project_id: projectId })
+        fetch('/prof_dashboard/archive_project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ project_id: projectId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Project archived successfully.");
+                    window.location.reload();
+                } else {
+                    alert("Failed to archive Project.");
+                }
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert("Project archived successfully.");
-                        window.location.reload();
-                    } else {
-                        alert("Failed to archive Project.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("An error occurred while archiving the project.");
-                });
-        });
-    });
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while archiving the project.");
+            });
 
-    // Deleting the student
-    document.querySelectorAll('.delete_project_button').forEach(button => {
-        button.addEventListener('click', function () {
-            const projectId = this.getAttribute('data-project-id');
+    }
 
-            fetch('/prof_dashboard/delete_project', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ project_id: projectId })
+    // Deleting project
+    function delete_project(projectId) {
+
+        fetch('/prof_dashboard/delete_project', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ project_id: projectId })
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("project deleted successfully.");
+                    window.location.reload();
+                } else {
+                    alert("Failed to delete project.");
+                }
             })
-                .then(response => {
-                    if (response.ok) {
-                        alert("project deleted successfully.");
-                        window.location.reload();
-                    } else {
-                        alert("Failed to delete project.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("An error occurred while deleting the project.");
-                });
-        });
-    });
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while deleting the project.");
+            });
+    }
 
     // Toggle search bar visibility
     function toggleSearchBar(projectId) {
