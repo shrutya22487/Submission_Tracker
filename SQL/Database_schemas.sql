@@ -95,3 +95,15 @@ CREATE TABLE IF NOT EXISTS todos
     date    DATE,
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS reading_list
+(
+    id         SERIAL PRIMARY KEY,
+    title      VARCHAR(1000) NOT NULL,
+    genre      VARCHAR(1000) NOT NULL,
+    prof_id    INT           NOT NULL,
+    conference VARCHAR(1000),
+    status     VARCHAR(1000),
+    link_1     VARCHAR(1000),
+    link_2     VARCHAR(1000)
+);

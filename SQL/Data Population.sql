@@ -158,3 +158,24 @@ INSERT INTO todos (prof_id, task, date) VALUES
 (4, 'Evaluate student projects and provide feedback', '2024-10-30'),
 (4, 'Plan curriculum for the new academic year', '2024-11-25');
 
+INSERT INTO reading_list (title, genre, prof_id, conference, status, link_1, link_2) VALUES
+('Artificial Intelligence: A Modern Approach', 'Artificial Intelligence', 1, 'AI Conference 2024', 'Read', 'https://example.com/ai_modern_approach', 'https://example.com/ai_modern_approach_extra'),
+('Deep Learning', 'Machine Learning', 1, 'NeurIPS 2024', 'In Progress', 'https://example.com/deep_learning', 'https://example.com/deep_learning_extra'),
+('Computer Vision: Algorithms and Applications', 'Computer Vision', 1, 'CVPR 2023', 'To Read', 'https://example.com/computer_vision', ''),
+('Data Mining: Concepts and Techniques', 'Data Science', 2, 'KDD 2022', 'Read', 'https://example.com/data_mining', ''),
+('Introduction to Algorithms', 'Algorithms', 2, 'ALGO Conference 2024', 'Read', 'https://example.com/intro_to_algorithms', ''),
+('Pattern Recognition and Machine Learning', 'Machine Learning', 2, 'ML Summit 2023', 'In Progress', 'https://example.com/pattern_recognition', ''),
+('The Elements of Statistical Learning', 'Statistics', 1, 'STATCONF 2023', 'To Read', 'https://example.com/elements_of_stat_learning', 'https://example.com/stat_learning_extra'),
+('Reinforcement Learning: An Introduction', 'Machine Learning', 2, 'RL Conference 2024', 'In Progress', 'https://example.com/reinforcement_learning', ''),
+('Convex Optimization', 'Optimization', 1, 'OPTCONF 2024', 'Read', 'https://example.com/convex_optimization', ''),
+('Bayesian Data Analysis', 'Statistics', 2, 'Bayesian Conference 2023', 'To Read', 'https://example.com/bayesian_data_analysis', 'https://example.com/bayesian_extra'),
+('Graph Algorithms', 'Algorithms', 1, 'ALGO Conference 2024', 'Read', 'https://example.com/graph_algorithms', ''),
+('Natural Language Processing with Transformers', 'Natural Language Processing', 2, 'NLP Summit 2024', 'In Progress', 'https://example.com/nlp_transformers', 'https://example.com/nlp_extra'),
+('Theoretical Neuroscience', 'Neuroscience', 1, 'NEURO Conference 2023', 'To Read', 'https://example.com/theoretical_neuroscience', ''),
+('Neural Networks and Deep Learning', 'Artificial Intelligence', 2, 'AI Conference 2023', 'Read', 'https://example.com/neural_networks', 'https://example.com/nn_extra'),
+('Quantum Computing for Computer Scientists', 'Quantum Computing', 1, 'Quantum Summit 2024', 'In Progress', 'https://example.com/quantum_computing', ''),
+('Distributed Systems', 'Distributed Computing', 2, 'DistComp Conference 2024', 'Read', 'https://example.com/distributed_systems', 'https://example.com/dist_sys_extra'),
+('Advanced Programming in the UNIX Environment', 'Operating Systems', 2, 'UNIX Conference 2023', 'To Read', 'https://example.com/unix_programming', ''),
+('Parallel Computing', 'High Performance Computing', 1, 'HPC Conference 2024', 'In Progress', 'https://example.com/parallel_computing', ''),
+('Introduction to Cryptography', 'Cryptography', 1, 'Crypto Conference 2023', 'Read', 'https://example.com/intro_to_crypto', 'https://example.com/crypto_extra'),
+('Blockchain: Blueprint for a New Economy', 'Blockchain', 1, 'Blockchain Summit 2024', 'To Read', 'https://example.com/blockchain', '');

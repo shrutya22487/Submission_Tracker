@@ -12,6 +12,7 @@ import todo from "./todo.js";
 import deadlines from "./deadlines.js";
 import conferences from "./conferences.js";
 
+// TODO create reading list based on the students pattern, delete, edit and add functionality
 const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
