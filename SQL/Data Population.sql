@@ -131,23 +131,30 @@ VALUES
 (6, '2024-10-07', 'SaaS Symposium', 'https://saassymposium.com'),
 (7, '2024-09-05', 'Green Tech Conference', 'https://greentechconference.com'),
 (7, '2024-09-22', 'Energy Efficiency Expo', 'https://energyefficiencyexpo.com');
--- Inserting data into the deadlines table
-INSERT INTO deadlines (prof_id, deadline) VALUES
-(1, 'Submit final grades by October 5th, 2024'),
-(2, 'Prepare midterm exam papers by October 10th, 2024'),
-(1, 'Review research proposals by November 1st, 2024'),
-(3, 'Submit conference abstracts by September 30th, 2024'),
-(2, 'Complete annual report by December 15th, 2024');
 
-INSERT INTO todos (prof_id, task)
-VALUES
-    (1, 'Complete assignment 1'),
-    (1, 'Read machine learning article'),
-    (2, 'Prepare class materials'),
-    (2, 'Review random forest model'),
-    (3, 'Submit research paper'),
-    (3, 'Attend conference call'),
-    (4, 'Update SVM model'),
-    (4, 'Draft email to collaborators'),
-    (5, 'Revise project proposal'),
-    (5, 'Schedule team meeting');
+
+
+INSERT INTO deadlines (prof_id, task, date) VALUES
+(1, 'Review student research papers', '2024-10-31'),
+(1, 'Submit grant proposal', '2024-11-15'),
+(1, 'Prepare conference presentation', '2024-11-05'),
+(2, 'Grade final exams', '2024-12-10'),
+(2, 'Update course materials', '2024-11-22'),
+(2, 'Hold faculty meeting', '2024-10-25'),
+(1, 'Organize workshop on AI', '2024-11-30'),
+(1, 'Submit journal article', '2024-11-10'),
+(2, 'Meet PhD students for progress review', '2024-12-05'),
+(2, 'Prepare budget report for research project', '2024-10-28');
+
+INSERT INTO todos (prof_id, task, date) VALUES
+(1, 'Prepare lecture slides for next week', '2024-10-28'),
+(1, 'Finalize project report for students', '2024-11-01'),
+(1, 'Schedule meeting with research team', '2024-10-25'),
+(2, 'Update course syllabus for next semester', '2024-11-10'),
+(2, 'Conduct final exams for undergraduate students', '2024-12-05'),
+(2, 'Review applications for teaching assistant positions', '2024-11-15'),
+(3, 'Organize guest lecture on machine learning', '2024-11-20'),
+(3, 'Draft proposal for summer research internship', '2024-12-01'),
+(4, 'Evaluate student projects and provide feedback', '2024-10-30'),
+(4, 'Plan curriculum for the new academic year', '2024-11-25');
+

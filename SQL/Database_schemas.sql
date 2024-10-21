@@ -80,11 +80,10 @@ CREATE TABLE IF NOT EXISTS Conferences
 
 CREATE TABLE IF NOT EXISTS deadlines
 (
-    prof_id   INT  NOT NULL,
-    id        SERIAL PRIMARY KEY,
-    deadline  TEXT NOT NULL,
-    completed BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    prof_id INT  NOT NULL,
+    id      SERIAL PRIMARY KEY,
+    task    TEXT NOT NULL,
+    date DATE,
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
 
@@ -93,36 +92,6 @@ CREATE TABLE IF NOT EXISTS todos
     prof_id INT  NOT NULL,
     id      SERIAL PRIMARY KEY,
     task    TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    date    DATE,
     FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
 );
-
-
-
-SELECT
-    p.id AS project_id,
-    p.title AS project_title,
-    p.deadline_date AS deadline_data,
-    p.submitted_date AS submitted_data,
-    p.status AS status,
-    p.link_1 AS link_1,
-    p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
-FROM
-    Project p
-LEFT JOIN
-    Project_Students ps ON p.id = ps.project_id
-LEFT JOIN
-    Student s ON ps.student_id = s.id
-JOIN
-    Project_profs pp ON p.id = pp.project_id
-JOIN
-    Professor pr ON pp.prof_id = pr.id
-LEFT JOIN
-    meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = 2 AND p.archived = FALSE AND p.sponsored =FALSE AND p.paper = FALSE
-GROUP BY
-    p.id
-ORDER BY
-    p.id;
