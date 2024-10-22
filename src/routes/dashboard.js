@@ -1,11 +1,9 @@
 import { Router } from "express";
 import db from "../utils/db.js";
-import student_dashboard from "./student_dashboard.js";
+import student_dashboard from "./student_routes/student_dashboard.js";
 import prof_dashboard from "./prof_routes/prof_dashboard.js";
 
 const router = Router();
-
-// TODO: 4. make mapping for student and prof
 
 router.use(student_dashboard);
 router.use(prof_dashboard);

@@ -175,7 +175,6 @@ router.post("/prof_dashboard/archive_project",check_authentication_prof, async (
 
 //Main Dashboard
 router.get("/prof_dashboard/research_projects", check_authentication_prof,async (req, res) => {
-    await utils.check_authentication_prof(req, res);
     const prof_id = await utils.get_prof_id(req, res);
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,

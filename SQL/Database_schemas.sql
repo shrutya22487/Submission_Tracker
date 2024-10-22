@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Professor
     Name     VARCHAR(50) NOT NULL,
     email_id VARCHAR(50) UNIQUE NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS Student
 (
     id       SERIAL PRIMARY KEY,
@@ -38,6 +39,7 @@ CREATE TABLE IF NOT EXISTS Project
     sponsored        BOOLEAN DEFAULT FALSE,
     paper        BOOLEAN DEFAULT FALSE
 );
+
 CREATE TABLE IF NOT EXISTS Project_profs
 (
     project_id INT NOT NULL,
@@ -77,7 +79,6 @@ CREATE TABLE IF NOT EXISTS Conferences
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE IF NOT EXISTS deadlines
 (
     prof_id INT  NOT NULL,
@@ -105,5 +106,49 @@ CREATE TABLE IF NOT EXISTS reading_list
     conference VARCHAR(1000),
     status     VARCHAR(1000),
     link_1     VARCHAR(1000),
-    link_2     VARCHAR(1000)
+    link_2     VARCHAR(1000),
+    FOREIGN KEY (prof_id) REFERENCES Professor(id) ON DELETE CASCADE
+
+);
+
+
+CREATE TABLE IF NOT EXISTS Conferences_student
+(
+    student_id INT NOT NULL,
+    id      SERIAL PRIMARY KEY,
+    date    DATE,
+    title  TEXT NOT NULL,
+    link  TEXT,
+    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS deadlines_student
+(
+    student_id INT  NOT NULL,
+    id      SERIAL PRIMARY KEY,
+    task    TEXT NOT NULL,
+    date DATE,
+    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS todos_student
+(
+    student_id INT  NOT NULL,
+    id      SERIAL PRIMARY KEY,
+    task    TEXT NOT NULL,
+    date    DATE,
+    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reading_list_student
+(
+    id         SERIAL PRIMARY KEY,
+    title      VARCHAR(1000) NOT NULL,
+    genre      VARCHAR(1000) NOT NULL,
+    student_id    INT           NOT NULL,
+    conference VARCHAR(1000),
+    status     VARCHAR(1000),
+    link_1     VARCHAR(1000),
+    link_2     VARCHAR(1000),
+    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );

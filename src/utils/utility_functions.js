@@ -33,11 +33,15 @@ export async function get_archived_jobs(req, res) {
     return await db.query('SELECT * FROM Job WHERE student_id IN (SELECT id FROM Student WHERE id IN (SELECT Mapping.student_id FROM Mapping WHERE prof_id = $1 AND archived = TRUE)) OR archived = TRUE ORDER BY date DESC', [prof_id]);
 }
 
-export async function check_authentication_prof(req, res) {
-    if (!req.isAuthenticated()) {
-        res.redirect(`/login`);
+export function check_authentication_prof(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+
+    } else {
+        return res.redirect('/login'); // Redirect to login if not authenticated
     }
 }
+
 
 export async function get_prof_name(req, res, id) {
     try {
