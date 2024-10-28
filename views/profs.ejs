@@ -1,0 +1,152 @@
+<%- include('partials/header') %>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <%- include('partials/nav_bar_student.ejs')%>
+
+        <!-- Working console section -->
+        <div class="col-md-6"
+             style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            <div id="working-console">
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Student Dashboard</h1>
+                </div>
+                <h2>Projects Grouped by Professor</h2>
+
+                <!-- FOR UNARCHIVED PROJECTS-->
+                <div id="professorList">
+                    <% prof_details_unarchived.forEach(function(prof) { %>
+                        <div class="professor">
+                            <p>
+                                <span
+                                        class="professor-name"
+                                        onclick="copyToClipboard('<%= prof.professor_email %>')">
+                                    <%= prof.professor_name %>
+                                </span>
+                            </p>
+                            <p><strong>Projects:</strong></p>
+                            <ul>
+                                <% prof.project_titles.split(', ').forEach(function(title) { %>
+                                    <li><%= title %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% }); %>
+                </div>
+
+
+                <!-- FOR ARCHIVED PROJECTS-->
+                <div id="professorList">
+                    <% prof_details_archived.forEach(function(prof) { %>
+                        <div class="professor">
+                            <p>
+                                <span
+                                        class="professor-name"
+                                        onclick="copyToClipboard('<%= prof.professor_email %>')">
+                                    <%= prof.professor_name %>
+                                </span>
+                            </p>
+                            <p><strong>Projects:</strong></p>
+                            <ul>
+                                <% prof.project_titles.split(', ').forEach(function(title) { %>
+                                    <li><%= title %></li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+
+        <!--Prof to do section-->
+        <%- include('partials/task_mgmt.ejs')%>
+
+    </div>
+</div>
+
+<style>
+    /* Search Results Box Styles */
+    /* Search Results Box Styles */
+    .results-box {
+        position: absolute;
+        z-index: 1000;
+        background-color: #fff;
+        width: calc(100% - 20px);
+        /* Full width minus padding */
+        max-width: 600px;
+        padding: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        /* Space between input and results */
+        left: 50%;
+        /* Center the box */
+        transform: translateX(-50%);
+        /* Adjust for the width of the box */
+    }
+
+
+    .results-box button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+        border-radius: 4px;
+        /* Rounded corners for buttons */
+        transition: background-color 0.3s;
+        /* Smooth transition for hover */
+    }
+
+    .results-box button:hover {
+        background-color: #f0f0f0;
+        /* Change background on hover */
+    }
+
+    /* Modal Styles (if needed) */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+    }
+
+    .close-btn {
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .remove-btn {
+        cursor: pointer;
+        color: red;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+</script>
+<%- include('partials/student_script.ejs') %>
+
+<%- include('partials/footer') %>

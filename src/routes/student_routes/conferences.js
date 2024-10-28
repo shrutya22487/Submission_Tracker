@@ -3,7 +3,7 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof, get_prof_id} from "../../utils/utility_functions.js";
+import {check_authentication, get_prof_id, get_student_id} from "../../utils/utility_functions.js";
 
 const router = Router();
 
@@ -11,9 +11,8 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 // Deleting the conference
-router.post("/prof_dashboard/delete_conference", async (req, res) => {
+router.post("/student_dashboard/delete_conference",check_authentication, async (req, res) => {
     try {
-        // console.log(req.body.conference_id);
         await db.query('DELETE FROM Conferences where id = $1;', [req.body.conference_id]);
         res.status(200).json({ message: "conference deleted successfully" });
     } catch (error) {
@@ -23,10 +22,10 @@ router.post("/prof_dashboard/delete_conference", async (req, res) => {
 });
 
 // Adding the conference
-router.post("/prof_dashboard/add_conference", async (req, res) => {
+router.post("/student_dashboard/add_conference", check_authentication,async (req, res) => {
     try {
-        const profId = await get_prof_id(req, res);
-        await db.query('INSERT INTO Conferences(prof_id,date, title, link) VALUES ($1, $2, $3, $4);', [profId, req.body.date, req.body.title, req.body.link]);
+        const student_id = await get_student_id(req, res);
+        await db.query('INSERT INTO Conferences_student(student_id,date, title, link) VALUES ($1, $2, $3, $4);', [student_id, req.body.date, req.body.title, req.body.link]);
         res.status(200).json({ message: "conference added successfully" });
     } catch (error) {
         console.error("Error executing query:", error);
@@ -35,12 +34,12 @@ router.post("/prof_dashboard/add_conference", async (req, res) => {
 });
 
 // sending the list of conferences to AJAX
-router.get('/prof_dashboard/conferences', check_authentication_prof,async (req, res) => {
+router.get('/student_dashboard/conferences', check_authentication,async (req, res) => {
     try {
-        const profId = await get_prof_id(req, res);
-        const data = await db.query('SELECT * FROM Conferences WHERE prof_id = $1', [profId]);
+        const student_id = await get_student_id(req, res);
+        const data = await db.query('SELECT * FROM Conferences_student WHERE student_id = $1', [student_id]);
 
-        res.render("prof_conferences.ejs",{
+        res.render("student_conferences.ejs",{
             conferences: data,
         } );
 

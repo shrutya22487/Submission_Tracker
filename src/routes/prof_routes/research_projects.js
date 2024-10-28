@@ -3,7 +3,7 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof} from "../../utils/utility_functions.js";
+import {check_authentication} from "../../utils/utility_functions.js";
 
 const router = Router();
 
@@ -11,10 +11,17 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 // adding meeting notes
-router.post('/prof_dashboard/add_meeting_notes',check_authentication_prof,  async (req, res) => {
+router.post('/prof_dashboard/add_meeting_notes',check_authentication,  async (req, res) => {
     try {
-       await db.query(
-            `INSERT INTO meeting_notes(project_id, prof_id, notes) VALUES ($1, $2, $3)`,[req.body.project_id, await utils.get_prof_id(req, res),req.body.notes]);
+        if (req.prof === true){
+            await db.query(
+                `INSERT INTO meeting_notes(project_id, prof_id, notes) VALUES ($1, $2, $3)`,[req.body.project_id, await utils.get_prof_id(req, res),req.body.notes]);
+        }
+        else {
+            await db.query(
+                `INSERT INTO meeting_notes(project_id, prof_id, notes) VALUES ($1, $2, $3)`,[req.body.project_id, null,req.body.notes]);
+        }
+
        res.status(200).json({ message: "Meeting Notes added successfully" });
 
     } catch (error) {
@@ -26,7 +33,7 @@ router.post('/prof_dashboard/add_meeting_notes',check_authentication_prof,  asyn
 ////////////////////////////////////Student Functions/////////////////////////////////////
 
 // for searching students
-router.get('/search_students_prof',check_authentication_prof,  async (req, res) => {
+router.get('/search_students_prof',check_authentication,  async (req, res) => {
     const {query} = req.query;
     try {
         let prof_id = await utils.get_prof_id(req, res);
@@ -49,8 +56,8 @@ router.get('/search_students_prof',check_authentication_prof,  async (req, res) 
     }
 });
 
-// add student to project, this uses the search route in the students.js
-router.post('/prof_dashboard/add_student_to_project',check_authentication_prof,  async (req, res) => {
+// add student to project, this uses the search route in the prof_routes/students.js
+router.post('/prof_dashboard/add_student_to_project',check_authentication,  async (req, res) => {
 
     try {
         await db.query(`
@@ -69,7 +76,7 @@ router.post('/prof_dashboard/add_student_to_project',check_authentication_prof, 
 ////////////////////////////// Project Functions //////////////////////////////////////////
 
 // Fetch project details to pre-fill the form
-router.get('/get_project/:id', check_authentication_prof, async (req, res) => {
+router.get('/get_project/:id', check_authentication, async (req, res) => {
     try {
         const project = await db.query("SELECT * FROM Project WHERE id = $1", [req.params.id]);
         res.json(project.rows[0]);
@@ -79,7 +86,7 @@ router.get('/get_project/:id', check_authentication_prof, async (req, res) => {
     }
 });
 
-router.post('/edit_project', check_authentication_prof, async (req, res) => {
+router.post('/edit_project', check_authentication, async (req, res) => {
     try {
 
         const currentProject = await db.query("SELECT * FROM Project WHERE id = $1", [req.body.project_id]);
@@ -117,7 +124,7 @@ router.post('/edit_project', check_authentication_prof, async (req, res) => {
 });
 
 //deleting a project
-router.post('/prof_dashboard/delete_project', check_authentication_prof, async (req, res) => {
+router.post('/prof_dashboard/delete_project', check_authentication, async (req, res) => {
     const { project_id } = req.body;
 
     try {
@@ -130,7 +137,7 @@ router.post('/prof_dashboard/delete_project', check_authentication_prof, async (
 });
 
 // adding project
-router.post('/add_project',check_authentication_prof, async (req, res) => {
+router.post('/add_project',check_authentication, async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
 
     try {
@@ -157,7 +164,7 @@ router.post('/add_project',check_authentication_prof, async (req, res) => {
 });
 
 //archive project
-router.post("/prof_dashboard/archive_project",check_authentication_prof, async (req, res) => {
+router.post("/prof_dashboard/archive_project",check_authentication, async (req, res) => {
     try {
 
         const { project_id } = req.body;
@@ -174,8 +181,7 @@ router.post("/prof_dashboard/archive_project",check_authentication_prof, async (
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Main Dashboard
-router.get("/prof_dashboard/research_projects", check_authentication_prof,async (req, res) => {
-    await utils.check_authentication_prof(req, res);
+router.get("/prof_dashboard/research_projects", check_authentication,async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,
@@ -185,6 +191,8 @@ router.get("/prof_dashboard/research_projects", check_authentication_prof,async 
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
+    p.conference AS project_conference,
+
     STRING_AGG(DISTINCT s.name, ', ') AS students,
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM
@@ -213,6 +221,7 @@ ORDER BY
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
+    p.conference AS project_conference,
     STRING_AGG(DISTINCT s.name, ', ') AS students,
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM
@@ -233,7 +242,7 @@ GROUP BY
 ORDER BY
     p.id;`, [prof_id]);
 
-    res.render("research_projects.ejs", {project_details_unarchived : project_details_unarchived,
+    res.render("research_projects_prof.ejs", {project_details_unarchived : project_details_unarchived,
     project_details_archived : project_details_archived,});
 });
 

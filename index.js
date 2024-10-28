@@ -48,7 +48,7 @@ app.get("/sampleboard", (req, res) => {
 });
 
 app.get("/research_projects", (req, res) => {
-    res.render("research_projects.ejs");
+    res.render("research_projects_prof.ejs");
 });
 
 app.get("/login", (req, res) => {

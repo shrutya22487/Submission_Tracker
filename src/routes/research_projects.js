@@ -7,7 +7,7 @@ const router = Router();
 router.get('/research_projects', async (req, res) => {
     try {
         // const conferencesResult = await db.query(`SELECT * FROM conferences`);
-        res.render("research_projects.ejs");
+        res.render("research_projects_prof.ejs");
     } catch (err) {
         console.error("Error fetching sampleboard:", err);
         res.status(500).send("Server error");
@@ -67,7 +67,7 @@ export default router;
 //         res.locals.unarchived_jobs = unarchived_jobs;
 
 //         // TODO: Do error handling here
-//         res.render("research_projects.ejs", {
+//         res.render("research_projects_prof.ejs", {
 //             prof_id: prof_id,
 //         });
 //     } catch (err) {

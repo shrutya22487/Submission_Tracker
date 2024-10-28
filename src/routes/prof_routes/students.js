@@ -6,14 +6,14 @@ import * as utils from "../../utils/utility_functions.js";
 import {fileURLToPath} from "url";
 import path from "path";
 import {parse} from "dotenv";
-import {check_authentication_prof} from "../../utils/utility_functions.js";
+import {check_authentication} from "../../utils/utility_functions.js";
 const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 // For searching a student to add in the projects
-router.get('/search_students',check_authentication_prof,  async (req, res) => {
+router.get('/search_students',check_authentication,  async (req, res) => {
     const {query} = req.query;
 
     try {
@@ -38,7 +38,7 @@ router.get('/search_students',check_authentication_prof,  async (req, res) => {
     }
 });
 
-router.post('/prof_dashboard/add_student', check_authentication_prof, async (req, res) => {
+router.post('/prof_dashboard/add_student', check_authentication, async (req, res) => {
     try {
         // console.log(req.body);
         const {student_id} = req.body;
@@ -63,7 +63,7 @@ router.post('/prof_dashboard/add_student', check_authentication_prof, async (req
 });
 
 // for deleting student
-router.post('/delete_student',check_authentication_prof,  async (req, res) => {
+router.post('/delete_student',check_authentication,  async (req, res) => {
     const { student_id } = req.body;
 
     try {
@@ -77,7 +77,7 @@ router.post('/delete_student',check_authentication_prof,  async (req, res) => {
     }
 });
 
-router.post("/prof_dashboard/archive_student",check_authentication_prof,  async (req, res) => {
+router.post("/prof_dashboard/archive_student",check_authentication,  async (req, res) => {
     try {
 
         const { student_id } = req.body;
@@ -92,8 +92,8 @@ router.post("/prof_dashboard/archive_student",check_authentication_prof,  async 
 });
 
 
-router.get("/prof_dashboard/students",check_authentication_prof,  async (req, res) => {
-    await utils.check_authentication_prof(req, res);
+router.get("/prof_dashboard/students",check_authentication,  async (req, res) => {
+    await utils.check_authentication(req, res);
     const prof_id = await utils.get_prof_id(req, res);
 
     const student_details_unarchived = await db.query("SELECT\n" +

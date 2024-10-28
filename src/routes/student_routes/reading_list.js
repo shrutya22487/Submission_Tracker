@@ -4,7 +4,7 @@ import db from "../../utils/db.js";
 const router = Router();
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof, get_prof_id} from "../../utils/utility_functions.js";
+import {check_authentication, get_prof_id} from "../../utils/utility_functions.js";
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
@@ -43,7 +43,7 @@ router.post('/prof_dashboard/add_book', async (req, res) => {
 
 
 // Route to fetch reading list, grouped by genre and render it
-router.get('/prof_dashboard/reading_list', check_authentication_prof,async (req, res) => {
+router.get('/prof_dashboard/reading_list', check_authentication,async (req, res) => {
     try {
         const profId = await utils.get_prof_id(req, res);
         const query = `

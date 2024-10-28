@@ -3,46 +3,17 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof} from "../../utils/utility_functions.js";
+import {check_authentication} from "../../utils/utility_functions.js";
 
 const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
-// adding project
-router.post('/add_paper', check_authentication_prof, async (req, res) => {
-    const prof_id = await utils.get_prof_id(req, res);
-
-    try {
-        const result = await db.query(
-            `INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored, paper)
-            VALUES ($1, NULL, NULL, $2, $3, $4, $5, $6, $7, FALSE, FALSE, TRUE)
-            RETURNING id;`,
-            [req.body.title || null, req.body.conference || null, req.body.status || null, req.body.link_1 || null, req.body.link_2 || null, req.body.submitted_date || null, req.body.deadline_date || null,]
-        );
-
-        const new_project_id = result.rows[0].id;
-
-        await db.query("UPDATE Project SET prof_table_id = $1 WHERE id = $2;", [new_project_id, new_project_id]);
-        await db.query("INSERT INTO Project_profs (project_id, prof_id) VALUES ($1, $2);", [new_project_id, prof_id]);
-
-        await db.query("UPDATE Project SET student_table_id = $1 WHERE id = $2;", [new_project_id, new_project_id]);
-
-        res.redirect("/prof_dashboard/under_review_papers");
-    } catch (error) {
-        console.error("Error executing query:", error);
-        res.status(500).send("Internal server error");
-    }
-});
-
+//uses /prof_dashboard/add_meeting_notes to add meeting notes
 //Main Dashboard
-router.get("/prof_dashboard/under_review_papers",check_authentication_prof,  async (req, res) => {
-    await utils.check_authentication_prof(req, res);
-
-    const prof_id = await utils.get_prof_id(req, res);
-    const prof_name = await utils.get_prof_name(req, res, prof_id);
-
+router.get("/student_dashboard/research_projects", check_authentication,async (req, res) => {
+    const student_id = await utils.get_student_id(req, res);
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,
     p.title AS project_title,
@@ -51,8 +22,10 @@ router.get("/prof_dashboard/under_review_papers",check_authentication_prof,  asy
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    p.conference AS project_conference,
+    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
+    STRING_AGG(DISTINCT s_other.name, ', ') AS students
 FROM
     Project p
 LEFT JOIN
@@ -65,11 +38,16 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored =FALSE AND p.paper = TRUE
+LEFT JOIN
+    Project_Students ps_other ON p.id = ps_other.project_id
+LEFT JOIN
+    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
+WHERE s.id = $1 AND p.paper = TRUE AND p.archived= FALSE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [student_id]);
 
     const project_details_archived = await db.query(`SELECT
     p.id AS project_id,
@@ -79,8 +57,10 @@ ORDER BY
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    p.conference AS project_conference,
+    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
+    STRING_AGG(DISTINCT s_other.name, ', ') AS students
 FROM
     Project p
 LEFT JOIN
@@ -93,15 +73,18 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored =FALSE AND p.paper = TRUE
+LEFT JOIN
+    Project_Students ps_other ON p.id = ps_other.project_id
+LEFT JOIN
+    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
+WHERE s.id = $1 AND p.paper = TRUE AND p.archived= TRUE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [student_id]);
 
-    console.log(project_details_unarchived.rows);
-
-    res.render("under_review_papers.ejs", {prof_name : prof_name,project_details_unarchived : project_details_unarchived,
+    res.render("research_projects_student.ejs", {project_details_unarchived : project_details_unarchived,
         project_details_archived : project_details_archived,});
 });
 

@@ -1,0 +1,35 @@
+<script>
+    function addMeetingNotes(project_id) {
+        const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
+
+        if (notes) {
+            $.ajax({
+                url: '/prof_dashboard/add_meeting_notes',
+                type: 'POST',
+                data: {
+                    project_id: project_id,
+                    notes: notes,
+                    prof: false
+                },
+                success: function () {
+                    alert('Meeting notes successfully added!');
+                    window.location.reload();
+                },
+                error: function () {
+                    alert('Error adding meeting notes');
+                }
+            });
+        } else {
+            alert('Please enter meeting notes');
+        }
+    }
+
+    // Function to copy email to clipboard
+    function copyToClipboard(email) {
+        navigator.clipboard.writeText(email)
+            .then(() => alert(`Email ${email} copied to clipboard!`))
+            .catch(err => console.error("Failed to copy text: ", err));
+    }
+
+
+</script>

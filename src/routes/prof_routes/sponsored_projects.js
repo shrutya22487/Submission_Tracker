@@ -3,7 +3,7 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof} from "../../utils/utility_functions.js";
+import {check_authentication} from "../../utils/utility_functions.js";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 //archive project
-router.post("/prof_dashboard/archive_project_sponsored",check_authentication_prof,  async (req, res) => {
+router.post("/prof_dashboard/archive_project_sponsored",check_authentication,  async (req, res) => {
     try {
         const { project_id } = req.body;
 
@@ -25,7 +25,7 @@ router.post("/prof_dashboard/archive_project_sponsored",check_authentication_pro
 });
 
 // for editing the project
-router.post('/edit_project_sponsored',check_authentication_prof,  async (req, res) => {
+router.post('/edit_project_sponsored',check_authentication,  async (req, res) => {
     try {
 
         const currentProject = await db.query("SELECT * FROM Project WHERE id = $1", [req.body.project_id]);
@@ -63,7 +63,7 @@ router.post('/edit_project_sponsored',check_authentication_prof,  async (req, re
 });
 
 // adding project
-router.post('/add_project_sponsored',check_authentication_prof,  async (req, res) => {
+router.post('/add_project_sponsored',check_authentication,  async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
 
     try {
@@ -89,9 +89,7 @@ router.post('/add_project_sponsored',check_authentication_prof,  async (req, res
 });
 
 //Main Dashboard
-router.get("/prof_dashboard/sponsored_projects", check_authentication_prof, async (req, res) => {
-    await utils.check_authentication_prof(req, res);
-
+router.get("/prof_dashboard/sponsored_projects", check_authentication, async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
 
     const project_details_unarchived = await db.query(`SELECT
@@ -102,6 +100,8 @@ router.get("/prof_dashboard/sponsored_projects", check_authentication_prof, asyn
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
+        p.conference AS project_conference,
+
     STRING_AGG(DISTINCT s.name, ', ') AS students,
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM
@@ -130,6 +130,7 @@ ORDER BY
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
+    p.conference AS project_conference,
     STRING_AGG(DISTINCT s.name, ', ') AS students,
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
 FROM

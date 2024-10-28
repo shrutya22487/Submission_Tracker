@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS meeting_notes
 (
     id         SERIAL PRIMARY KEY,
     project_id INT  NOT NULL,
-    prof_id    INT  NOT NULL,
+    prof_id    INT ,
     notes      TEXT NOT NULL,
     date       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE,
@@ -111,7 +111,6 @@ CREATE TABLE IF NOT EXISTS reading_list
 
 );
 
-
 CREATE TABLE IF NOT EXISTS Conferences_student
 (
     student_id INT NOT NULL,
@@ -152,3 +151,26 @@ CREATE TABLE IF NOT EXISTS reading_list_student
     link_2     VARCHAR(1000),
     FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );
+
+SELECT
+    STRING_AGG(DISTINCT p.title, ', ') AS project_titles,
+    pr.name AS professor_name,
+    pr.email_id AS professor_email
+FROM
+    Project p
+LEFT JOIN
+    Project_Students ps ON p.id = ps.project_id
+LEFT JOIN
+    Student s ON ps.student_id = s.id
+JOIN
+    Project_profs pp ON p.id = pp.project_id
+JOIN
+    Professor pr ON pp.prof_id = pr.id
+WHERE s.id = 1 AND p.paper = FALSE AND p.archived = FALSE
+GROUP BY
+    pr.name, pr.email_id
+ORDER BY
+    pr.name;
+
+
+SELECT * from Project

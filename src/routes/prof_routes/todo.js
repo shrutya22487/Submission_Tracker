@@ -3,7 +3,7 @@ import { Router } from "express";
 import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
-import {check_authentication_prof, get_prof_id} from "../../utils/utility_functions.js";
+import {check_authentication, get_prof_id} from "../../utils/utility_functions.js";
 
 const router = Router();
 
@@ -11,7 +11,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 // Deleting the to-dos
-router.post("/prof_dashboard/delete_todo",check_authentication_prof,  async (req, res) => {
+router.post("/prof_dashboard/delete_todo",check_authentication,  async (req, res) => {
     try {
         console.log(req.body.todo_id);
         await db.query('DELETE FROM todos where id = $1;', [req.body.todo_id]);
@@ -23,7 +23,7 @@ router.post("/prof_dashboard/delete_todo",check_authentication_prof,  async (req
 });
 
 // Adding the to-dos
-router.post("/prof_dashboard/add_todo",check_authentication_prof,  async (req, res) => {
+router.post("/prof_dashboard/add_todo",check_authentication,  async (req, res) => {
     try {
         const profId = await get_prof_id(req, res);
         await db.query('INSERT INTO todos(prof_id,task) VALUES ($1, $2);', [profId, req.body.task]);
@@ -35,7 +35,7 @@ router.post("/prof_dashboard/add_todo",check_authentication_prof,  async (req, r
 });
 
 // sending the list of To-dos to AJAX
-router.get('/prof_dashboard/todo',check_authentication_prof,  async (req, res) => {
+router.get('/prof_dashboard/todo',check_authentication,  async (req, res) => {
     try {
         const profId = await get_prof_id(req, res);
         const { rows: data } = await db.query('SELECT * FROM todos WHERE prof_id = $1', [profId]);
