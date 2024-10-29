@@ -13,7 +13,7 @@ router.use(express.json());
 // Deleting the conference
 router.post("/prof_dashboard/delete_conference", check_authentication,async (req, res) => {
     try {
-        // console.log(req.body.conference_id);
+
         await db.query('DELETE FROM Conferences where id = $1;', [req.body.conference_id]);
         res.status(200).json({ message: "conference deleted successfully" });
     } catch (error) {

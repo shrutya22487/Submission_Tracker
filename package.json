@@ -18,6 +18,8 @@
     "ejs": "^3.1.10",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "google-auth-library": "^9.14.2",
+    "googleapis": "^144.0.0",
     "jquery": "^3.7.1",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",

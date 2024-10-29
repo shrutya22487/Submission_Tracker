@@ -2,22 +2,31 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import passport from "passport";
-import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
 import session from "express-session";
 import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
 import sampleRouter from "./src/routes/sampleboard.js";
-import paperRoute from "./src/routes/research_projects.js";
 import db from "./src/utils/db.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { google } from "googleapis";
+import GoogleAuthLibrary from "google-auth-library";
+
+const OAuth2 = google.auth.OAuth2;
 
 const app = express();
 const port = 3000;
 env.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Configure OAuth2 client for Gmail API
+const oauth2Client = new OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    "http://localhost:3000/auth/google/dashboard"
+);
 
 app.use(
     session({
@@ -34,10 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.use(dashboardRouter);
-
-///////////////Google Oauth////////////////////////////////////
 
 app.get("/", (req, res) => {
     res.render("home.ejs");
@@ -45,10 +51,6 @@ app.get("/", (req, res) => {
 
 app.get("/sampleboard", (req, res) => {
     res.render("sampleboard.ejs");
-});
-
-app.get("/research_projects", (req, res) => {
-    res.render("research_projects_prof.ejs");
 });
 
 app.get("/login", (req, res) => {
@@ -62,7 +64,7 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/logout", (req, res) => {
-    req.logout(function (err) {
+    req.logout((err) => {
         if (err) {
             return next(err);
         }
@@ -73,7 +75,7 @@ app.get("/logout", (req, res) => {
 app.get(
     "/auth/google",
     passport.authenticate("google", {
-        scope: ["profile","email"],
+        scope: ["profile", "email", "https://www.googleapis.com/auth/gmail.readonly"],
     })
 );
 
@@ -84,38 +86,22 @@ app.get(
         failureRedirect: "/login?error=unauthorized_domain",
     })
 );
-app.post(
-    "/auth/google/dashboard",
-    passport.authenticate("google", {
-        successRedirect: "/dashboard",
-        failureRedirect: "/login",
-    })
-);
 
-
-function isStudent(email){
+function isStudent(email) {
     const studentEmailPattern = /^[a-zA-Z]+[0-9]{5}@iiitd\.ac\.in$/;
     return studentEmailPattern.test(email);
 }
+
 passport.use(
-    "google",
     new GoogleStrategy(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             callbackURL: "http://localhost:3000/auth/google/dashboard",
-            userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
         },
         async (accessToken, refreshToken, profile, cb) => {
             try {
                 const email = profile.email;
-                const domain = email.split("@")[1]; // Extract the domain from the email
-
-                // TODO Comment this out when project has been completed
-                // if (domain !== "iiitd.ac.in") {
-                //     return cb(null, false, { message: "Kindly login with IIITD Email-ID" });
-                // }
-
                 let user = null;
 
                 if (isStudent(email)) {
@@ -124,50 +110,49 @@ passport.use(
                         [email]
                     );
 
-                    // Check if any rows are returned
                     if (studentResult.rows.length === 0) {
-                        // Insert into 'Student' table if no rows exist
                         await db.query(
                             "INSERT INTO Student (Name, email_id) VALUES ($1, $2)",
                             [profile.displayName, email]
                         );
-
-                        // Retrieve the inserted student
                         const newStudentResult = await db.query(
                             "SELECT * FROM Student WHERE email_id = $1",
                             [email]
                         );
-
                         user = newStudentResult.rows[0];
                     } else {
                         user = studentResult.rows[0];
                     }
                 } else {
-                    // Check if user exists in 'Professor' table
                     const professorResult = await db.query(
                         "SELECT * FROM Professor WHERE email_id = $1",
                         [email]
                     );
 
-                    // Check if any rows are returned
                     if (professorResult.rows.length === 0) {
-                        // Insert into 'Professor' table if no rows exist
                         await db.query(
                             "INSERT INTO Professor (Name, email_id) VALUES ($1, $2)",
                             [profile.displayName, email]
                         );
-
-                        // Retrieve the inserted professor
                         const newProfessorResult = await db.query(
                             "SELECT * FROM Professor WHERE email_id = $1",
                             [email]
                         );
-
                         user = newProfessorResult.rows[0];
                     } else {
                         user = professorResult.rows[0];
                     }
                 }
+
+                // Set credentials for OAuth2 client
+                oauth2Client.setCredentials({
+                    access_token: accessToken,
+                    refresh_token: refreshToken,
+                });
+
+                // Store tokens and user info in session
+                user.accessToken = accessToken;
+                user.refreshToken = refreshToken;
                 return cb(null, user);
             } catch (err) {
                 return cb(err);
@@ -175,6 +160,7 @@ passport.use(
         }
     )
 );
+
 passport.serializeUser((user, cb) => {
     cb(null, user);
 });
@@ -183,7 +169,8 @@ passport.deserializeUser((user, cb) => {
     cb(null, user);
 });
 
-///////////////MISC//////////////////////////////////////////
+export { oauth2Client };
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

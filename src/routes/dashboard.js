@@ -17,9 +17,8 @@ router.get("/dashboard", (req, res) => {
     // console.log(req.user);
     if (req.isAuthenticated()) {
         try {
-            // TODO: fix this to /profs
             if (isStudent(req.user.email_id)) {
-                res.redirect("/student_dashboard/research_projects");
+                res.redirect("/student_dashboard/profs");
             }
             else
                 res.redirect("/prof_dashboard/students");

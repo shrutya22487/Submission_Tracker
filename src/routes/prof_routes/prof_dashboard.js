@@ -11,6 +11,7 @@ import reading_list from "./reading_list.js";
 import todo from "./todo.js";
 import deadlines from "./deadlines.js";
 import conferences from "./conferences.js";
+import mails from "./mail.js";
 
 const router = Router();
 
@@ -24,5 +25,5 @@ router.use(sponsored_projects);
 router.use(reading_list);
 router.use(todo);
 router.use(deadlines);
-
+router.use(mails);
 export default router;

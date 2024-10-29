@@ -38,8 +38,6 @@ router.post('/add_paper', check_authentication, async (req, res) => {
 
 //Main Dashboard
 router.get("/prof_dashboard/under_review_papers",check_authentication,  async (req, res) => {
-    await utils.check_authentication(req, res);
-
     const prof_id = await utils.get_prof_id(req, res);
     const prof_name = await utils.get_prof_name(req, res, prof_id);
 
