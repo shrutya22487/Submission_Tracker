@@ -100,10 +100,10 @@ router.get("/prof_dashboard/sponsored_projects", check_authentication, async (re
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-        p.conference AS project_conference,
-
+    p.conference AS project_conference,
+    
     STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -120,7 +120,8 @@ WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored = TRUE AND p.paper = FAL
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+` ,[prof_id]);
 
     const project_details_archived = await db.query(`SELECT
     p.id AS project_id,
@@ -131,8 +132,9 @@ ORDER BY
     p.link_1 AS link_1,
     p.link_2 AS link_2,
     p.conference AS project_conference,
+    
     STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -149,7 +151,8 @@ WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored = TRUE AND p.paper = FALS
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+` ,[prof_id]);
 
     res.render("sponsored_projects.ejs", {project_details_unarchived : project_details_unarchived,
         project_details_archived : project_details_archived,});

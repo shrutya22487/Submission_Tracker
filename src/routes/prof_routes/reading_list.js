@@ -62,7 +62,7 @@ router.get('/prof_dashboard/reading_list', check_authentication,async (req, res)
         const { rows: groupedBooks } = await db.query(query, [profId]);
 
         // Render the EJS template, passing the groupedBooks data
-        res.render('reading_list', { groupedBooks : groupedBooks});
+        res.render('reading_list_prof.ejs', { groupedBooks : groupedBooks});
     } catch (error) {
         console.error("Error fetching reading list:", error);
         res.status(500).send("Internal server error");

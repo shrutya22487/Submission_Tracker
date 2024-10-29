@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <%- include('partials/task_mgmt.ejs')%>
+        <%- include('partials/task_mgmt_prof.ejs')%>
 
     </div>
 </div>
@@ -83,7 +83,7 @@
         $('#conference-table-body').on('click', '.delete-btn', function() {
             const conferenceId = $(this).data('id');
             $.ajax({
-                url: '/prof_dashboard/delete_conference',
+                url: '/student_dashboard/delete_conference',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ conference_id: conferenceId }),
@@ -106,7 +106,7 @@
                 link: $('#link').val()
             };
             $.ajax({
-                url: '/prof_dashboard/add_conference',
+                url: '/student_dashboard/add_conference',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify(formData),

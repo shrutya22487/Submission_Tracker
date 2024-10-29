@@ -10,6 +10,8 @@ const router = Router();
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
+//////////////////////////////////// Meeting Notes /////////////////////////////////////
+
 // adding meeting notes
 router.post('/prof_dashboard/add_meeting_notes',check_authentication,  async (req, res) => {
     try {
@@ -24,6 +26,19 @@ router.post('/prof_dashboard/add_meeting_notes',check_authentication,  async (re
 
        res.status(200).json({ message: "Meeting Notes added successfully" });
 
+    } catch (error) {
+        console.error("Error executing query:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+//deleting meeting notes
+router.post('/prof_dashboard/delete_meeting_notes',check_authentication,  async (req, res) => {
+    const { id } = req.body;
+
+    try {
+        await db.query("DELETE FROM meeting_notes WHERE id = $1", [id]);
+        res.redirect("/prof_dashboard/research_projects");
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
@@ -183,6 +198,7 @@ router.post("/prof_dashboard/archive_project",check_authentication, async (req, 
 //Main Dashboard
 router.get("/prof_dashboard/research_projects", check_authentication,async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
+
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,
     p.title AS project_title,
@@ -192,9 +208,9 @@ router.get("/prof_dashboard/research_projects", check_authentication,async (req,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
     p.conference AS project_conference,
-
+    
     STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -207,11 +223,12 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored =FALSE AND p.paper = FALSE
+WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored = FALSE AND p.paper = FALSE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [prof_id]);
 
     const project_details_archived = await db.query(`SELECT
     p.id AS project_id,
@@ -222,8 +239,9 @@ ORDER BY
     p.link_1 AS link_1,
     p.link_2 AS link_2,
     p.conference AS project_conference,
+    
     STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -236,11 +254,12 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored =FALSE AND p.paper = FALSE
+WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored = FALSE AND p.paper = FALSE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [prof_id]);
 
     res.render("research_projects_prof.ejs", {project_details_unarchived : project_details_unarchived,
     project_details_archived : project_details_archived,});

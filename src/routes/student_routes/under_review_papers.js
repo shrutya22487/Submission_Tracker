@@ -9,13 +9,10 @@ const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
-
+//uses /prof_dashboard/add_meeting_notes to add meeting notes
 //Main Dashboard
-router.get("/student_dashboard/under_review_papers",check_authentication,  async (req, res) => {
-
-    const prof_id = await utils.get_prof_id(req, res);
-    const prof_name = await utils.get_prof_name(req, res, prof_id);
-
+router.get("/student_dashboard/under_review_papers", check_authentication,async (req, res) => {
+    const student_id = await utils.get_student_id(req, res);
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,
     p.title AS project_title,
@@ -24,8 +21,10 @@ router.get("/student_dashboard/under_review_papers",check_authentication,  async
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    p.conference AS project_conference,
+    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
+    STRING_AGG(DISTINCT s_other.name, ', ') AS students
 FROM
     Project p
 LEFT JOIN
@@ -38,11 +37,16 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = FALSE AND p.sponsored =FALSE AND p.paper = TRUE
+LEFT JOIN
+    Project_Students ps_other ON p.id = ps_other.project_id
+LEFT JOIN
+    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
+WHERE s.id = $1 AND p.paper = TRUE AND p.archived= FALSE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [student_id]);
 
     const project_details_archived = await db.query(`SELECT
     p.id AS project_id,
@@ -52,8 +56,10 @@ ORDER BY
     p.status AS status,
     p.link_1 AS link_1,
     p.link_2 AS link_2,
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes
+    p.conference AS project_conference,
+    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
+    STRING_AGG(DISTINCT s_other.name, ', ') AS students
 FROM
     Project p
 LEFT JOIN
@@ -66,15 +72,18 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = TRUE AND p.sponsored =FALSE AND p.paper = TRUE
+LEFT JOIN
+    Project_Students ps_other ON p.id = ps_other.project_id
+LEFT JOIN
+    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
+WHERE s.id = $1 AND p.paper = TRUE AND p.archived= TRUE
 GROUP BY
     p.id
 ORDER BY
-    p.id;`, [prof_id]);
+    p.id;
+`, [student_id]);
 
-    console.log(project_details_unarchived.rows);
-
-    res.render("under_review_papers.ejs", {prof_name : prof_name,project_details_unarchived : project_details_unarchived,
+    res.render("under_review_papers_student.ejs", {project_details_unarchived : project_details_unarchived,
         project_details_archived : project_details_archived,});
 });
 

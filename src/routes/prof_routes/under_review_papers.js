@@ -23,9 +23,9 @@ router.get("/student_dashboard/research_projects", check_authentication,async (r
     p.link_1 AS link_1,
     p.link_2 AS link_2,
     p.conference AS project_conference,
-    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
-    STRING_AGG(DISTINCT s_other.name, ', ') AS students
+    
+    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -38,11 +38,7 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-LEFT JOIN
-    Project_Students ps_other ON p.id = ps_other.project_id
-LEFT JOIN
-    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
-WHERE s.id = $1 AND p.paper = TRUE AND p.archived= FALSE
+WHERE pr.id = $1 AND p.archived = FALSE AND p.paper = TRUE
 GROUP BY
     p.id
 ORDER BY
@@ -58,9 +54,9 @@ ORDER BY
     p.link_1 AS link_1,
     p.link_2 AS link_2,
     p.conference AS project_conference,
-    STRING_AGG(DISTINCT pr.name, ', ') AS professor_names,
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')'), '; ') AS meeting_notes,
-    STRING_AGG(DISTINCT s_other.name, ', ') AS students
+    
+    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
 LEFT JOIN
@@ -73,11 +69,7 @@ JOIN
     Professor pr ON pp.prof_id = pr.id
 LEFT JOIN
     meeting_notes mn ON p.id = mn.project_id
-LEFT JOIN
-    Project_Students ps_other ON p.id = ps_other.project_id
-LEFT JOIN
-    Student s_other ON ps_other.student_id = s_other.id AND s_other.id != $1
-WHERE s.id = $1 AND p.paper = TRUE AND p.archived= TRUE
+WHERE pr.id = $1 AND p.archived = TRUE AND p.paper = TRUE
 GROUP BY
     p.id
 ORDER BY

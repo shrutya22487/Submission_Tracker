@@ -93,7 +93,6 @@ router.post("/prof_dashboard/archive_student",check_authentication,  async (req,
 
 
 router.get("/prof_dashboard/students",check_authentication,  async (req, res) => {
-    await utils.check_authentication(req, res);
     const prof_id = await utils.get_prof_id(req, res);
 
     const student_details_unarchived = await db.query("SELECT\n" +
