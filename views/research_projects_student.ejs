@@ -13,10 +13,8 @@
                     <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Student Dashboard</h1>
                 </div>
 
-                <!--research projects -->
-                <div>
-                    <!-- FOR UNARCHIVED PROJECTS-->
-                    <div class="container mt-5">
+                <!-- FOR UNARCHIVED PROJECTS-->
+                <div class="container mt-5">
                         <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
 
                         <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
@@ -66,7 +64,7 @@
                             <p>No projects found.</p>
                         <% } %>
                     </div>
-                </div>
+
 
                 <!-- FOR ARCHIVED PROJECTS-->
                 <div class="container mt-5">
@@ -123,7 +121,7 @@
         </div>
 
         <!--Prof to do section-->
-        <%- include('partials/task_mgmt_prof.ejs')%>
+        <%- include('partials/task_mgmt_student.ejs')%>
 
     </div>
 </div>

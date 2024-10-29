@@ -81,12 +81,12 @@
                         data.forEach(function(todo) {
                             todoList.append(`<li id="todo-${todo.id}">
                                     Task: ${todo.task}
-                                    <button class="delete-btn" data-id="${todo.id}">Delete</button>
+                                    <button class="delete-btn1" data-id="${todo.id}">Delete</button>
                                 </li>`);
                         });
 
                         // Attach delete event handler after todos are rendered
-                        attachDeleteHandlers();
+                        attachDeleteHandlers1();
                     } else {
                         $('#todo-list').html('<p>No todos found.</p>');
                     }
@@ -99,8 +99,9 @@
         }
 
         // Function to attach delete event handlers to delete buttons
-        function attachDeleteHandlers() {
-            $('.delete-btn').on('click', function() {
+        function attachDeleteHandlers1() {
+
+            $('.delete-btn1').on('click', function() {
                 const todoId = $(this).data('id');
 
                 if (confirm('Are you sure you want to delete this todo?')) {
@@ -112,7 +113,7 @@
                         success: function(response) {
                             alert(response.message); // Show success message
 
-                            // Remove the deleted todo from the UI
+                            // Remove the deleted todos from the UI
                             $(`#todo-${todoId}`).remove();
                         },
                         error: function(error) {
@@ -126,6 +127,7 @@
 
         // AJAX request to add a new to_do
         $('#add-todo-form').submit(function(event) {
+
             event.preventDefault(); // Prevent the form from submitting the default way
 
             const task = $('#task_todo').val();
@@ -151,8 +153,6 @@
             });
         });
     });
-
-    /////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////////////// Deadline FUNCTIONS ///////////////////////////////////
 

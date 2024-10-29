@@ -58,8 +58,8 @@ ORDER BY
 `,[student_id]);
 
     res.render("profs.ejs", {
-        prof_details_unarchived : prof_details_unarchived,
-        prof_details_archived : prof_details_archived,});
+        prof_details_unarchived : prof_details_unarchived.rows,
+        prof_details_archived : prof_details_archived.rows ,});
 });
 
 export default router;

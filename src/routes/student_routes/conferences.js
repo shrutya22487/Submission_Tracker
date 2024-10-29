@@ -13,7 +13,7 @@ router.use(express.json());
 // Deleting the conference
 router.post("/student_dashboard/delete_conference",check_authentication, async (req, res) => {
     try {
-        await db.query('DELETE FROM Conferences where id = $1;', [req.body.conference_id]);
+        await db.query('DELETE FROM Conferences_student where id = $1;', [req.body.conference_id]);
         res.status(200).json({ message: "conference deleted successfully" });
     } catch (error) {
         console.error("Error executing query:", error);

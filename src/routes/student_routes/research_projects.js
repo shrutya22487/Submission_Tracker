@@ -13,6 +13,7 @@ router.use(express.json());
 //Main Dashboard
 router.get("/student_dashboard/research_projects", check_authentication,async (req, res) => {
     const student_id = await utils.get_student_id(req, res);
+
     const project_details_unarchived = await db.query(`SELECT
     p.id AS project_id,
     p.title AS project_title,
