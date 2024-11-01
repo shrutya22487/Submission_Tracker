@@ -1,160 +1,200 @@
 <%- include('partials/header') %>
 
-<div class="container-fluid">
-    <div class="row">
+    <div class="container-fluid">
+        <div class="row">
 
-        <%- include('partials/nav_bar.ejs')%>
+            <%- include('partials/nav_bar.ejs')%>
 
-        <!-- Working console section -->
-        <div class="col-md-6"
-            style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div id="working-console">
-                <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
-                </div>
-
-                <!-- Combined section for adding a project and research projects -->
-                <div>
-                    <!-- FOR ADDING A PROJECT-->
-                    <form id="addProjectForm" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;" onsubmit="return add_project();">
-                        <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Add New Project</h2>
-
-                        <div class="form-group">
-                            <label for="title">Title</label>
-                            <input type="text" id="title" name="title" required class="form-control" style="margin-bottom: 10px;">
+                <!-- Working console section -->
+                <div class="col-md-6"
+                    style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                    <div id="working-console">
+                        <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                            <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
                         </div>
 
-                        <div class="form-group">
-                            <label for="conference">Conference</label>
-                            <input type="text" id="conference" name="conference" class="form-control" style="margin-bottom: 10px;">
-                        </div>
+                        <!-- Combined section for adding a project and research projects -->
+                        <div>
+                            <!-- FOR ADDING A PROJECT-->
+                            <form id="addProjectForm"
+                                style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;"
+                                onsubmit="return add_project();">
+                                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Add New Project
+                                </h2>
 
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select id="status" name="status" required class="form-control" style="margin-bottom: 10px;">
-                                <option value="Upcoming">Upcoming</option>
-                                <option value="Under Review">Under Review</option>
-                                <option value="In Progress">In Progress</option>
-                            </select>
-                        </div>
+                                <div class="form-group">
+                                    <label for="title">Title</label>
+                                    <input type="text" id="title" name="title" required class="form-control"
+                                        style="margin-bottom: 10px;">
+                                </div>
 
-                        <div class="form-group">
-                            <label for="link_1">Link 1</label>
-                            <input type="url" id="link_1" name="link_1" class="form-control" style="margin-bottom: 10px;">
-                        </div>
+                                <div class="form-group">
+                                    <label for="conference">Conference</label>
+                                    <input type="text" id="conference" name="conference" class="form-control"
+                                        style="margin-bottom: 10px;">
+                                </div>
 
-                        <div class="form-group">
-                            <label for="link_2">Link 2</label>
-                            <input type="url" id="link_2" name="link_2" class="form-control" style="margin-bottom: 10px;">
-                        </div>
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    <select id="status" name="status" required class="form-control"
+                                        style="margin-bottom: 10px;">
+                                        <option value="Upcoming">Upcoming</option>
+                                        <option value="Under Review">Under Review</option>
+                                        <option value="In Progress">In Progress</option>
+                                    </select>
+                                </div>
 
-                        <div class="form-group">
-                            <label for="submitted_date">Submitted Date</label>
-                            <input type="date" id="submitted_date" name="submitted_date" class="form-control" style="margin-bottom: 10px;">
-                        </div>
+                                <div class="form-group">
+                                    <label for="link_1">Link 1</label>
+                                    <input type="url" id="link_1" name="link_1" class="form-control"
+                                        style="margin-bottom: 10px;">
+                                </div>
 
-                        <div class="form-group">
-                            <label for="deadline_date">Deadline Date</label>
-                            <input type="date" id="deadline_date" name="deadline_date" class="form-control" style="margin-bottom: 20px;">
-                        </div>
+                                <div class="form-group">
+                                    <label for="link_2">Link 2</label>
+                                    <input type="url" id="link_2" name="link_2" class="form-control"
+                                        style="margin-bottom: 10px;">
+                                </div>
 
-                        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.2rem;">Add Project</button>
-                    </form>
-                    <!-- FOR EDITING A PROJECT -->
-                    <div id="edit-project-modal" class="modal" style="display: none;">
-                        <div class="modal-content">
-                            <span class="close-button" onclick="closeEditModal()">&times;</span>
-                            <h2>Edit Project</h2>
-                            <form id="edit-project-form">
-                                <input type="hidden" id="search-project_id" name="project_id">
-                                <div>
-                                    <label for="title">Project Title:</label>
-                                    <input type="text" id="search-title" name="title" value="">
+                                <div class="form-group">
+                                    <label for="submitted_date">Submitted Date</label>
+                                    <input type="date" id="submitted_date" name="submitted_date" class="form-control"
+                                        style="margin-bottom: 10px;">
                                 </div>
-                                <div>
-                                    <label for="conference">Conference:</label>
-                                    <input type="text" id="search-conference" name="conference">
+
+                                <div class="form-group">
+                                    <label for="deadline_date">Deadline Date</label>
+                                    <input type="date" id="deadline_date" name="deadline_date" class="form-control"
+                                        style="margin-bottom: 20px;">
                                 </div>
-                                <div>
-                                    <label for="status">Status:</label>
-                                    <input type="text" id="search-status" name="status">
-                                </div>
-                                <div>
-                                    <label for="link_1">Link 1:</label>
-                                    <input type="url" id="search-link_1" name="link_1">
-                                </div>
-                                <div>
-                                    <label for="link_2">Link 2:</label>
-                                    <input type="url" id="search-link_2" name="link_2">
-                                </div>
-                                <div>
-                                    <label for="submitted_date">Submitted Date:</label>
-                                    <input type="date" id="search-submitted_date" name="submitted_date">
-                                </div>
-                                <div>
-                                    <label for="deadline_date">Deadline Date:</label>
-                                    <input type="date" id="search-deadline_date" name="deadline_date">
-                                </div>
-                                <button type="submit" onclick="edit_project()">Save Changes</button>
+
+                                <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.2rem;">Add
+                                    Project</button>
                             </form>
-                        </div>
-                    </div>
-
-                    <!-- FOR UNARCHIVED PROJECTS-->
-                    <div class="container mt-5">
-                        <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
-
-                        <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
-                            <ul style="font-size: 1.2rem;">
-                                <% project_details_unarchived.rows.forEach(function(detail) { %>
-
-                                    <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
-                                        <strong>Project:</strong> <%= detail.project_title %>
-                                        (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
-                                        <br>
-                                        <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
-                                        <br>
-                                        Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
-                                        | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
-
-                                        <!-- Flex container to align buttons horizontally -->
-                                        <div class="d-flex justify-content-start align-items-center mt-2">
-                                            <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
-                                            <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                                            <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
-                                            <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                            <!-- FOR EDITING A PROJECT -->
+                            <div id="edit-project-modal" class="modal" style="display: none;">
+                                <div class="modal-content">
+                                    <span class="close-button" onclick="closeEditModal()">&times;</span>
+                                    <h2>Edit Project</h2>
+                                    <form id="edit-project-form">
+                                        <input type="hidden" id="search-project_id" name="project_id">
+                                        <div>
+                                            <label for="title">Project Title:</label>
+                                            <input type="text" id="search-title" name="title" value="">
                                         </div>
-                                        <!-- Hidden Search Bar Container -->
-                                        <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
-                                            <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
-
-                                            <!-- Search Form -->
-                                            <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
-                                                <input type="text" id="student-search-project-<%= detail.project_id %>"
-                                                       data-project-id="<%= detail.project_id %>"
-                                                       placeholder="Type student name..."
-                                                       oninput="searchStudents(<%= detail.project_id %>)"
-                                                       class="form-control"
-                                                       style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
-                                                       autocomplete="off" required>
-                                            </form>
-
-                                            <!-- Search Results Box -->
-                                            <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
-                                                <!-- Search results will be displayed here -->
-                                            </div>
+                                        <div>
+                                            <label for="conference">Conference:</label>
+                                            <input type="text" id="search-conference" name="conference">
                                         </div>
+                                        <div>
+                                            <label for="status">Status:</label>
+                                            <input type="text" id="search-status" name="status">
+                                        </div>
+                                        <div>
+                                            <label for="link_1">Link 1:</label>
+                                            <input type="url" id="search-link_1" name="link_1">
+                                        </div>
+                                        <div>
+                                            <label for="link_2">Link 2:</label>
+                                            <input type="url" id="search-link_2" name="link_2">
+                                        </div>
+                                        <div>
+                                            <label for="submitted_date">Submitted Date:</label>
+                                            <input type="date" id="search-submitted_date" name="submitted_date">
+                                        </div>
+                                        <div>
+                                            <label for="deadline_date">Deadline Date:</label>
+                                            <input type="date" id="search-deadline_date" name="deadline_date">
+                                        </div>
+                                        <button type="submit" onclick="edit_project()">Save Changes</button>
+                                    </form>
+                                </div>
+                            </div>
 
-                                        <!-- Student List -->
-                                        <ul class="student-list" style="margin-top: 10px;">
-                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
-                                        </ul>
+                            <!-- FOR UNARCHIVED PROJECTS-->
+                            <div class="container mt-5">
+                                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects
+                                </h2>
 
-                                        <!-- Meeting Notes List -->
-                                        <ul class="meeting-notes-list" style="margin-top: 10px;">
-                                            <li><strong>Meeting Notes:</strong></li>
-                                            <% if (detail.meeting_notes) { %>
-                                                <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) &&
+                                    project_details_unarchived.rows.length> 0) { %>
+                                    <ul style="font-size: 1.2rem;">
+                                        <% project_details_unarchived.rows.forEach(function(detail) { %>
+
+                                            <li class="project-list-item"
+                                                style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                                <strong>Project:</strong>
+                                                <%= detail.project_title %>
+                                                    (Conference: <%= detail.project_conference %>, Status: <%=
+                                                            detail.status %>)
+                                                            <br>
+                                                            <a href="<%= detail.link_1 %>">Link 1</a> | <a
+                                                                href="<%= detail.link_2 %>">Link 2</a>
+                                                            <br>
+                                                            Submitted: <%= detail.submitted_data ?
+                                                                detail.submitted_data.toDateString() : 'N/A' %>
+                                                                | Deadline: <%= detail.deadline_data ?
+                                                                    detail.deadline_data.toDateString() : 'N/A' %>
+
+                                                                    <!-- Flex container to align buttons horizontally -->
+                                                                    <div
+                                                                        class="d-flex justify-content-start align-items-center mt-2">
+                                                                        <button
+                                                                            class="btn btn-sm btn-warning archive_project_button mr-2"
+                                                                            onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                                                                        <button
+                                                                            class="btn btn-sm btn-danger delete_project_button mr-2"
+                                                                            onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                                                                        <button class="btn btn-sm btn-info mr-2"
+                                                                            onclick="toggleSearchBar(<%= detail.project_id %>)">Add
+                                                                            Student</button>
+                                                                        <button class="btn btn-sm btn-secondary"
+                                                                            onclick="openEditModal(<%= detail.project_id %>)">Edit
+                                                                            Project</button>
+                                                                    </div>
+                                                                    <!-- Hidden Search Bar Container -->
+                                                                    <div id="search-bar-<%= detail.project_id %>"
+                                                                        class="search-bar-container"
+                                                                        style="display: none; margin-top: 20px;">
+                                                                        <h3
+                                                                            style="font-size: 1.5rem; margin-bottom: 20px;">
+                                                                            Student Search</h3>
+
+                                                                        <!-- Search Form -->
+                                                                        <form id="search-form"
+                                                                            class="d-flex justify-content-center align-items-center"
+                                                                            style="margin-bottom: 20px;">
+                                                                            <input type="text"
+                                                                                id="student-search-project-<%= detail.project_id %>"
+                                                                                data-project-id="<%= detail.project_id %>"
+                                                                                placeholder="Type student name..."
+                                                                                oninput="searchStudents(<%= detail.project_id %>)"
+                                                                                class="form-control"
+                                                                                style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                                                                autocomplete="off" required>
+                                                                        </form>
+
+                                                                        <!-- Search Results Box -->
+                                                                        <div id="student-results-<%= detail.project_id %>"
+                                                                            class="results-box" style="display: none;">
+                                                                            <!-- Search results will be displayed here -->
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Student List -->
+                                                                    <ul class="student-list" style="margin-top: 10px;">
+                                                                        <li><strong>Students:</strong>
+                                                                            <%= detail.students ? detail.students
+                                                                                : 'No students assigned' %>
+                                                                        </li>
+                                                                    </ul>
+
+                                                                    <!-- Meeting Notes List -->
+                                                                    <ul class="meeting-notes-list"
+                                                                        style="margin-top: 10px;">
+                                                                        <li><strong>Meeting Notes:</strong></li>
+                                                                        <% if (detail.meeting_notes) { %>
+                                                                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
                                                     <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
                                                     <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
                                                     <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
@@ -206,48 +246,81 @@
                                     <br>
                                     <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
                                     <br>
-                                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
-                                    | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+                                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : '
+                                                                                N/A' %>
+                                                                                | Deadline: <%= detail.deadline_data ?
+                                                                                    detail.deadline_data.toDateString()
+                                                                                    : 'N/A' %>
 
-                                    <!-- Flex container to align buttons horizontally -->
-                                    <div class="d-flex justify-content-start align-items-center mt-2">
-                                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
-                                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
-                                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
-                                    </div>
+                                                                                    <!-- Flex container to align buttons horizontally -->
+                                                                                    <div
+                                                                                        class="d-flex justify-content-start align-items-center mt-2">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-warning archive_project_button mr-2"
+                                                                                            onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-danger delete_project_button mr-2"
+                                                                                            onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-info mr-2"
+                                                                                            onclick="toggleSearchBar(<%= detail.project_id %>)">Add
+                                                                                            Student</button>
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-secondary"
+                                                                                            onclick="openEditModal(<%= detail.project_id %>)">Edit
+                                                                                            Project</button>
+                                                                                    </div>
 
-                                    <!-- Hidden Search Bar Container -->
-                                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
-                                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+                                                                                    <!-- Hidden Search Bar Container -->
+                                                                                    <div id="search-bar-<%= detail.project_id %>"
+                                                                                        class="search-bar-container"
+                                                                                        style="display: none; margin-top: 20px;">
+                                                                                        <h3
+                                                                                            style="font-size: 1.5rem; margin-bottom: 20px;">
+                                                                                            Student Search</h3>
 
-                                        <!-- Search Form -->
-                                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
-                                            <input type="text" id="student-search-project-<%= detail.project_id %>"
-                                                   data-project-id="<%= detail.project_id %>"
-                                                   placeholder="Type student name..."
-                                                   oninput="searchStudents(<%= detail.project_id %>)"
-                                                   class="form-control"
-                                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
-                                                   autocomplete="off" required>
-                                        </form>
+                                                                                        <!-- Search Form -->
+                                                                                        <form id="search-form"
+                                                                                            class="d-flex justify-content-center align-items-center"
+                                                                                            style="margin-bottom: 20px;">
+                                                                                            <input type="text"
+                                                                                                id="student-search-project-<%= detail.project_id %>"
+                                                                                                data-project-id="<%= detail.project_id %>"
+                                                                                                placeholder="Type student name..."
+                                                                                                oninput="searchStudents(<%= detail.project_id %>)"
+                                                                                                class="form-control"
+                                                                                                style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                                                                                autocomplete="off"
+                                                                                                required>
+                                                                                        </form>
 
-                                        <!-- Search Results Box -->
-                                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
-                                            <!-- Search results will be displayed here -->
-                                        </div>
-                                    </div>
+                                                                                        <!-- Search Results Box -->
+                                                                                        <div id="student-results-<%= detail.project_id %>"
+                                                                                            class="results-box"
+                                                                                            style="display: none;">
+                                                                                            <!-- Search results will be displayed here -->
+                                                                                        </div>
+                                                                                    </div>
 
-                                    <!-- Student List -->
-                                    <ul class="student-list" style="margin-top: 10px;">
-                                        <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
-                                    </ul>
+                                                                                    <!-- Student List -->
+                                                                                    <ul class="student-list"
+                                                                                        style="margin-top: 10px;">
+                                                                                        <li><strong>Students:</strong>
+                                                                                            <%= detail.students ?
+                                                                                                detail.students
+                                                                                                : 'No students assigned'
+                                                                                                %>
+                                                                                        </li>
+                                                                                    </ul>
 
-                                    <!-- Meeting Notes List -->
-                                    <ul class="meeting-notes-list" style="margin-top: 10px;">
-                                        <li><strong>Meeting Notes:</strong></li>
-                                        <% if (detail.meeting_notes) { %>
-                                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                                                                    <!-- Meeting Notes List -->
+                                                                                    <ul class="meeting-notes-list"
+                                                                                        style="margin-top: 10px;">
+                                                                                        <li><strong>Meeting
+                                                                                                Notes:</strong></li>
+                                                                                        <% if (detail.meeting_notes) {
+                                                                                            %>
+                                                                                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
                                                 <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
                                                 <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
                                                 <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
@@ -287,379 +360,379 @@
         </div>
 
         <!--Prof to do section-->
-        <%- include('partials/task_mgmt_prof.ejs')%>
+        <%- include(' partials/task_mgmt_prof.ejs')%>
 
-    </div>
-</div>
+                            </div>
+                        </div>
 
-<style>
-    /* Search Results Box Styles */
-    /* Search Results Box Styles */
-    .results-box {
-        position: absolute;
-        z-index: 1000;
-        background-color: #fff;
-        width: calc(100% - 20px);
-        /* Full width minus padding */
-        max-width: 600px;
-        padding: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        margin-top: 5px;
-        /* Space between input and results */
-        left: 50%;
-        /* Center the box */
-        transform: translateX(-50%);
-        /* Adjust for the width of the box */
-    }
+                        <style>
+                            /* Search Results Box Styles */
+                            /* Search Results Box Styles */
+                            .results-box {
+                                position: absolute;
+                                z-index: 1000;
+                                background-color: #fff;
+                                width: calc(100% - 20px);
+                                /* Full width minus padding */
+                                max-width: 600px;
+                                padding: 10px;
+                                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                                border-radius: 8px;
+                                border: 1px solid #ccc;
+                                margin-top: 5px;
+                                /* Space between input and results */
+                                left: 50%;
+                                /* Center the box */
+                                transform: translateX(-50%);
+                                /* Adjust for the width of the box */
+                            }
 
 
-    .results-box button {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        background: transparent;
-        text-align: left;
-        cursor: pointer;
-        border-radius: 4px;
-        /* Rounded corners for buttons */
-        transition: background-color 0.3s;
-        /* Smooth transition for hover */
-    }
+                            .results-box button {
+                                width: 100%;
+                                padding: 10px;
+                                border: none;
+                                background: transparent;
+                                text-align: left;
+                                cursor: pointer;
+                                border-radius: 4px;
+                                /* Rounded corners for buttons */
+                                transition: background-color 0.3s;
+                                /* Smooth transition for hover */
+                            }
 
-    .results-box button:hover {
-        background-color: #f0f0f0;
-        /* Change background on hover */
-    }
+                            .results-box button:hover {
+                                background-color: #f0f0f0;
+                                /* Change background on hover */
+                            }
 
-    /* Modal Styles (if needed) */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+                            /* Modal Styles (if needed) */
+                            .modal {
+                                display: none;
+                                position: fixed;
+                                z-index: 1;
+                                left: 0;
+                                top: 0;
+                                width: 100%;
+                                height: 100%;
+                                overflow: auto;
+                                background-color: rgba(0, 0, 0, 0.5);
+                            }
 
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-    }
+                            .modal-content {
+                                background-color: #fff;
+                                margin: 15% auto;
+                                padding: 20px;
+                                border: 1px solid #888;
+                                width: 80%;
+                                max-width: 500px;
+                            }
 
-    .close-btn {
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+                            .close-btn {
+                                float: right;
+                                font-size: 28px;
+                                font-weight: bold;
+                                cursor: pointer;
+                            }
 
-    .remove-btn {
-        cursor: pointer;
-        color: red;
-        font-weight: bold;
-        margin-left: 10px;
-    }
-</style>
+                            .remove-btn {
+                                cursor: pointer;
+                                color: red;
+                                font-weight: bold;
+                                margin-left: 10px;
+                            }
+                        </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    // Open the edit modal and fetch the project details
-    function openEditModal(projectId) {
-        // Open the modal
-        document.getElementById('edit-project-modal').style.display = 'block';
+                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                        <script>
+                            // Open the edit modal and fetch the project details
+                            function openEditModal(projectId) {
+                                // Open the modal
+                                document.getElementById('edit-project-modal').style.display = 'block';
 
-        // Fetch current project details to pre-fill the form
-        fetch(`/get_project/${projectId}`)
-            .then(response => response.json())
-            .then(data => {
-                // console.log(data);
-                // Pre-fill the form with existing project data
-                document.getElementById('search-project_id').value = data.id;
-                document.getElementById('search-title').value = data.title || '';
-                document.getElementById('search-conference').value = data.conference || '';
-                document.getElementById('search-status').value = data.status || '';
-                document.getElementById('search-link_1').value = data.link_1 || '';
-                document.getElementById('search-link_2').value = data.link_2 || '';
-                document.getElementById('search-submitted_date').value = data.submitted_date ? data.submitted_date.split('T')[0] : '';
-                document.getElementById('search-deadline_date').value = data.deadline_date ? data.deadline_date.split('T')[0] : '';
-            });
-    }
+                                // Fetch current project details to pre-fill the form
+                                fetch(`/get_project/${projectId}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        // console.log(data);
+                                        // Pre-fill the form with existing project data
+                                        document.getElementById('search-project_id').value = data.id;
+                                        document.getElementById('search-title').value = data.title || '';
+                                        document.getElementById('search-conference').value = data.conference || '';
+                                        document.getElementById('search-status').value = data.status || '';
+                                        document.getElementById('search-link_1').value = data.link_1 || '';
+                                        document.getElementById('search-link_2').value = data.link_2 || '';
+                                        document.getElementById('search-submitted_date').value = data.submitted_date ? data.submitted_date.split('T')[0] : '';
+                                        document.getElementById('search-deadline_date').value = data.deadline_date ? data.deadline_date.split('T')[0] : '';
+                                    });
+                            }
 
-    // Close the modal
-    function closeEditModal() {
-        document.getElementById('edit-project-modal').style.display = 'none';
-    }
+                            // Close the modal
+                            function closeEditModal() {
+                                document.getElementById('edit-project-modal').style.display = 'none';
+                            }
 
-    // editing a project
-    function edit_project() {
-        const projectId = document.getElementById('search-project_id').value;
-        const title = document.getElementById('search-title').value;
-        const conference = document.getElementById('search-conference').value;
-        const status = document.getElementById('search-status').value;
-        const link_1 = document.getElementById('search-link_1').value;
-        const link_2 = document.getElementById('search-link_2').value;
-        const submitted_date = document.getElementById('search-submitted_date').value;
-        const deadline_date = document.getElementById('search-deadline_date').value;
+                            // editing a project
+                            function edit_project() {
+                                const projectId = document.getElementById('search-project_id').value;
+                                const title = document.getElementById('search-title').value;
+                                const conference = document.getElementById('search-conference').value;
+                                const status = document.getElementById('search-status').value;
+                                const link_1 = document.getElementById('search-link_1').value;
+                                const link_2 = document.getElementById('search-link_2').value;
+                                const submitted_date = document.getElementById('search-submitted_date').value;
+                                const deadline_date = document.getElementById('search-deadline_date').value;
 
-        // Send AJAX request to update project details
-        fetch('/edit_project', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                project_id: projectId,
-                title: title,
-                conference: conference,
-                status: status,
-                link_1: link_1,
-                link_2: link_2,
-                submitted_date: submitted_date,
-                deadline_date: deadline_date,
-            })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('Project updated successfully');
-                    window.location.reload();  // Reload page after successful update
-                } else {
-                    alert('Error updating project');
-                }
-            })
-            .catch(error => {
-                console.error('Error updating project:', error);
-                alert('An error occurred.');
-            });
-    }
+                                // Send AJAX request to update project details
+                                fetch('/edit_project', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        project_id: projectId,
+                                        title: title,
+                                        conference: conference,
+                                        status: status,
+                                        link_1: link_1,
+                                        link_2: link_2,
+                                        submitted_date: submitted_date,
+                                        deadline_date: deadline_date,
+                                    })
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            alert('Project updated successfully');
+                                            window.location.reload();  // Reload page after successful update
+                                        } else {
+                                            alert('Error updating project');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error updating project:', error);
+                                        alert('An error occurred.');
+                                    });
+                            }
 
-    function add_project() {
-        // Get the form values
-        const formData = {
-            title: document.getElementById('title').value,
-            conference: document.getElementById('conference').value,
-            status: document.getElementById('status').value,
-            link_1: document.getElementById('link_1').value,
-            link_2: document.getElementById('link_2').value,
-            submitted_date: document.getElementById('submitted_date').value,
-            deadline_date: document.getElementById('deadline_date').value,
-        };
+                            function add_project() {
+                                // Get the form values
+                                const formData = {
+                                    title: document.getElementById('title').value,
+                                    conference: document.getElementById('conference').value,
+                                    status: document.getElementById('status').value,
+                                    link_1: document.getElementById('link_1').value,
+                                    link_2: document.getElementById('link_2').value,
+                                    submitted_date: document.getElementById('submitted_date').value,
+                                    deadline_date: document.getElementById('deadline_date').value,
+                                };
 
-        // Use fetch API to send data
-        fetch('/add_project', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('Project added successfully');
-                    window.location.href = '/prof_dashboard/research_projects'; // Redirect on success
-                } else {
-                    return response.json().then(error => {
-                        console.error('Error:', error);
-                        alert('An error occurred while adding the project');
-                    });
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while adding the project');
-            });
+                                // Use fetch API to send data
+                                fetch('/add_project', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(formData)
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            alert('Project added successfully');
+                                            window.location.href = '/prof_dashboard/research_projects'; // Redirect on success
+                                        } else {
+                                            return response.json().then(error => {
+                                                console.error('Error:', error);
+                                                alert('An error occurred while adding the project');
+                                            });
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                        alert('An error occurred while adding the project');
+                                    });
 
-        return false; // Prevent default form submission (page reload)
-    }
+                                return false; // Prevent default form submission (page reload)
+                            }
 
-    // Archiving project
-    function archive_project(projectId) {
-        // const projectId = this.getAttribute('data-project-id');
+                            // Archiving project
+                            function archive_project(projectId) {
+                                // const projectId = this.getAttribute('data-project-id');
 
-        fetch('/prof_dashboard/archive_project', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ project_id: projectId })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert("Project archived successfully.");
-                    window.location.reload();
-                } else {
-                    alert("Failed to archive Project.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred while archiving the project.");
-            });
+                                fetch('/prof_dashboard/archive_project', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ project_id: projectId })
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            alert("Project archived successfully.");
+                                            window.location.reload();
+                                        } else {
+                                            alert("Failed to archive Project.");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error:", error);
+                                        alert("An error occurred while archiving the project.");
+                                    });
 
-    }
+                            }
 
-    // Deleting project
-    function delete_project(projectId) {
+                            // Deleting project
+                            function delete_project(projectId) {
 
-        fetch('/prof_dashboard/delete_project', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ project_id: projectId })
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert("project deleted successfully.");
-                    window.location.reload();
-                } else {
-                    alert("Failed to delete project.");
-                }
-            })
-            .catch(error => {
-                console.error("Error:", error);
-                alert("An error occurred while deleting the project.");
-            });
-    }
+                                fetch('/prof_dashboard/delete_project', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ project_id: projectId })
+                                })
+                                    .then(response => {
+                                        if (response.ok) {
+                                            alert("project deleted successfully.");
+                                            window.location.reload();
+                                        } else {
+                                            alert("Failed to delete project.");
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error("Error:", error);
+                                        alert("An error occurred while deleting the project.");
+                                    });
+                            }
 
-    // Toggle search bar visibility
-    function toggleSearchBar(projectId) {
-        const searchBar = document.getElementById(`search-bar-${projectId}`);
-        searchBar.style.display = searchBar.style.display === 'none' ? 'block' : 'none';
-    }
+                            // Toggle search bar visibility
+                            function toggleSearchBar(projectId) {
+                                const searchBar = document.getElementById(`search-bar-${projectId}`);
+                                searchBar.style.display = searchBar.style.display === 'none' ? 'block' : 'none';
+                            }
 
-    // Search function
-    async function searchStudents(projectId) {
-        const query = document.getElementById(`student-search-project-${projectId}`).value;
+                            // Search function
+                            async function searchStudents(projectId) {
+                                const query = document.getElementById(`student-search-project-${projectId}`).value;
 
-        if (query.length === 0) {
-            const resultsDiv = document.getElementById(`student-results-${projectId}`);
-            resultsDiv.innerHTML = '';
-            resultsDiv.style.display = 'none';
-            return;
-        }
+                                if (query.length === 0) {
+                                    const resultsDiv = document.getElementById(`student-results-${projectId}`);
+                                    resultsDiv.innerHTML = '';
+                                    resultsDiv.style.display = 'none';
+                                    return;
+                                }
 
-        try {
-            const response = await fetch(`/search_students_prof?query=${encodeURIComponent(query)}`);
-            const students = await response.json();
-            displayResults(students, projectId);
-        } catch (error) {
-            console.error('Error fetching students:', error);
-        }
-    }
+                                try {
+                                    const response = await fetch(`/search_students_prof?query=${encodeURIComponent(query)}`);
+                                    const students = await response.json();
+                                    displayResults(students, projectId);
+                                } catch (error) {
+                                    console.error('Error fetching students:', error);
+                                }
+                            }
 
-    // Display results for the specific project
-    function displayResults(students, projectId) {
-        const resultsDiv = document.getElementById(`student-results-${projectId}`);
-        resultsDiv.innerHTML = ''; // Clear previous results
+                            // Display results for the specific project
+                            function displayResults(students, projectId) {
+                                const resultsDiv = document.getElementById(`student-results-${projectId}`);
+                                resultsDiv.innerHTML = ''; // Clear previous results
 
-        if (students.length > 0) {
-            resultsDiv.style.display = 'block'; // Show results box
-            students.forEach(student => {
-                const button = document.createElement('button');
-                button.textContent = student.name;
-                button.className = 'student-button';
-                button.setAttribute('data-id', student.id);
+                                if (students.length > 0) {
+                                    resultsDiv.style.display = 'block'; // Show results box
+                                    students.forEach(student => {
+                                        const button = document.createElement('button');
+                                        button.textContent = student.name;
+                                        button.className = 'student-button';
+                                        button.setAttribute('data-id', student.id);
 
-                button.addEventListener('click', () => {
-                    addStudentToProfessor(student.id, projectId); // Pass projectId
-                });
+                                        button.addEventListener('click', () => {
+                                            addStudentToProfessor(student.id, projectId); // Pass projectId
+                                        });
 
-                resultsDiv.appendChild(button);
-            });
-        } else {
-            resultsDiv.style.display = 'none'; // Hide if no results
-        }
-    }
+                                        resultsDiv.appendChild(button);
+                                    });
+                                } else {
+                                    resultsDiv.style.display = 'none'; // Hide if no results
+                                }
+                            }
 
-    // Add student function
-    async function addStudentToProfessor(studentId, projectId) {
-        try {
-            const response = await fetch('/prof_dashboard/add_student_to_project', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    student_id: studentId,
-                    project_id: projectId
-                })
-            });
+                            // Add student function
+                            async function addStudentToProfessor(studentId, projectId) {
+                                try {
+                                    const response = await fetch('/prof_dashboard/add_student_to_project', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({
+                                            student_id: studentId,
+                                            project_id: projectId
+                                        })
+                                    });
 
-            if (response.ok) {
-                alert('Student successfully added!');
-                window.location.reload();
-            } else {
-                alert('Error adding student.');
-            }
-        } catch (error) {
-            console.error('Error adding student:', error);
-            alert('An error occurred.');
-        }
-    }
+                                    if (response.ok) {
+                                        alert('Student successfully added!');
+                                        window.location.reload();
+                                    } else {
+                                        alert('Error adding student.');
+                                    }
+                                } catch (error) {
+                                    console.error('Error adding student:', error);
+                                    alert('An error occurred.');
+                                }
+                            }
 
-    function addDeadline() {
-        let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
-        if (deadline) {
-            const ul = document.getElementById('deadlines-list');
-            const li = document.createElement('li');
-            li.innerHTML = `${deadline}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
-            ul.appendChild(li);
-        }
-    }
+                            function addDeadline() {
+                                let deadline = prompt("Enter the new deadline (e.g., 'New Deadline: Date'):");
+                                if (deadline) {
+                                    const ul = document.getElementById('deadlines-list');
+                                    const li = document.createElement('li');
+                                    li.innerHTML = `${deadline}<span class="remove-btn" onclick="removeItem(this)">x</span>`;
+                                    ul.appendChild(li);
+                                }
+                            }
 
-    // Function to add a new Meeting note
-    function addMeetingNotes(project_id) {
-        const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
+                            // Function to add a new Meeting note
+                            function addMeetingNotes(project_id) {
+                                const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
 
-        if (notes) {
-            $.ajax({
-                url: '/prof_dashboard/add_meeting_notes',
-                type: 'POST',
-                data: {
-                    project_id: project_id,
-                    notes: notes,
-                    prof: true
-                },
-                success: function () {
-                    alert('Meeting notes successfully added!');
-                    window.location.reload();
-                },
-                error: function () {
-                    alert('Error adding meeting notes');
-                }
-            });
-        } else {
-            alert('Please enter meeting notes');
-        }
-    }
+                                if (notes) {
+                                    $.ajax({
+                                        url: '/prof_dashboard/add_meeting_notes',
+                                        type: 'POST',
+                                        data: {
+                                            project_id: project_id,
+                                            notes: notes,
+                                            prof: true
+                                        },
+                                        success: function () {
+                                            alert('Meeting notes successfully added!');
+                                            window.location.reload();
+                                        },
+                                        error: function () {
+                                            alert('Error adding meeting notes');
+                                        }
+                                    });
+                                } else {
+                                    alert('Please enter meeting notes');
+                                }
+                            }
 
-    // to delete a meeting note
-    function deleteMeetingNotes(Id) {
-        if (confirm('Are you sure you want to delete this meeting note?')) {
-            $.ajax({
-                url: '/prof_dashboard/delete_meeting_notes',
-                type: 'POST',
-                data: { id: Id },
-                success: function () {
-                    alert('Meeting note successfully deleted!');
-                    window.location.reload();
-                },
-                error: function () {
-                    alert('Error deleting meeting note');
-                }
-            });
-        }
-    }
+                            // to delete a meeting note
+                            function deleteMeetingNotes(Id) {
+                                if (confirm('Are you sure you want to delete this meeting note?')) {
+                                    $.ajax({
+                                        url: '/prof_dashboard/delete_meeting_notes',
+                                        type: 'POST',
+                                        data: { id: Id },
+                                        success: function () {
+                                            alert('Meeting note successfully deleted!');
+                                            window.location.reload();
+                                        },
+                                        error: function () {
+                                            alert('Error deleting meeting note');
+                                        }
+                                    });
+                                }
+                            }
 
-</script>
+                        </script>
 
-<%- include('partials/footer') %>
+                        <%- include('partials/footer') %>

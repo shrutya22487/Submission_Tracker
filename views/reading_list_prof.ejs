@@ -1,158 +1,210 @@
 <%- include('partials/header') %>
 
-<div class="container-fluid">
-    <div class="row">
+    <div class="container-fluid">
+        <div class="row">
 
-        <%- include('partials/nav_bar.ejs')%>
+            <%- include('partials/nav_bar.ejs') %>
 
-        <!-- Working console section -->
-        <div class="col-md-6"
-             style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-            <div id="working-console">
-                <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
+                <!-- Working console section -->
+                <div class="col-md-6"
+                    style="background-color: #f9f9f9; height: auto; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 10px;">
+                    <div id="working-console">
+                        <div class="jumbotron text-center"
+                            style="margin-bottom: 20px; background-color: #ffffff; border-radius: 10px;">
+                            <h1 style="font-size: 3rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
+                        </div>
+
+                        <!-- Genre and Form Section -->
+                        <!-- <h2 style="color: #555;">Add a New Book</h2> -->
+                        <div class="accordion" id="genreAccordion">
+                            <div class="card">
+                                <div class="card-header" id="formHeading">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#formCollapse"
+                                            aria-expanded="true" aria-controls="formCollapse">
+                                            <span style="font-size: 2rem; font-weight: bold; color: #333;">
+                                                Add Book Form
+                                            </span>
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="formCollapse" class="collapse" aria-labelledby="formHeading"
+                                    data-parent="#genreAccordion">
+                                    <div class="card-body">
+                                        <form action="/prof_dashboard/add_book" method="POST"
+                                            style="margin-bottom: 30px;">
+                                            <div class="form-group">
+                                                <label for="title">Title:</label>
+                                                <input type="text" id="title" name="title" required
+                                                    class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="genre">Genre:</label>
+                                                <input type="text" id="genre" name="genre" required
+                                                    class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="conference">Conference:</label>
+                                                <input type="text" id="conference" name="conference"
+                                                    class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="status">Status:</label>
+                                                <input type="text" id="status" name="status" class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="link_1">Link 1:</label>
+                                                <input type="url" id="link_1" name="link_1" class="form-control">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="link_2">Link 2:</label>
+                                                <input type="url" id="link_2" name="link_2" class="form-control">
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary">Add Book</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <!-- Display books grouped by genre -->
+                        <div class="accordion" id="genreAccordion">
+                            <% if (groupedBooks.length> 0) { %>
+                                <% groupedBooks.forEach((genreGroup, index)=> { %>
+                                    <div class="card">
+                                        <div class="card-header" id="heading<%= index %>">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" data-toggle="collapse"
+                                                    data-target="#collapse<%= index %>" aria-expanded="true"
+                                                    aria-controls="collapse<%= index %>">
+                                                    <span style="font-size: 1.5rem; font-weight: bold; color: #333;">
+                                                        <%= genreGroup.genre %>
+                                                    </span>
+                                                </button>
+                                            </h5>
+                                        </div>
+
+                                        <div id="collapse<%= index %>" class="collapse"
+                                            aria-labelledby="heading<%= index %>" data-parent="#genreAccordion">
+                                            <div class="card-body">
+                                                <ul class="list-group mb-4">
+                                                    <% genreGroup.books.forEach(book=> { %>
+                                                        <li
+                                                            class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <div>
+                                                                <strong>Title:</strong>
+                                                                <%= book.title %><br>
+                                                                    <strong>Conference:</strong>
+                                                                    <%= book.conference || 'N/A' %><br>
+                                                                        <strong>Status:</strong>
+                                                                        <%= book.status || 'N/A' %><br>
+                                                                            <strong>Link 1:</strong> <a
+                                                                                href="<%= book.link_1 %>"
+                                                                                target="_blank">
+                                                                                <%= book.link_1 || 'No link' %>
+                                                                            </a><br>
+                                                                            <strong>Link 2:</strong> <a
+                                                                                href="<%= book.link_2 %>"
+                                                                                target="_blank">
+                                                                                <%= book.link_2 || 'No link' %>
+                                                                            </a><br>
+                                                            </div>
+
+                                                            <!-- Delete book form aligned to the right -->
+                                                            <form action="/prof_dashboard/delete_book" method="POST"
+                                                                style="display:inline;">
+                                                                <input type="hidden" name="book_id"
+                                                                    value="<%= book.id %>">
+                                                                <button type="submit"
+                                                                    class="btn btn-danger btn-sm">Delete</button>
+                                                            </form>
+                                                        </li>
+                                                        <hr>
+                                                        <% }) %>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <p>No books found in the reading list.</p>
+                                            <% } %>
+                        </div>
+                    </div>
                 </div>
-                <!-- Form to add a new book -->
-                <h2>Add a New Book</h2>
-                <form action="/prof_dashboard/add_book" method="POST">
-                    <label for="title">Title:</label>
-                    <input type="text" id="title" name="title" required><br><br>
 
-                    <label for="genre">Genre:</label>
-                    <input type="text" id="genre" name="genre" required><br><br>
+                <!-- Prof to do section -->
+                <%- include('partials/task_mgmt_prof.ejs') %>
 
-                    <label for="conference">Conference:</label>
-                    <input type="text" id="conference" name="conference"><br><br>
-
-                    <label for="status">Status:</label>
-                    <input type="text" id="status" name="status"><br><br>
-
-                    <label for="link_1">Link 1:</label>
-                    <input type="url" id="link_1" name="link_1"><br><br>
-
-                    <label for="link_2">Link 2:</label>
-                    <input type="url" id="link_2" name="link_2"><br><br>
-
-                    <button type="submit">Add Book</button>
-                </form>
-
-                <hr>
-
-                <!-- Display books grouped by genre -->
-                <% if (groupedBooks.length > 0) { %>
-                    <% groupedBooks.forEach(genreGroup => { %>
-                        <h2><%= genreGroup.genre %></h2>
-                        <ul>
-                            <% genreGroup.books.forEach(book => { %>
-                                <li>
-                                    <strong>Title:</strong> <%= book.title %><br>
-                                    <strong>Conference:</strong> <%= book.conference || 'N/A' %><br>
-                                    <strong>Status:</strong> <%= book.status || 'N/A' %><br>
-                                    <strong>Link 1:</strong> <a href="<%= book.link_1 %>" target="_blank"><%= book.link_1 || 'No link' %></a><br>
-                                    <strong>Link 2:</strong> <a href="<%= book.link_2 %>" target="_blank"><%= book.link_2 || 'No link' %></a><br>
-
-                                    <!-- Delete book form -->
-                                    <form action="/prof_dashboard/delete_book" method="POST" style="display:inline;">
-                                        <input type="hidden" name="book_id" value="<%= book.id %>">
-                                        <button type="submit">Delete</button>
-                                    </form>
-                                </li>
-                                <hr>
-                            <% }) %>
-                        </ul>
-                    <% }) %>
-                <% } else { %>
-                    <p>No books found in the reading list.</p>
-                <% } %>
-
-
-            </div>
         </div>
-
-        <!--Prof to do section-->
-        <%- include('partials/task_mgmt_prof.ejs')%>
-
     </div>
-</div>
 
-<style>
-    /* Search Results Box Styles */
-    /* Search Results Box Styles */
-    .results-box {
-        position: absolute;
-        z-index: 1000;
-        background-color: #fff;
-        width: calc(100% - 20px);
-        /* Full width minus padding */
-        max-width: 600px;
-        padding: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        margin-top: 5px;
-        /* Space between input and results */
-        left: 50%;
-        /* Center the box */
-        transform: translateX(-50%);
-        /* Adjust for the width of the box */
-    }
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        .form-control {
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .results-box button {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        background: transparent;
-        text-align: left;
-        cursor: pointer;
-        border-radius: 4px;
-        /* Rounded corners for buttons */
-        transition: background-color 0.3s;
-        /* Smooth transition for hover */
-    }
+        .list-group-item {
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
 
-    .results-box button:hover {
-        background-color: #f0f0f0;
-        /* Change background on hover */
-    }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
 
-    /* Modal Styles (if needed) */
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-    }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
 
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        max-width: 500px;
-    }
+        .btn-danger {
+            background-color: #dc3545;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
 
-    .close-btn {
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+    </style>
 
-    .remove-btn {
-        cursor: pointer;
-        color: red;
-        font-weight: bold;
-        margin-left: 10px;
-    }
-</style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Function to handle toggling of genre and form sections
+            $('.btn-link').click(function () {
+                // Get the target collapse element
+                var target = $(this).data('target');
 
-<%- include('partials/footer') %>
+                // Close other open sections
+                $('.collapse').not(target).collapse('hide');
+            });
+        });
+    </script>
+
+    <%- include('partials/footer') %>
