@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <h2>Register as a Student</h2>
+
+    <% if (error) { %>
+        <div class="error-message">
+            <p><%= error %></p>
+        </div>
+    <% } %>
+
+    <form action="/register" method="POST">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" value="<%= user.displayName %>" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email ID</label>
+            <input type="email" id="email" name="email" value="<%= user.email %>" readonly required>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Program</label>
+            <select id="type" name="type" required>
+                <option value="B.Tech">B.Tech</option>
+                <option value="M.Tech">M.Tech</option>
+                <option value="PhD">PhD</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Register</button>
+    </form>
+</div>
+
+<%- include('partials/footer') %>

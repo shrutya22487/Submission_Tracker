@@ -88,6 +88,38 @@ router.post('/prof_dashboard/add_student_to_project',check_authentication,  asyn
     }
 });
 
+// deletes student from a project
+router.post("/project/:projectId/remove-student", async (req, res) => {
+    const { projectId } = req.params;
+    const { email } = req.body;
+
+    try {
+        // Find the student by email
+        const studentResult = await db.query(
+            "SELECT id FROM Student WHERE email_id = $1",
+            [email]
+        );
+
+        if (studentResult.rows.length === 0) {
+            return res.status(404).json({ success: false, message: "Student not found" });
+        }
+
+        const studentId = studentResult.rows[0].id;
+
+        // Delete the student from the project
+        await db.query(
+            "DELETE FROM Project_Students WHERE project_id = $1 AND student_id = $2",
+            [projectId, studentId]
+        );
+
+        res.json({ success: true, message: "Student removed from the project" });
+    } catch (err) {
+        console.error("Error deleting student from project:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+
 ////////////////////////////// Project Functions //////////////////////////////////////////
 
 // Fetch project details to pre-fill the form
@@ -209,7 +241,7 @@ router.get("/prof_dashboard/research_projects", check_authentication,async (req,
     p.link_2 AS link_2,
     p.conference AS project_conference,
     
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(s.name, ' (', s.email_id, ')'), ', ') AS students, -- Fetch student names and emails
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
@@ -240,7 +272,7 @@ ORDER BY
     p.link_2 AS link_2,
     p.conference AS project_conference,
     
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(s.name, ' (', s.email_id, ')'), ', ') AS students, -- Fetch student names and emails
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p

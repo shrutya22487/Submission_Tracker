@@ -151,4 +151,3 @@ CREATE TABLE IF NOT EXISTS reading_list_student
     link_2     VARCHAR(1000),
     FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );
-

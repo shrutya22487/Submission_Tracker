@@ -70,6 +70,20 @@ VALUES
 ('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false),
 ('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false);
 
+
+INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored, paper)
+VALUES
+('Quantum Computing', 1, 1, 'ICML 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-01', '2024-01-15', false, false, true),
+('Deep Learning Advances', 2, 2, 'NeurIPS 2024', 'Reviewing', 'http://linktoconference.com', 'http://linktopaper.com', '2023-10-01', '2024-02-20', false,false, true),
+('AI in Healthcare', 3, 3, 'JMLR 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-08-15', '2024-03-30', false, false, true);
+('Robotics and AI', 4, 4, 'CVPR 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-07-01', '2024-04-25', false, true),
+('NLP Fundamentals', 5, 5, 'ACL 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2023-06-20', '2024-05-18', false, true),
+('Blockchain Technology', 6, 6, 'Crypto 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-10', '2024-06-30', false, false),
+('Sustainable Computing', 7, 7, 'SIGCOMM 2024', 'Reviewing', 'http://linktoconference.com', 'http://linktopaper.com', '2023-05-25', '2024-07-22', false, false),
+('Data Privacy', 8, 8, 'SP 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-11-05', '2024-08-15', false, false),
+('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false),
+('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false);
+
 INSERT INTO Project_profs (project_id, prof_id)
 VALUES
 (1, 1), (2, 1), (3, 1),

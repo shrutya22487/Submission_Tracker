@@ -49,16 +49,17 @@ app.get("/", (req, res) => {
     res.render("home.ejs");
 });
 
-app.get("/sampleboard", (req, res) => {
-    res.render("sampleboard.ejs");
-});
-
 app.get("/login", (req, res) => {
     const error = req.query.error;
     if (error === "unauthorized_domain") {
         res.locals.message = "Registration is only allowed for users with a specific domain.";
         res.render("login.ejs");
-    } else {
+    }
+    else if(req.query.message === 'registration_successful'){
+        res.locals.message = "Successfully registered as a student, kindly login again";
+        res.render("login.ejs");
+    }
+    else {
         res.render("login.ejs");
     }
 });
@@ -81,16 +82,34 @@ app.get(
 
 app.get(
     "/auth/google/dashboard",
-    passport.authenticate("google", {
-        successRedirect: "/dashboard",
-        failureRedirect: "/login?error=unauthorized_domain",
-    })
+    (req, res, next) => {
+        passport.authenticate("google", (err, user, info) => {
+            if (err) {
+                return next(err); // Handle unexpected errors
+            }
+            const message = info && info.message;
+
+            // Take action based on the message value
+            if (message === "unauthorized_domain") {
+                return res.redirect("/login?error=unauthorized_domain");
+            }
+            if (message === "prompt_register") {
+                // Store user data in the session if it's needed for registration
+                req.session.user = user; // Store user in session explicitly
+                return res.redirect("/register?message=not_registered");
+            }
+
+            // Successful authentication
+            req.logIn(user, (loginErr) => {
+                if (loginErr) {
+                    return next(loginErr);
+                }
+                return res.redirect("/dashboard");
+            });
+        })(req, res, next);
+    }
 );
 
-function isStudent(email) {
-    const studentEmailPattern = /^[a-zA-Z]+[0-9]{5}@iiitd\.ac\.in$/;
-    return studentEmailPattern.test(email);
-}
 
 passport.use(
     new GoogleStrategy(
@@ -102,45 +121,43 @@ passport.use(
         async (accessToken, refreshToken, profile, cb) => {
             try {
                 const email = profile.email;
-                let user = null;
+                // const domain = email.split("@")[1]; // Extract the domain from the email
+                //
+                // if (domain !== "iiitd.ac.in") {
+                //     return cb(null, false, { message: "unauthorized_domain" });
+                // }
 
-                if (isStudent(email)) {
+                let user = {};
+
+                // Check if the email belongs to a professor
+                const professorResult = await db.query(
+                    "SELECT * FROM Professor WHERE email_id = $1",
+                    [email]
+                );
+
+                if (professorResult.rows.length > 0) {
+                    user = professorResult.rows[0];
+                    user.student = false; // Set new field indicating the user is not a student
+                }
+                else {
+                    user.student = true; // Set new field indicating the user is a student
+
+                    // Check if the email belongs to a student
                     const studentResult = await db.query(
                         "SELECT * FROM Student WHERE email_id = $1",
                         [email]
                     );
 
-                    if (studentResult.rows.length === 0) {
-                        await db.query(
-                            "INSERT INTO Student (Name, email_id) VALUES ($1, $2)",
-                            [profile.displayName, email]
-                        );
-                        const newStudentResult = await db.query(
-                            "SELECT * FROM Student WHERE email_id = $1",
-                            [email]
-                        );
-                        user = newStudentResult.rows[0];
-                    } else {
+                    if (studentResult.rows.length > 0) {
                         user = studentResult.rows[0];
-                    }
-                } else {
-                    const professorResult = await db.query(
-                        "SELECT * FROM Professor WHERE email_id = $1",
-                        [email]
-                    );
+                        user.student = true; // Set new field indicating the user is a student
 
-                    if (professorResult.rows.length === 0) {
-                        await db.query(
-                            "INSERT INTO Professor (Name, email_id) VALUES ($1, $2)",
-                            [profile.displayName, email]
-                        );
-                        const newProfessorResult = await db.query(
-                            "SELECT * FROM Professor WHERE email_id = $1",
-                            [email]
-                        );
-                        user = newProfessorResult.rows[0];
                     } else {
-                        user = professorResult.rows[0];
+                        user.email_id = profile.email;
+                        user.name = profile.displayName;
+
+                        // Redirect to register page if email is not found in either table
+                        return cb(null, user, { message: "prompt_register" });
                     }
                 }
 
@@ -160,6 +177,44 @@ passport.use(
         }
     )
 );
+
+// Define the /register route to handle student registration
+app.get("/register", (req, res) => {
+    const user = req.session.user; // Retrieve user from session
+    if (!user) {
+        return res.redirect("/login?error=not_authenticated"); // Handle case if no user is found in session
+    }
+
+    res.render("register.ejs", {
+        user: {
+            displayName: user.name,
+            email: user.email_id || user.email, // Make sure to access the correct field
+        },
+        error: req.query.error,
+    });
+});
+
+app.post("/register", async (req, res) => {
+    const { name, email, type } = req.body;
+
+    try {
+        // Insert new student into the Student table
+        await db.query(
+            "INSERT INTO Student (Name, email_id, type) VALUES ($1, $2, $3)",
+            [name, email, type]
+        );
+
+        // Clear the user data from session after registration
+        delete req.session.user; // Remove user info from session
+
+        // Redirect to login page to log in with the new registration
+        res.redirect("/login?message=registration_successful");
+    } catch (err) {
+        console.error("Error registering user:", err);
+        res.redirect("/register?error=registration_failed");
+    }
+});
+
 
 passport.serializeUser((user, cb) => {
     cb(null, user);
