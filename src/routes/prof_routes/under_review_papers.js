@@ -51,7 +51,7 @@ router.get("/prof_dashboard/under_review_papers",check_authentication,  async (r
     p.link_2 AS link_2,
     p.conference AS project_conference,
     
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(s.name, ' (', s.email_id, ')'), ', ') AS students, -- Fetch student names and emails
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p
@@ -82,7 +82,7 @@ ORDER BY
     p.link_2 AS link_2,
     p.conference AS project_conference,
     
-    STRING_AGG(DISTINCT s.name, ', ') AS students,
+    STRING_AGG(DISTINCT CONCAT(s.name, ' (', s.email_id, ')'), ', ') AS students, -- Fetch student names and emails
     STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
 FROM
     Project p

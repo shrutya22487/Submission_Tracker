@@ -77,8 +77,7 @@
 
 <!--                ARCHIVED STUDENTS-->
                 <div class="container" style="position: relative;">
-                    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Archived
-                        Students</h1>
+                    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
                     <% if (student_details_archived && Array.isArray(student_details_archived.rows) &&
                             student_details_archived.rows.length> 0) { %>
 
@@ -100,18 +99,22 @@
                                 <% } %>
                                 <%if (student.student_id !== current_id){%>
                                     <% if (current_id !=='' ) { %>
-                            </ul> <!-- Closing tag for projects -->
-                        </li> <!-- Closing tag for student name -->
+                            </ul>
+                        </li>
                         <% } %>
                         <%current_id = student.student_id;%>
-                        <li style="margin-bottom: 15px;">  <!-- Opening tag for  student name -->
+                        <li style="margin-bottom: 15px;">
                             <%= student.student_name %>
-                            <div class="button-group" style="margin-top: 10px;">
+
+                            <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
                                 <button class="btn btn-warning archive_student_button"
-                                        data-student-id="<%= student.student_id %>">Archive</button>
+                                        data-student-id="<%= student.student_id %>"
+                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Un-Archive</button>
                                 <button class="btn btn-danger delete_student_button"
-                                        data-student-id="<%= student.student_id %>">Delete</button>
+                                        data-student-id="<%= student.student_id %>"
+                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Delete</button>
                             </div>
+
                             <ul>
 
                                 <%}%>
@@ -124,71 +127,6 @@
                     <% } else { %>
                         <p>No students found.</p>
                     <% } %>
-                </div>
-
-
-
-                <div>
-                    <div class="col-md-3"
-                        style="background-color: #e9ecef; height: 100vh; right:0; position: fixed; z-index:4;">
-                        <div id="static-info">
-                            <!-- Title Section -->
-                            <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                                <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
-                            </div>
-
-                            <!-- Upcoming Deadlines Card -->
-                            <div class="card" style="margin-bottom: 20px;">
-                                <div class="card-body">
-                                    <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">Upcoming
-                                        Deadlines</h2>
-                                    <ul class="list-unstyled" id="deadlines-list" style="padding-left: 20px;">
-                                        <li>Project Report: September 20, 2024<span class="remove-btn"
-                                                onclick="removeItem(this)">x</span></li>
-                                        <li>Assignment 3 Submission: September 25, 2024<span class="remove-btn"
-                                                onclick="removeItem(this)">x</span></li>
-                                        <li>Midterm Exam: October 5, 2024<span class="remove-btn"
-                                                onclick="removeItem(this)">x</span></li>
-                                        <li>Research Proposal: October 10, 2024<span class="remove-btn"
-                                                onclick="removeItem(this)">x</span></li>
-                                    </ul>
-                                    <!-- Edit Button to Add Deadline -->
-                                    <button class="btn btn-primary btn-sm" style="background-color:#808080"
-                                        onclick="addDeadline()">Edit</button>
-                                </div>
-                            </div>
-
-                            <!-- To-Do List Card -->
-                            <div class="card">
-                                <div class="card-body">
-                                    <h2 class="card-title" style="font-size: 1.5rem; font-weight: bold;">To-Do List
-                                    </h2>
-                                    <ul class="list-unstyled" id="todo-list" style="padding-left: 20px;">
-                                        <li><input type="checkbox" id="task1" name="task1">
-                                            <label for="task1">Complete UDP Pinger assignment</label>
-                                            <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                        </li>
-                                        <li><input type="checkbox" id="task2" name="task2">
-                                            <label for="task2">Prepare for Midterm Exam</label>
-                                            <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                        </li>
-                                        <li><input type="checkbox" id="task3" name="task3">
-                                            <label for="task3">Finish Project Report Draft</label>
-                                            <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                        </li>
-                                        <li><input type="checkbox" id="task4" name="task4">
-                                            <label for="task4">Read 2 Research Papers</label>
-                                            <span class="remove-btn" onclick="removeItem(this)">x</span>
-                                        </li>
-                                    </ul>
-                                    <!-- Edit Button to Add To-Do -->
-                                    <button class="btn btn-primary btn-sm" style="background-color:#808080"
-                                        onclick="addTodo()">Edit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
