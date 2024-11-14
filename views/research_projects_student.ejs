@@ -89,7 +89,7 @@
                                     </ul>
 
                                     <!-- Meeting Notes List -->
-                                    <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                    <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
                                         <li><strong>Meeting Notes:</strong></li>
                                         <% if (detail.meeting_notes) { %>
                                             <% detail.meeting_notes.split('; ').forEach(function(note) { %>

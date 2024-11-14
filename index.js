@@ -7,10 +7,12 @@ import session from "express-session";
 import env from "dotenv";
 import dashboardRouter from "./src/routes/dashboard.js";
 import db from "./src/utils/db.js";
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from "path";
+import { fileURLToPath } from "url";
 import { google } from "googleapis";
 import GoogleAuthLibrary from "google-auth-library";
+import http from "http";
+import { Server } from "socket.io";
 
 const OAuth2 = google.auth.OAuth2;
 
@@ -19,6 +21,18 @@ const port = 3000;
 env.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const server = http.createServer(app);  // Use createServer from http
+const io = new Server(server);
+
+io.on("connection", (socket) => {
+    console.log("New client connected", socket.id);
+
+    socket.on("disconnect", () => {
+        console.log("Client disconnected", socket.id);
+    });
+});
+
 
 // Configure OAuth2 client for Gmail API
 const oauth2Client = new OAuth2(
@@ -223,8 +237,9 @@ passport.deserializeUser((user, cb) => {
     cb(null, user);
 });
 
-export { oauth2Client };
+export { oauth2Client, io };
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+

@@ -337,32 +337,6 @@
         }
     }
 
-    // Function to add a new Meeting note
-    function addMeetingNotes(project_id) {
-        const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
-
-        if (notes) {
-            $.ajax({
-                url: '/prof_dashboard/add_meeting_notes',
-                type: 'POST',
-                data: {
-                    project_id: project_id,
-                    notes: notes,
-                    prof: true
-                },
-                success: function () {
-                    alert('Meeting notes successfully added!');
-                    window.location.reload();
-                },
-                error: function () {
-                    alert('Error adding meeting notes');
-                }
-            });
-        } else {
-            alert('Please enter meeting notes');
-        }
-    }
-
     // to delete a meeting note
     function deleteMeetingNotes(Id) {
         if (confirm('Are you sure you want to delete this meeting note?')) {

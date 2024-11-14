@@ -9,7 +9,7 @@
         <!-- Combined section for adding a project and research projects -->
         <div>
             <!-- FOR ADDING A PROJECT-->
-            <form id="addProjectForm" style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;" onsubmit="return add_project();">
+            <form id="addProjectForm"  style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;" onsubmit="return add_project();">
                 <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Add New Project</h2>
 
                 <div class="form-group">
@@ -144,7 +144,7 @@
                                 </ul>
 
                                 <!-- Meeting Notes List -->
-                                <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
                                     <li><strong>Meeting Notes:</strong></li>
                                     <% if (detail.meeting_notes) { %>
                                         <% detail.meeting_notes.split('; ').forEach(function(note) { %>
@@ -299,7 +299,55 @@
         </div>
     </div>
 </div>
+<script src="/socket.io/socket.io.js"></script>
+
 <script>
+
+    const socket = io();
+
+    // Listen for meeting note updates
+    socket.on("meeting_note_update", (data) => {
+
+        const projectId = data.project_id;
+        const noteText = `${data.notes} (${data.date})`;
+
+        // Locate the correct project and append the new meeting note
+        const meetingNotesList = document.querySelectorAll(`[data-project-id="${projectId}"]`)[1];
+
+        if (meetingNotesList) {
+            const listItem = document.createElement("li");
+            listItem.textContent = noteText;
+            meetingNotesList.appendChild(listItem);
+        }
+    });
+
+    // Function to add a new Meeting note
+    function addMeetingNotes(project_id) {
+        const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
+        if (notes.trim() === "") return;
+
+        if (notes) {
+            $.ajax({
+                url: '/prof_dashboard/add_meeting_notes',
+                type: 'POST',
+                data: {
+                    project_id: project_id,
+                    notes: notes,
+                    prof: true
+                },
+                success: function () {
+                    alert('Meeting notes successfully added!');
+                    window.location.reload();
+                },
+                error: function () {
+                    alert('Error adding meeting notes');
+                }
+            });
+        } else {
+            alert('Please enter meeting notes');
+        }
+    }
+
     function showOptions(email) {
         document.getElementById(email + "-options").style.display = "inline";
     }

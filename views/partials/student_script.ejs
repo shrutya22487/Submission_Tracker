@@ -1,7 +1,28 @@
+<script src="/socket.io/socket.io.js"></script>
+
 <script>
+
+    const socket = io();
+
+    // Listen for meeting note updates
+    socket.on("meeting_note_update", (data) => {
+
+        const projectId = data.project_id;
+        const noteText = `${data.notes} (${data.date})`;
+
+        // Locate the correct project and append the new meeting note
+        const meetingNotesList = document.querySelectorAll(`[data-project-id="${projectId}"]`)[1];
+
+        if (meetingNotesList) {
+            const listItem = document.createElement("li");
+            listItem.textContent = noteText;
+            meetingNotesList.appendChild(listItem);
+        }
+    });
+
     function addMeetingNotes(project_id) {
         const notes = document.getElementById(`meeting-notes-input-${project_id}`).value;
-
+        console.log(notes);
         if (notes) {
             $.ajax({
                 url: '/prof_dashboard/add_meeting_notes',

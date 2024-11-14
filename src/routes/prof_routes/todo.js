@@ -13,9 +13,8 @@ router.use(express.json());
 // Deleting the to-dos
 router.post("/prof_dashboard/delete_todo",check_authentication,  async (req, res) => {
     try {
-        console.log(req.body.todo_id);
         await db.query('DELETE FROM todos where id = $1;', [req.body.todo_id]);
-        res.status(200).json({ message: "Task deleted successfully" }); // <-- Send a response here
+        res.status(200).json({ message: "Task deleted successfully" });
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");
@@ -27,7 +26,7 @@ router.post("/prof_dashboard/add_todo",check_authentication,  async (req, res) =
     try {
         const profId = await get_prof_id(req, res);
         await db.query('INSERT INTO todos(prof_id,task) VALUES ($1, $2);', [profId, req.body.task]);
-        res.status(200).json({ message: "Task added successfully" }); // <-- Send a response here
+        res.status(200).json({ message: "Task added successfully" });
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");

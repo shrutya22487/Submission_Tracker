@@ -4,6 +4,7 @@ import db from "../../utils/db.js";
 import bodyParser from "body-parser";
 import * as utils from "../../utils/utility_functions.js";
 import {check_authentication} from "../../utils/utility_functions.js";
+import {io} from "../../../index.js";
 
 const router = Router();
 
@@ -18,13 +19,29 @@ router.post('/prof_dashboard/add_meeting_notes',check_authentication,  async (re
         if (req.prof === true){
             await db.query(
                 `INSERT INTO meeting_notes(project_id, prof_id, notes) VALUES ($1, $2, $3)`,[req.body.project_id, await utils.get_prof_id(req, res),req.body.notes]);
+
+            // Emit WebSocket event with meeting note details
+            io.emit("meeting_note_update", {
+                project_id: req.body.project_id,
+                notes: req.body.notes,
+                date: new Date().toISOString().split('T')[0]
+            });
+
         }
         else {
             await db.query(
                 `INSERT INTO meeting_notes(project_id, prof_id, notes) VALUES ($1, $2, $3)`,[req.body.project_id, null,req.body.notes]);
+
+            // Emit WebSocket event with meeting note details
+            io.emit("meeting_note_update", {
+                project_id: req.body.project_id,
+                notes: req.body.notes,
+                date: new Date().toISOString().split('T')[0]
+            });
+
         }
 
-       res.status(200).json({ message: "Meeting Notes added successfully" });
+        res.status(200).json({ message: "Meeting Notes added successfully" });
 
     } catch (error) {
         console.error("Error executing query:", error);
