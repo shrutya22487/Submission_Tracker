@@ -9,7 +9,7 @@
 
         <!-- Upcoming Deadlines Card -->
         <div class="card mb-3 shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header text-black">
                 <h5 class="mb-0">Upcoming Deadlines</h5>
             </div>
             <div class="card-body">
@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Button to toggle add deadline form -->
-                <button class="btn btn-link btn-block text-primary" data-toggle="collapse"
+                <button class="btn btn-link btn-block text-secondary" data-toggle="collapse"
                     data-target="#addDeadlineForm" aria-expanded="false">
                     Add New Deadline
                 </button>
@@ -35,7 +35,7 @@
                             <label for="date">Date:</label>
                             <input type="date" id="date" name="date" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Add Deadline</button>
+                        <button type="submit" class="btn btn-secondary btn-block">Add Deadline</button>
                     </form>
                 </div>
             </div>
@@ -43,7 +43,7 @@
 
         <!-- To-Do List Card -->
         <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
+            <div class="card-header text-black">
                 <h5 class="mb-0">To-Do List</h5>
             </div>
             <div class="card-body">
@@ -53,7 +53,7 @@
                 </div>
 
                 <!-- Button to toggle add to-do form -->
-                <button class="btn btn-link btn-block text-success" data-toggle="collapse" data-target="#addTodoForm"
+                <button class="btn btn-link btn-block text-secondary" data-toggle="collapse" data-target="#addTodoForm"
                     aria-expanded="false">
                     Add New Todo
                 </button>
@@ -65,7 +65,7 @@
                             <label for="task_todo">Task:</label>
                             <input type="text" id="task_todo" name="task" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-success btn-block">Add Todo</button>
+                        <button type="submit" class="btn btn-secondary btn-block">Add Todo</button>
                     </form>
                 </div>
             </div>
@@ -125,7 +125,7 @@
         function appendTodoItem(todo) {
             const todoItem = `<li id="todo-${todo.id}">
             <span><strong>Task:</strong> ${todo.task}</span>
-            <button class="delete-btn btn btn-sm btn-danger" data-id="${todo.id}">Delete</button>
+            <button class="delete-btn btn btn-sm" data-id="${todo.id}"><strong>🗑️</strong></button>
         </li>`;
 
             $('#todo-items').append(todoItem);
@@ -204,7 +204,7 @@
                                         <span><strong>Task:</strong> ${deadline.task}</span><br>
                                         <span><strong>Due Date:</strong> ${new Date(deadline.date).toLocaleDateString()}</span>
                                     </div>
-                                    <button class="delete-btn btn btn-sm btn-danger" data-id="${deadline.id}">Delete</button>
+                                    <button class="delete-btn btn btn-sm" data-id="${deadline.id}"><strong>🗑️</strong></button>
                                 </li>
                             `);
                         });

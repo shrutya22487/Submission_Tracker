@@ -7,10 +7,9 @@
             <%- include('partials/nav_bar.ejs')%>
             <!--Working Console-->
             <div class="col-md-6"
-                style="background-color: #f9f9f9; width: 100%; height: 100vh; margin-left: auto; margin-right: auto;position:relative;">
+                style="background-color: #f9f9f9; width: 100%; height: 100vh; margin-left: auto; margin-right: auto; padding:20px; position:relative;">
                 <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 5rem; font-weight: bold;">Rema.</h1>
-
+                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
                 </div>
 
                 <!-- Section for adding students -->
@@ -22,120 +21,129 @@
 
 
 <!--                UNARCHIVED STUDENTS-->
-                <div class="container" style="position: relative;">
-                    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
-                    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
-                        <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
-                            <% let currentType = ''; %>
-                            <% let current_id = ''; %>
+<div class="container" style="position: relative;">
+    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px; display: inline-block;">Students</h1>
+    <!-- Button to toggle Archive and Delete buttons -->
+    <button id="toggle-buttons" class="btn btn-secondary" style="position: absolute; top: 20px; right: 20px;">Edit</button>
 
-                            <% student_details_unarchived.rows.forEach(function(student) { %>
-                                <% if (student.degree !== currentType) { %>
-                                    <% if (currentType !== '' ) { %>
+    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
+        <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
+            <% let currentType = ''; %>
+            <% let current_id = ''; %>
+
+            <% student_details_unarchived.rows.forEach(function(student) { %>
+                <% if (student.degree !== currentType) { %>
+                    <% if (currentType !== '' ) { %>
                         </ul> <!-- Closing tag for previous student degree -->
-                        <% } %>
-
-                        <li>
-                            <strong><%= student.degree %></strong>
-                            <ul style="padding-left: 20px;"> <!-- Opening tag for new student degree section -->
-                                <% currentType = student.degree; %>
-                                <% } %>
-
-                                <% if (student.student_id !== current_id) { %>
-                                    <% if (current_id !== '') { %>
-                            </ul> <!-- Closing tag for previous student projects -->
-                        </li>
-                        <% } %>
-
-                        <% current_id = student.student_id; %>
-                        <li style="margin-bottom: 15px;">
-                            <%= student.student_name %>
-
-                            <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
-                                <button class="btn btn-warning archive_student_button"
-                                        data-student-id="<%= student.student_id %>"
-                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Archive</button>
-                                <button class="btn btn-danger delete_student_button"
-                                        data-student-id="<%= student.student_id %>"
-                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Delete</button>
-                            </div>
-
-                            <ul> <!-- Start new project list for the student -->
-                                <% } %>
-
-                                <% student.project_titles.split(',').forEach(function(project_title) { %>
-                                    <li>Project Title: <%= project_title.trim() %></li>
-                                <% }); %>
-
-                                <% }); %>
-
-                            </ul> <!-- Closing last student's project list -->
-                        </li> <!-- Closing last student's list item -->
-                        </ul> <!-- Closing last degree section list -->
-                    <% } else { %>
-                        <p>No students found.</p>
                     <% } %>
 
+                    <li>
+                        
+                        <strong style="font-size: 1.5rem; font-weight: bold;"><%= student.degree %></strong>
 
-                </div>
+                        <ul style="padding-left: 20px;list-style-type:none;"> <!-- Opening tag for new student degree section -->
+                            <% currentType = student.degree; %>
+                            
+                        <% } %>
+                       
+                        
+
+                        <% if (student.student_id !== current_id) { %>
+                            <% if (current_id !== '') { %>
+                                </ul> <!-- Closing  for previous student projects -->
+                            </li>
+                            <% } %>
+
+                            <% current_id = student.student_id; %>
+                            <li style="margin-bottom: 15px;">
+                                <strong><%= student.student_name %></strong>
+
+                                <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
+                                    <button class="btn btn-warning archive_student_button"
+                                            data-student-id="<%= student.student_id %>"
+                                            style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Archive</button>
+                                    <button class="btn btn-danger delete_student_button"
+                                            data-student-id="<%= student.student_id %>"
+                                            style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Delete</button>
+                                </div>
+
+                                <ul> <!-- Start new project list for the student -->
+                        <% } %>
+
+                        <% student.project_titles.split(',').forEach(function(project_title) { %>
+                            <li>Project Title: <%= project_title.trim() %></li>
+                        <% }); %>
+
+                        <% }); %>
+
+                    </ul> <!-- Closing last student's project list -->
+                </li> <!-- Closing last student's list item -->
+            </ul> <!-- Closing last degree section list -->
+        <% } else { %>
+            <p>No students found.</p>
+        <% } %>
+   
+</div>
 
 <!--                ARCHIVED STUDENTS-->
-                <div class="container" style="position: relative;">
-                    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
-                    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
-                        <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
-                            <% let currentType = ''; %>
-                            <% let current_id = ''; %>
+<div class="container" style="position: relative;">
+    <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
+    
+    <!-- Button to toggle Archive and Delete buttons -->
 
-                            <% student_details_unarchived.rows.forEach(function(student) { %>
-                                <% if (student.degree !== currentType) { %>
-                                    <% if (currentType !== '' ) { %>
+    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
+        <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
+            <% let currentType = ''; %>
+            <% let current_id = ''; %>
+
+            <% student_details_unarchived.rows.forEach(function(student) { %>
+                <% if (student.degree !== currentType) { %>
+                    <% if (currentType !== '' ) { %>
                         </ul> <!-- Closing tag for previous student degree -->
-                        <% } %>
-
-                        <li>
-                            <strong><%= student.degree %></strong>
-                            <ul style="padding-left: 20px;"> <!-- Opening tag for new student degree section -->
-                                <% currentType = student.degree; %>
-                                <% } %>
-
-                                <% if (student.student_id !== current_id) { %>
-                                    <% if (current_id !== '') { %>
-                            </ul> <!-- Closing tag for previous student projects -->
-                        </li>
-                        <% } %>
-
-                        <% current_id = student.student_id; %>
-                        <li style="margin-bottom: 15px;">
-                            <%= student.student_name %>
-
-                            <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
-                                <button class="btn btn-warning archive_student_button"
-                                        data-student-id="<%= student.student_id %>"
-                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Archive</button>
-                                <button class="btn btn-danger delete_student_button"
-                                        data-student-id="<%= student.student_id %>"
-                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Delete</button>
-                            </div>
-
-                            <ul> <!-- Start new project list for the student -->
-                                <% } %>
-
-                                <% student.project_titles.split(',').forEach(function(project_title) { %>
-                                    <li>Project Title: <%= project_title.trim() %></li>
-                                <% }); %>
-
-                                <% }); %>
-
-                            </ul> <!-- Closing last student's project list -->
-                        </li> <!-- Closing last student's list item -->
-                        </ul> <!-- Closing last degree section list -->
-                    <% } else { %>
-                        <p>No students found.</p>
                     <% } %>
 
+                    <li>
+                        <strong style="font-size: 1.5rem; font-weight: bold;"><%= student.degree %></strong>
+                        <ul style="padding-left: 20px; list-style-type:none;"> <!-- Opening tag for new student degree section -->
+                            <% currentType = student.degree; %>
+                <% } %>
 
-                </div>
+                <% if (student.student_id !== current_id) { %>
+                    <% if (current_id !== '') { %>
+                        </ul> <!-- Closing tag for previous student projects -->
+                    </li>
+                    <% } %>
+
+                    <% current_id = student.student_id; %>
+                    <li style="margin-bottom: 15px;">
+                        <strong><%= student.student_name %></strong>
+
+                        <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
+                            <button class="btn btn-warning archive_student_button"
+                                    data-student-id="<%= student.student_id %>"
+                                    style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Archive</button>
+                            <button class="btn btn-danger delete_student_button"
+                                    data-student-id="<%= student.student_id %>"
+                                    style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Delete</button>
+                        </div>
+
+                        <ul> <!-- Start new project list for the student -->
+                <% } %>
+
+                <% student.project_titles.split(',').forEach(function(project_title) { %>
+                    <li>Project Title: <%= project_title.trim() %></li>
+                <% }); %>
+
+            <% }); %>
+
+            </ul> <!-- Closing last student's project list -->
+        </li> <!-- Closing last student's list item -->
+        </ul> <!-- Closing last degree section list -->
+    <% } else { %>
+        <p>No students found.</p>
+    <% } %>
+
+</div>
             </div>
 
             <!--todos and deadlines-->
@@ -167,24 +175,7 @@
         /* Darker grey on hover */
     }
 
-    .delete_student_button {
-        background-color: #a40000 !important;
-
-
-        /* Custom red color */
-        color: white !important;
-        /* White text */
-        padding: 10px 15px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .delete_student_button:hover {
-        background-color: #800000 !important;
-        /* Darker red on hover */
-    }
+    
 
 
 
@@ -267,6 +258,21 @@
 
 
 <script>
+
+     // JavaScript to toggle visibility of archive and delete buttons
+     document.getElementById('toggle-buttons').addEventListener('click', function() {
+        // Select all archive and delete buttons
+        const archiveButtons = document.querySelectorAll('.archive_student_button');
+        const deleteButtons = document.querySelectorAll('.delete_student_button');
+
+        // Toggle visibility
+        archiveButtons.forEach(button => {
+            button.style.display = button.style.display === 'none' ? 'inline-block' : 'none';
+        });
+        deleteButtons.forEach(button => {
+            button.style.display = button.style.display === 'none' ? 'inline-block' : 'none';
+        });
+    });
         // Archiving the student
         document.querySelectorAll('.archive_student_button').forEach(button => {
         button.addEventListener('click', function () {
@@ -321,7 +327,7 @@
         });
     });
 
-
+ 
         // Function to add a new deadline
 
         async function searchStudents() {

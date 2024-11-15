@@ -8,9 +8,13 @@
 
         <!-- Combined section for adding a project and research projects -->
         <div>
+            <!-- Collapsible Button for Adding a Project -->
+            <button type="button" class="btn btn-secondary" style="font-size: 1rem; margin-bottom: 20px; float: right; padding: 8px 16px;" onclick="toggleForm()">Add New Project</button>
+
+
             <!-- FOR ADDING A PROJECT-->
-            <form id="addProjectForm"  style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;" onsubmit="return add_project();">
-                <h2 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 20px;">Add New Project</h2>
+            <div id="addProjectForm" style="display: none; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); margin-bottom: 40px;">
+                <h2 style="margin-bottom: 20px;">Add New Project</h2>
 
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -51,149 +55,177 @@
                     <input type="date" id="deadline_date" name="deadline_date" class="form-control" style="margin-bottom: 20px;">
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.2rem;">Add Project</button>
-            </form>
+                <button type="submit" class="btn btn-secondary btn-block" style="font-size: 1.2rem;">Add Project</button>
+            </div>
+            <!-- End of Add Project Form -->
+
             <!-- FOR EDITING A PROJECT -->
             <div id="edit-project-modal" class="modal" style="display: none;">
-                <div class="modal-content">
+                <div class="modal-content" style="max-width: 800px; width: 100%; padding: 20px;">
                     <span class="close-button" onclick="closeEditModal()">&times;</span>
                     <h2>Edit Project</h2>
-                    <form id="edit-project-form">
+                    <form id="edit-project-form" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
                         <input type="hidden" id="search-project_id" name="project_id">
-                        <div>
-                            <label for="title">Project Title:</label>
-                            <input type="text" id="search-title" name="title" value="">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="title" style="font-weight: bold; margin-bottom: 5px;">Project Title:</label>
+                            <input type="text" id="search-title" name="title" value="" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="conference">Conference:</label>
-                            <input type="text" id="search-conference" name="conference">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="conference" style="font-weight: bold; margin-bottom: 5px;">Conference:</label>
+                            <input type="text" id="search-conference" name="conference" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="status">Status:</label>
-                            <input type="text" id="search-status" name="status">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="status" style="font-weight: bold; margin-bottom: 5px;">Status:</label>
+                            <input type="text" id="search-status" name="status" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="link_1">Link 1:</label>
-                            <input type="url" id="search-link_1" name="link_1">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="link_1" style="font-weight: bold; margin-bottom: 5px;">Link 1:</label>
+                            <input type="url" id="search-link_1" name="link_1" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="link_2">Link 2:</label>
-                            <input type="url" id="search-link_2" name="link_2">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="link_2" style="font-weight: bold; margin-bottom: 5px;">Link 2:</label>
+                            <input type="url" id="search-link_2" name="link_2" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="submitted_date">Submitted Date:</label>
-                            <input type="date" id="search-submitted_date" name="submitted_date">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="submitted_date" style="font-weight: bold; margin-bottom: 5px;">Submitted Date:</label>
+                            <input type="date" id="search-submitted_date" name="submitted_date" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <div>
-                            <label for="deadline_date">Deadline Date:</label>
-                            <input type="date" id="search-deadline_date" name="deadline_date">
+                        
+                        <div style="display: flex; flex-direction: column; width: 100%;">
+                            <label for="deadline_date" style="font-weight: bold; margin-bottom: 5px;">Deadline Date:</label>
+                            <input type="date" id="search-deadline_date" name="deadline_date" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        <button type="submit" onclick="edit_project()">Save Changes</button>
+                        
+                        <button type="submit" onclick="edit_project()" class="btn btn-primary" style="padding: 10px 20px; font-size: 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Save Changes</button>
                     </form>
                 </div>
             </div>
-
+            
+            
+<br>
             <!-- FOR UNARCHIVED PROJECTS-->
-            <div class="container mt-5">
-                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
+<div class="container mt-5">
+    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
 
-                <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
-                    <ul style="font-size: 1.2rem;">
-                        <% project_details_unarchived.rows.forEach(function(detail) { %>
+    <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
+        <ul style="font-size: 1.2rem;">
+            <% project_details_unarchived.rows.forEach(function(detail) { %>
+                <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
 
-                            <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
-                                <strong>Project:</strong> <%= detail.project_title %>
-                                (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
-                                <br>
-                                <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
-                                <br>
-                                Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
-                                | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+                <div class="d-flex justify-content-between align-items-center">
+<span>
+   
 
-                                <!-- Flex container to align buttons horizontally -->
-                                <div class="d-flex justify-content-start align-items-center mt-2">
-                                    <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
-                                    <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                                    <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
-                                    <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
-                                </div>
-                                <!-- Hidden Search Bar Container -->
-                                <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
-                                    <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+                    <strong>Project:</strong> <%= detail.project_title %>
+                    (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
+                    <br>
+                    <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
+                    <br>
+                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
+                    | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+</span>
+                    <!-- More Options Button with Same Alignment -->
+                    
+                        <button class="btn btn-sm btn-secondary" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
+                    </div>
 
-                                    <!-- Search Form -->
-                                    <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
-                                        <input type="text" id="student-search-project-<%= detail.project_id %>"
-                                               data-project-id="<%= detail.project_id %>"
-                                               placeholder="Type student name..."
-                                               oninput="searchStudents(<%= detail.project_id %>)"
-                                               class="form-control"
-                                               style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
-                                               autocomplete="off" required>
-                                    </form>
+                    <!-- Hidden Buttons (Initially hidden) -->
+                    <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
+                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
+                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                    </div>
 
-                                    <!-- Search Results Box -->
-                                    <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
-                                        <!-- Search results will be displayed here -->
-                                    </div>
-                                </div>
+                    <!-- Hidden Search Bar Container -->
+                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
 
-                                <!-- Student List -->
-                                <ul class="student-list" style="margin-top: 10px;">
-                                    <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
-                                </ul>
+                        <!-- Search Form -->
+                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
+                            <input type="text" id="student-search-project-<%= detail.project_id %>"
+                                   data-project-id="<%= detail.project_id %>"
+                                   placeholder="Type student name..."
+                                   oninput="searchStudents(<%= detail.project_id %>)"
+                                   class="form-control"
+                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                   autocomplete="off" required>
+                        </form>
 
-                                <!-- Meeting Notes List -->
-                                <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
-                                    <li><strong>Meeting Notes:</strong></li>
-                                    <% if (detail.meeting_notes) { %>
-                                        <% detail.meeting_notes.split('; ').forEach(function(note) { %>
-                                            <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
-                                            <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
-                                            <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
-                                            <li data-note-id="<%= noteId %>">
-                                                <%= noteText %>
-                                                <% if (noteId) { %>
-                                                    <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
-                                                        🗑️
-                                                    </button>
-                                                <% } %>
-                                            </li>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <li>No meeting notes available.</li>
-                                    <% } %>
-                                </ul>
+                        <!-- Search Results Box -->
+                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
+                            <!-- Search results will be displayed here -->
+                        </div>
+                    </div>
 
-
-                                <!-- Add Meeting Notes Form -->
-                                <form class="add-notes-form" style="margin-top: 10px;">
-                                    <input type="hidden" name="project_id" value="<%= detail.project_id %>">
-                                    <div class="form-group">
-                                        <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
-                                        <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
-                                    </div>
-                                    <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
-                                </form>
-
-                            </li>
-                        <% }); %>
+                    <!-- Student List -->
+                    <ul class="student-list" style="margin-top: 10px;">
+                        <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
                     </ul>
-                <% } else { %>
-                    <p>No projects found.</p>
-                <% } %>
-            </div>
-        </div>
 
-        <!-- FOR ARCHIVED PROJECTS-->
-        <div class="container mt-5">
-            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
+                    <!-- Meeting Notes List -->
+                    <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
+                        <li><strong>Meeting Notes:</strong></li>
+                        <% if (detail.meeting_notes) { %>
+                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
+                                <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
+                                <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
+                                <li data-note-id="<%= noteId %>">
+                                    <%= noteText %>
+                                    <% if (noteId) { %>
+                                        <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
+                                            🗑️
+                                        </button>
+                                    <% } %>
+                                </li>
+                            <% }) %>
+                        <% } else { %>
+                            <li>No meeting notes available.</li>
+                        <% } %>
+                    </ul>
 
-            <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
-                <ul style="font-size: 1.2rem;">
-                    <% project_details_archived.rows.forEach(function(detail) { %>
+                    <!-- Add Meeting Notes Form -->
+                    <form class="add-notes-form" style="margin-top: 10px;">
+                        <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                        <div class="form-group">
+                            <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                            <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                    </form>
+                    </li>
 
-                        <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No projects found.</p>
+    <% } %>
+</div>
+</div>
+
+
+<!-- FOR ARCHIVED PROJECTS -->
+<div class="container mt-5">
+    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
+
+    <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
+        <ul style="font-size: 1.2rem;">
+            <% project_details_archived.rows.forEach(function(detail) { %>
+
+                <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+
+                    <!-- Project Title and Info -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                           
                             <strong>Project:</strong> <%= detail.project_title %>
                             (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
                             <br>
@@ -201,107 +233,112 @@
                             <br>
                             Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
                             | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+                        </span>
+                        
+                        <!-- More Options Button -->
+                        <button class="btn btn-sm btn-secondary mt-2" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
+                    </div>
 
-                            <!-- Flex container to align buttons horizontally -->
-                            <div class="d-flex justify-content-start align-items-center mt-2">
-                                <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
-                                <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                                <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
-                                <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
-                            </div>
+                    <!-- Hidden Buttons (Initially hidden) -->
+                    <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
+                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Unarchive</button>
+                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
+                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                    </div>
 
-                            <!-- Hidden Search Bar Container -->
-                            <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
-                                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+                    <!-- Hidden Search Bar Container -->
+                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
 
-                                <!-- Search Form -->
-                                <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
-                                    <input type="text" id="student-search-project-<%= detail.project_id %>"
-                                           data-project-id="<%= detail.project_id %>"
-                                           placeholder="Type student name..."
-                                           oninput="searchStudents(<%= detail.project_id %>)"
-                                           class="form-control"
-                                           style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
-                                           autocomplete="off" required>
-                                </form>
+                        <!-- Search Form -->
+                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
+                            <input type="text" id="student-search-project-<%= detail.project_id %>"
+                                   data-project-id="<%= detail.project_id %>"
+                                   placeholder="Type student name..."
+                                   oninput="searchStudents(<%= detail.project_id %>)"
+                                   class="form-control"
+                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                   autocomplete="off" required>
+                        </form>
 
-                                <!-- Search Results Box -->
-                                <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
-                                    <!-- Search results will be displayed here -->
-                                </div>
-                            </div>
+                        <!-- Search Results Box -->
+                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
+                            <!-- Search results will be displayed here -->
+                        </div>
+                    </div>
 
-                            <!-- Student List -->
-                            <ul class="student-list" style="margin-top: 10px;">
-                                <li><strong>Students:</strong>
-                                    <% if (detail.students) { %>
-                                        <% detail.students.split(', ').forEach((student) => { %>
-                                            <% const [name, email] = student.match(/(.*) \((.*)\)/).slice(1); %>
-                                            <span class="student-item">
-                                <span class="student-name"
-                                      onmouseover="showOptions('<%= email %>')"
-                                      onmouseout="hideOptions()">
-                                      <%= name %>
-                                </span>
-                                <span class="student-options" style="display: none;" id="<%= email %>-options">
-                                    <button onclick="copyToClipboard('<%= email %>')">Copy Email</button>
-                                    <button onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
-                                </span>
-                                </span>
-                                        <% }); %>
-                                    <% } else { %>
-                                        No students assigned
+                    <!-- Student List -->
+                    <ul class="student-list" style="margin-top: 10px;">
+                        <li><strong>Students:</strong>
+                            <% if (detail.students) { %>
+                                <% detail.students.split(', ').forEach((student) => { %>
+                                    <% const [name, email] = student.match(/(.*) \((.*)\)/).slice(1); %>
+                                    <span class="student-item">
+                                        <span class="student-name"
+                                              onmouseover="showOptions('<%= email %>')"
+                                              onmouseout="hideOptions()">
+                                              <%= name %>
+                                        </span>
+                                        <span class="student-options" style="display: none;" id="<%= email %>-options">
+                                            <button onclick="copyToClipboard('<%= email %>')">Copy Email</button>
+                                            <button onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
+                                        </span>
+                                    </span>
+                                <% }); %>
+                            <% } else { %>
+                                No students assigned
+                            <% } %>
+                        </li>
+                    </ul>
+
+                    <!-- Meeting Notes List -->
+                    <ul class="meeting-notes-list" style="margin-top: 10px;">
+                        <li><strong>Meeting Notes:</strong></li>
+                        <% if (detail.meeting_notes) { %>
+                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
+                                <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
+                                <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
+                                <li data-note-id="<%= noteId %>">
+                                    <%= noteText %>
+                                    <% if (noteId) { %>
+                                        <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
+                                            🗑️
+                                        </button>
                                     <% } %>
                                 </li>
-                            </ul>
+                            <% }) %>
+                        <% } else { %>
+                            <li>No meeting notes available.</li>
+                        <% } %>
+                    </ul>
+
+                    <!-- Add Meeting Notes Form -->
+                    <form class="add-notes-form" style="margin-top: 10px;">
+                        <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                        <div class="form-group">
+                            <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                            <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                    </form>
+
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No projects found.</p>
+    <% } %>
+</div>
 
 
-
-                            <!-- Meeting Notes List -->
-                            <ul class="meeting-notes-list" style="margin-top: 10px;">
-                                <li><strong>Meeting Notes:</strong></li>
-                                <% if (detail.meeting_notes) { %>
-                                    <% detail.meeting_notes.split('; ').forEach(function(note) { %>
-                                        <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
-                                        <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
-                                        <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
-                                        <li data-note-id="<%= noteId %>">
-                                            <%= noteText %>
-                                            <% if (noteId) { %>
-                                                <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
-                                                    🗑️
-                                                </button>
-                                            <% } %>
-                                        </li>
-                                    <% }) %>
-                                <% } else { %>
-                                    <li>No meeting notes available.</li>
-                                <% } %>
-                            </ul>
-
-
-                            <!-- Add Meeting Notes Form -->
-                            <form class="add-notes-form" style="margin-top: 10px;">
-                                <input type="hidden" name="project_id" value="<%= detail.project_id %>">
-                                <div class="form-group">
-                                    <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
-                                    <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
-                                </div>
-                                <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
-                            </form>
-
-                        </li>
-                    <% }); %>
-                </ul>
-            <% } else { %>
-                <p>No projects found.</p>
-            <% } %>
-        </div>
     </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 
 <script>
+
 
     const socket = io();
 
@@ -361,6 +398,16 @@
             .then(() => alert(`Email ${email} copied to clipboard!`))
             .catch(err => console.error("Failed to copy text: ", err));
     }
+        // JavaScript function to toggle the visibility of the "Add New Project" form
+function toggleForm() {
+    var form = document.getElementById('addProjectForm');
+    // Toggle visibility
+    if (form.style.display === 'none' || form.style.display === '') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
 
     function deleteStudent(email, projectId) {
         if (confirm("Are you sure you want to delete this student from the project?")) {
@@ -383,4 +430,29 @@
                 .catch(err => console.error("Failed to remove student:", err));
         }
     }
+
+    function toggleButtons(projectId) {
+        // Get the container holding the buttons
+        const buttonsContainer = document.getElementById('buttons-container-' + projectId);
+        
+        // Toggle the visibility of the buttons
+        if (buttonsContainer.classList.contains('d-none')) {
+            buttonsContainer.classList.remove('d-none');
+        } else {
+            buttonsContainer.classList.add('d-none');
+        }
+    }
+    function toggleButtons(projectId) {
+        // Get the container holding the buttons
+        const buttonsContainer = document.getElementById('buttons-container-' + projectId);
+        
+        // Toggle the visibility of the buttons
+        if (buttonsContainer.classList.contains('d-none')) {
+            buttonsContainer.classList.remove('d-none');
+        } else {
+            buttonsContainer.classList.add('d-none');
+        }
+    }
+
+    
 </script>

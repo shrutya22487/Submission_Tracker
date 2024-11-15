@@ -1,130 +1,141 @@
 <%- include('partials/header') %>
 
-    <div class="container-fluid">
-        <div class="row">
-            <%- include('partials/nav_bar.ejs') %>
+<div class="container-fluid" >
+    <div class="row">
+        <%- include('partials/nav_bar.ejs') %>
 
-                <!-- Working console section -->
-                <div class="col-md-6 mx-auto" style="background-color: #fff; padding: 20px; border-radius: 8px;">
-                    <div id="working-console">
-                        <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                            <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
-                        </div>
-
-                        <!-- Conferences Table -->
-                        <table class="table table-bordered">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Title</th>
-                                    <th>Link</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="conference-table-body">
-                                <% if (conferences && Array.isArray(conferences.rows)) { %>
-                                    <% conferences.rows.forEach(function(conference) { %>
-                                        <tr data-id="<%= conference.id %>">
-                                            <td>
-                                                <%= conference.date %>
-                                            </td>
-                                            <td>
-                                                <%= conference.title %>
-                                            </td>
-                                            <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
-                                            <td>
-                                                <button class="btn btn-danger delete-btn"
-                                                    data-id="<%= conference.id %>">Delete</button>
-                                            </td>
-                                        </tr>
-                                        <% }); %>
-                                            <% } %>
-                            </tbody>
-                        </table>
-
-                        <h2 class="mt-4">Add Conference</h2>
-                        <form id="add-conference-form" class="mb-3">
-                            <div class="form-group">
-                                <label for="date">Date:</label>
-                                <input type="date" id="date" name="date" class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="title">Title:</label>
-                                <input type="text" id="title" name="title" required class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="link">Link:</label>
-                                <input type="url" id="link" name="link" class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Conference</button>
-                        </form>
-                    </div>
+        <!-- Working console section -->
+        <div class="col-md-6 mx-auto" style="background-color: #fff; padding: 20px; border-radius: 8;background-color:#f9f9f9; height:100vh;">
+            <div id="working-console">
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
                 </div>
 
-                <%- include('partials/task_mgmt_prof.ejs') %>
+                <!-- Conferences Table -->
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="conference-table-body">
+                        <% if (conferences && Array.isArray(conferences.rows)) { %>
+                            <% conferences.rows.forEach(function(conference) { %>
+                                <tr data-id="<%= conference.id %>">
+                                    <td>
+                                        <%= conference.date %>
+                                    </td>
+                                    <td>
+                                        <%= conference.title %>
+                                    </td>
+                                    <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
+                                    <td>
+                                        <button class="btn delete-btn"
+                                            data-id="<%= conference.id %>">🗑️</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
+
+                <!-- Toggle Button for Add Conference Form -->
+                <button id="toggle-form-btn" class="btn btn-secondary mb-3">Add Conference</button>
+
+                <!-- Add Conference Form (Initially hidden) -->
+                <div id="add-conference-form-container" style="display: none; padding: 20px; background-color:#fff;border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
+                    <h2 class="mt-4">Add Conference</h2>
+                    <form id="add-conference-form" class="mb-3" >
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" id="date" name="date" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" id="title" name="title" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="link">Link:</label>
+                            <input type="url" id="link" name="link" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-secondary">Add Conference</button>
+                    </form>
+                </div>
+            </div>
         </div>
+
+        <%- include('partials/task_mgmt_prof.ejs') %>
     </div>
+</div>
 
-    <style>
-        .remove-btn {
-            cursor: pointer;
-            color: red;
-            font-weight: bold;
-            margin-left: 10px;
-        }
+<style>
+    .remove-btn {
+        cursor: pointer;
+        color: red;
+        font-weight: bold;
+        margin-left: 10px;
+    }
 
-        h2 {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-    </style>
+    h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+</style>
 
-    <!-- JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            // Delete conference
-            $('#conference-table-body').on('click', '.delete-btn', function () {
-                const conferenceId = $(this).data('id');
-                $.ajax({
-                    url: '/prof_dashboard/delete_conference',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({ conference_id: conferenceId }),
-                    success: function (response) {
-                        alert(response.message);
-                        location.reload();
-                    },
-                    error: function (error) {
-                        alert("Error deleting conference.");
-                    }
-                });
-            });
-
-            // Add conference
-            $('#add-conference-form').submit(function (e) {
-                e.preventDefault();
-                const formData = {
-                    date: $('#date').val(),
-                    title: $('#title').val(),
-                    link: $('#link').val()
-                };
-                $.ajax({
-                    url: '/prof_dashboard/add_conference',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formData),
-                    success: function (response) {
-                        alert(response.message);
-                        location.reload();
-                    },
-                    error: function (error) {
-                        alert("Error adding conference.");
-                    }
-                });
+<script>
+    $(document).ready(function () {
+        // Delete conference
+        $('#conference-table-body').on('click', '.delete-btn', function () {
+            const conferenceId = $(this).data('id');
+            $.ajax({
+                url: '/prof_dashboard/delete_conference',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ conference_id: conferenceId }),
+                success: function (response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Error deleting conference.");
+                }
             });
         });
-    </script>
 
-    <%- include('partials/footer') %>
+        // Add conference
+        $('#add-conference-form').submit(function (e) {
+            e.preventDefault();
+            const formData = {
+                date: $('#date').val(),
+                title: $('#title').val(),
+                link: $('#link').val()
+            };
+            $.ajax({
+                url: '/prof_dashboard/add_conference',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                success: function (response) {
+                    alert(response.message);
+                    location.reload();
+                },
+                error: function (error) {
+                    alert("Error adding conference.");
+                }
+            });
+        });
+
+        // Toggle form visibility
+        $('#toggle-form-btn').click(function () {
+            $('#add-conference-form-container').toggle();
+        });
+    });
+</script>
+
+<%- include('partials/footer') %>
