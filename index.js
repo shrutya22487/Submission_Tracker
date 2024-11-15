@@ -25,14 +25,6 @@ const __dirname = path.dirname(__filename);
 const server = http.createServer(app);  // Use createServer from http
 const io = new Server(server);
 
-io.on("connection", (socket) => {
-    console.log("New client connected", socket.id);
-
-    socket.on("disconnect", () => {
-        console.log("Client disconnected", socket.id);
-    });
-});
-
 
 // Configure OAuth2 client for Gmail API
 const oauth2Client = new OAuth2(

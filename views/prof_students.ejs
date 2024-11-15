@@ -24,34 +24,33 @@
 <!--                UNARCHIVED STUDENTS-->
                 <div class="container" style="position: relative;">
                     <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
-                    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) &&
-                            student_details_unarchived.rows.length> 0) { %>
-
+                    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
                         <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
-                            <% let currentType='' ; %>
-                            <% let current_id='' ; %>
+                            <% let currentType = ''; %>
+                            <% let current_id = ''; %>
+
                             <% student_details_unarchived.rows.forEach(function(student) { %>
-                                <% if (student.degree !==currentType) { %>
-                                    <% if (currentType !=='' ) { %>
-                        </ul> <!-- Closing tag for  student degree -->
+                                <% if (student.degree !== currentType) { %>
+                                    <% if (currentType !== '' ) { %>
+                        </ul> <!-- Closing tag for previous student degree -->
                         <% } %>
 
                         <li>
-                            <strong>
-                                <%= student.degree %>
-                            </strong>
-                            <ul style="padding-left: 20px;"> <!-- Opening tag for  student degree -->
-                                <% currentType=student.degree; %>
+                            <strong><%= student.degree %></strong>
+                            <ul style="padding-left: 20px;"> <!-- Opening tag for new student degree section -->
+                                <% currentType = student.degree; %>
                                 <% } %>
-                                <%if (student.student_id !== current_id){%>
-                                    <% if (current_id !=='' ) { %>
-                            </ul> 
-                        </li> 
+
+                                <% if (student.student_id !== current_id) { %>
+                                    <% if (current_id !== '') { %>
+                            </ul> <!-- Closing tag for previous student projects -->
+                        </li>
                         <% } %>
-                        <%current_id = student.student_id;%>
-                        <li style="margin-bottom: 15px;"> 
+
+                        <% current_id = student.student_id; %>
+                        <li style="margin-bottom: 15px;">
                             <%= student.student_name %>
-                            
+
                             <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
                                 <button class="btn btn-warning archive_student_button"
                                         data-student-id="<%= student.student_id %>"
@@ -60,73 +59,82 @@
                                         data-student-id="<%= student.student_id %>"
                                         style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Delete</button>
                             </div>
-                            
-                            <ul>
 
-                                <%}%>
-                                <li>Project Title: <%= student.project_title %>
-                                </li>
+                            <ul> <!-- Start new project list for the student -->
+                                <% } %>
+
+                                <% student.project_titles.split(',').forEach(function(project_title) { %>
+                                    <li>Project Title: <%= project_title.trim() %></li>
                                 <% }); %>
-                            </ul>
-                        </li>
-                        </ul>
+
+                                <% }); %>
+
+                            </ul> <!-- Closing last student's project list -->
+                        </li> <!-- Closing last student's list item -->
+                        </ul> <!-- Closing last degree section list -->
                     <% } else { %>
                         <p>No students found.</p>
                     <% } %>
+
+
                 </div>
 
 <!--                ARCHIVED STUDENTS-->
                 <div class="container" style="position: relative;">
                     <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; margin-top: 40px;">Students</h1>
-                    <% if (student_details_archived && Array.isArray(student_details_archived.rows) &&
-                            student_details_archived.rows.length> 0) { %>
-
+                    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
                         <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
-                            <% let currentType='' ; %>
-                            <% let current_id='' ; %>
-                            <% student_details_archived.rows.forEach(function(student) { %>
-                                <% if (student.degree !==currentType) { %>
-                                    <% if (currentType !=='' ) { %>
-                        </ul> <!-- Closing tag for  student degree -->
+                            <% let currentType = ''; %>
+                            <% let current_id = ''; %>
+
+                            <% student_details_unarchived.rows.forEach(function(student) { %>
+                                <% if (student.degree !== currentType) { %>
+                                    <% if (currentType !== '' ) { %>
+                        </ul> <!-- Closing tag for previous student degree -->
                         <% } %>
 
                         <li>
-                            <strong>
-                                <%= student.degree %>
-                            </strong>
-                            <ul style="padding-left: 20px;"> <!-- Opening tag for  student degree -->
-                                <% currentType=student.degree; %>
+                            <strong><%= student.degree %></strong>
+                            <ul style="padding-left: 20px;"> <!-- Opening tag for new student degree section -->
+                                <% currentType = student.degree; %>
                                 <% } %>
-                                <%if (student.student_id !== current_id){%>
-                                    <% if (current_id !=='' ) { %>
-                            </ul>
+
+                                <% if (student.student_id !== current_id) { %>
+                                    <% if (current_id !== '') { %>
+                            </ul> <!-- Closing tag for previous student projects -->
                         </li>
                         <% } %>
-                        <%current_id = student.student_id;%>
+
+                        <% current_id = student.student_id; %>
                         <li style="margin-bottom: 15px;">
                             <%= student.student_name %>
 
                             <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
                                 <button class="btn btn-warning archive_student_button"
                                         data-student-id="<%= student.student_id %>"
-                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Un-Archive</button>
+                                        style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Archive</button>
                                 <button class="btn btn-danger delete_student_button"
                                         data-student-id="<%= student.student_id %>"
                                         style="font-size: 0.8rem; padding: 5px 10px; height: 30px;">Delete</button>
                             </div>
 
-                            <ul>
+                            <ul> <!-- Start new project list for the student -->
+                                <% } %>
 
-                                <%}%>
-                                <li>Project Title: <%= student.project_title %>
-                                </li>
+                                <% student.project_titles.split(',').forEach(function(project_title) { %>
+                                    <li>Project Title: <%= project_title.trim() %></li>
                                 <% }); %>
-                            </ul>
-                        </li>
-                        </ul>
+
+                                <% }); %>
+
+                            </ul> <!-- Closing last student's project list -->
+                        </li> <!-- Closing last student's list item -->
+                        </ul> <!-- Closing last degree section list -->
                     <% } else { %>
                         <p>No students found.</p>
                     <% } %>
+
+
                 </div>
             </div>
 

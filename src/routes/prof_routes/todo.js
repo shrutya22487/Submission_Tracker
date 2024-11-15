@@ -22,11 +22,16 @@ router.post("/prof_dashboard/delete_todo",check_authentication,  async (req, res
 });
 
 // Adding the to-dos
-router.post("/prof_dashboard/add_todo",check_authentication,  async (req, res) => {
+router.post("/prof_dashboard/add_todo", check_authentication, async (req, res) => {
     try {
         const profId = await get_prof_id(req, res);
-        await db.query('INSERT INTO todos(prof_id,task) VALUES ($1, $2);', [profId, req.body.task]);
-        res.status(200).json({ message: "Task added successfully" });
+        const result = await db.query(
+            'INSERT INTO todos(prof_id, task) VALUES ($1, $2) RETURNING id;',
+            [profId, req.body.task]
+        );
+
+        const newTodoId = result.rows[0].id; // Get the newly inserted to-do's ID
+        res.status(200).json({ message: "Task added successfully", todo_id: newTodoId });
     } catch (error) {
         console.error("Error executing query:", error);
         res.status(500).send("Internal server error");

@@ -95,47 +95,54 @@ router.post("/prof_dashboard/archive_student",check_authentication,  async (req,
 router.get("/prof_dashboard/students",check_authentication,  async (req, res) => {
     const prof_id = await utils.get_prof_id(req, res);
 
-    const student_details_unarchived = await db.query("SELECT\n" +
-        "    s.id AS student_id,\n" +
-        "    s.Name AS student_name,\n" +
-        "    s.type AS degree,\n" +
-        "    COALESCE(p.title, 'No Project Assigned') AS project_title\n" +
-        "\n" +
-        "FROM\n" +
-        "    Student s\n" +
-        "LEFT JOIN\n" +
-        "    Project_Students ps ON s.id = ps.student_id\n" +
-        "LEFT JOIN\n" +
-        "    Project p ON ps.project_id = p.id\n" +
-        "JOIN\n" +
-        "    Team t ON s.id = t.student_id\n" +
-        "WHERE\n" +
-        "    t.prof_id = $1 AND t.archived = FALSE\n" +
-        "GROUP BY\n" +
-        "    s.id, s.Name, s.type, p.title, p.id\n" +
-        "ORDER BY\n" +
-        "    s.type, s.Name;",[prof_id]);
+    const student_details_unarchived = await db.query(`SELECT
+    s.id AS student_id,
+    s.Name AS student_name,
+    s.type AS degree,
+    COALESCE(STRING_AGG(pr.title, ', '), 'No Project Assigned') AS project_titles
+FROM
+    Professor p
+JOIN
+    Project_profs pp ON p.id = pp.prof_id
+JOIN
+    Project pr ON pp.project_id = pr.id
+JOIN
+    Project_Students ps ON pr.id = ps.project_id
+JOIN
+    Student s ON ps.student_id = s.id
+JOIN
+    Team t ON t.student_id = s.id AND t.prof_id = p.id
+WHERE
+    p.id = $1 AND t.archived = FALSE
+GROUP BY
+    s.id, s.Name, s.type
+ORDER BY
+    s.type, s.Name;`,[prof_id]);
 
-    const student_details_archived = await db.query("SELECT\n" +
-        "    s.id AS student_id,\n" +
-        "    s.Name AS student_name,\n" +
-        "    s.type AS degree,\n" +
-        "    COALESCE(p.title, 'No Project Assigned') AS project_title\n" +
-        "\n" +
-        "FROM\n" +
-        "    Student s\n" +
-        "LEFT JOIN\n" +
-        "    Project_Students ps ON s.id = ps.student_id\n" +
-        "LEFT JOIN\n" +
-        "    Project p ON ps.project_id = p.id\n" +
-        "JOIN\n" +
-        "    Team t ON s.id = t.student_id\n" +
-        "WHERE\n" +
-        "    t.prof_id = $1 AND t.archived = TRUE\n" +
-        "GROUP BY\n" +
-        "    s.id, s.Name, s.type, p.title, p.id\n" +
-        "ORDER BY\n" +
-        "    s.type, s.Name;",[prof_id]);
+    const student_details_archived = await db.query(`SELECT
+    s.id AS student_id,
+    s.Name AS student_name,
+    s.type AS degree,
+    COALESCE(STRING_AGG(pr.title, ', '), 'No Project Assigned') AS project_titles
+    FROM
+        Professor p
+    JOIN
+        Project_profs pp ON p.id = pp.prof_id
+    JOIN
+        Project pr ON pp.project_id = pr.id
+    JOIN
+        Project_Students ps ON pr.id = ps.project_id
+    JOIN
+        Student s ON ps.student_id = s.id
+    JOIN
+        Team t ON t.student_id = s.id AND t.prof_id = p.id
+    WHERE
+        p.id = $1 AND t.archived = TRUE
+    GROUP BY
+        s.id, s.Name, s.type
+    ORDER BY
+        s.type, s.Name;`,[prof_id]);
+
 
     res.render("prof_students.ejs", {
         student_details_unarchived : student_details_unarchived,
