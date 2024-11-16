@@ -6,49 +6,48 @@
         <%- include('partials/nav_bar_student.ejs') %>
 
         <!-- Working console section (reduced width) -->
-        <div class="col-md-6 mx-auto" style="background-color: #fff; padding: 30px; border-radius: 8px; overflow-y: auto;">
+        <div class="col-md-6 mx-auto" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; overflow-y: auto;">
             <div id="working-console">
 
                 <!-- Jumbotron Section -->
-                <div class="jumbotron text-center" style="margin-bottom: 30px;">
-                    <h1 style="font-size: 2.5rem; font-weight: bold; color: #333;">Conferences</h1>
+                <div class="jumbotron text-center" style="margin-bottom: 20px;">
+                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Conferences</h1>
                 </div>
 
                 <!-- Conferences Table -->
-                <div style="max-height: 400px; overflow-y: auto;">
-                    <table class="table table-striped table-bordered table-sm" style="margin-bottom: 30px;">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Date</th>
-                                <th>Title</th>
-                                <th>Link</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="conference-table-body">
-                            <% if (conferences && Array.isArray(conferences.rows)) { %>
-                                <% conferences.rows.forEach(function(conference) { %>
-                                    <tr data-id="<%= conference.id %>">
-                                        <td><%= conference.date %></td>
-                                        <td><%= conference.title %></td>
-                                        <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm delete-btn" data-id="<%= conference.id %>">Delete</button>
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                            <% } %>
-                        </tbody>
-                    </table>
-                </div>
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Title</th>
+                            <th>Link</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="conference-table-body">
+                        <% if (conferences && Array.isArray(conferences.rows)) { %>
+                            <% conferences.rows.forEach(function(conference) { %>
+                                <tr data-id="<%= conference.id %>">
+                                    <td><%= conference.date %></td>
+                                    <td><%= conference.title %></td>
+                                    <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
+                                    <td>
+                                        <button class="btn delete-btn" data-id="<%= conference.id %>">🗑️</button>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } %>
+                    </tbody>
+                </table>
 
                 <!-- Button to toggle form visibility -->
-                <button class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#addConferenceForm" aria-expanded="false" aria-controls="addConferenceForm">
-                    Add
+                <button id="toggle-form-btn" class="btn btn-secondary btn-sm" type="button">
+                    Add Conference
                 </button>
+                
 
                 <!-- Collapsible Add Conference Form -->
-                <div class="collapse" id="addConferenceForm">
+                <div id="addConferenceForm" style="display: none; padding: 20px; background-color:#fff;border-radius: 8px; margin-top:20px;">
                     <h2 class="mt-4">Add Conference</h2>
                     <form id="add-conference-form" class="mb-4">
                         <div class="form-group">
@@ -63,7 +62,7 @@
                             <label for="link">Link:</label>
                             <input type="url" id="link" name="link" class="form-control form-control-sm">
                         </div>
-                        <button type="submit" class="btn btn-primary btn-sm">Add Conference</button>
+                        <button type="submit" class="btn btn-secondary btn-sm">Add Conference</button>
                     </form>
                 </div>
 
@@ -94,7 +93,7 @@
     }
 
     .table th, .table td {
-        text-align: center;
+        text-align: left;
     }
 
     .form-group {
@@ -153,6 +152,12 @@
 
 <script>
     $(document).ready(function() {
+        // Toggle form visibility
+        $('#toggle-form-btn').click(function() {
+            const formContainer = $('#addConferenceForm');
+            formContainer.toggle();  // This toggles the visibility of the form
+        });
+
         // Delete conference
         $('#conference-table-body').on('click', '.delete-btn', function() {
             const conferenceId = $(this).data('id');

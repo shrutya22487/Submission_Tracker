@@ -7,48 +7,51 @@
 
         <!-- Working console section -->
         <div class="col-md-6"
-             style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); background-color: #f9f9f9; width: 100%; height: 100vh; margin-left: auto; margin-right: auto; padding: 20px; position: relative;">
             <div id="working-console">
                 <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Student Dashboard</h1>
+                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">My Professors</h1>
                 </div>
-                <h2>Projects Grouped by Professor</h2>
+                <h2 style="margin-left:40px; padding: 20px;"><strong>Projects Grouped by Professor</strong></h2>
 
                 <!-- FOR UNARCHIVED PROJECTS-->
-                <div id="professorList">
+                <div id="professorList" style="padding: 20px;margin-left:40px; ">
                     <% prof_details_unarchived.forEach(function(prof) { %>
                         <div class="professor">
-                            <p>
+                            <p style="font-size: 2rem;"><strong>
                                 <span
                                         class="professor-name"
                                         onclick="copyToClipboard('<%= prof.professor_email %>')">
                                     <%= prof.professor_name %>
                                 </span>
+                            </strong>
                             </p>
-                            <p><strong>Projects:</strong></p>
+                            <p style="font-size: 1.5rem;"><strong>Projects:</strong></p>
                             <ul>
                                 <% prof.project_titles.split(', ').forEach(function(title) { %>
-                                    <li><%= title %></li>
+                                    <li style="font-size: 1rem;"><%= title %></li>
                                 <% }); %>
                             </ul>
                         </div>
                     <% }); %>
                 </div>
-
-                <h3>Archived Projects</h3>
+                <br>
+                <h3 style="padding: 20px;margin-left:40px; "> <Strong>Archived Projects</Strong><button class="btn btn-sm btn-secondary" id="toggleArchivedProjects" style="margin-left: 20px;">Show</button></h3>
 
                 <!-- FOR ARCHIVED PROJECTS-->
-                <div id="professorList">
+                
+                <div id="professorList2" style="display: none;padding: 20px;margin-left:40px; ">
                     <% prof_details_archived.forEach(function(prof) { %>
                         <div class="professor">
-                            <p>
+                            <p style="font-size: 2rem;"><strong>
                                 <span
                                         class="professor-name"
                                         onclick="copyToClipboard('<%= prof.professor_email %>')">
                                     <%= prof.professor_name %>
                                 </span>
+                            </strong>
                             </p>
-                            <p><strong>Projects:</strong></p>
+                            <p style="font-size: 1.5rem;"><strong>Projects:</strong></p>
                             <ul>
                                 <% prof.project_titles.split(', ').forEach(function(title) { %>
                                     <li><%= title %></li>
@@ -57,6 +60,7 @@
                         </div>
                     <% }); %>
                 </div>
+                
             </div>
         </div>
 
@@ -145,6 +149,19 @@
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.getElementById('toggleArchivedProjects').addEventListener('click', function () {
+        const content = document.getElementById('professorList2');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            this.textContent = 'Hide';
+        } else {
+            content.style.display = 'none';
+            this.textContent = 'Show';
+        }
+    });
+</script>
 
 <%- include('partials/student_script.ejs') %>
 

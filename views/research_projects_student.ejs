@@ -3,76 +3,23 @@
 <div class="container-fluid">
     <div class="row">
 
-        <%- include('partials/nav_bar_student.ejs')%>
+        <%- include('partials/nav_bar_student.ejs') %>
 
         <!-- Working console section -->
         <div class="col-md-6"
-            style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+            style="background-color: #f9f9f9; width: 100%; height: 100%; margin-left: auto; margin-right: auto; padding: 20px;">
             <div id="working-console">
                 <div class="jumbotron text-center" style="margin-bottom: 20px;">
                     <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Student Dashboard</h1>
                 </div>
 
-                <!-- FOR UNARCHIVED PROJECTS-->
-                <div class="container mt-5">
-                        <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
-
-                        <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
-                            <ul style="font-size: 1.2rem;">
-                                <% project_details_unarchived.rows.forEach(function(detail) { %>
-
-                                    <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
-                                        <strong>Project:</strong> <%= detail.project_title %>
-                                        (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
-                                        <br>
-                                        <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
-                                        <br>
-                                        Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
-                                        | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
-
-                                        <!-- Student List -->
-                                        <ul class="student-list" style="margin-top: 10px;">
-                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
-                                        </ul>
-
-                                        <!-- Meeting Notes List -->
-                                        <ul class="meeting-notes-list" style="margin-top: 10px;">
-                                            <li><strong>Meeting Notes:</strong></li>
-                                            <% if (detail.meeting_notes) { %>
-                                                <% detail.meeting_notes.split('; ').forEach(function(note) { %>
-                                                    <li><%= note %></li>
-                                                <% }) %>
-                                            <% } else { %>
-                                                <li>No meeting notes available.</li>
-                                            <% } %>
-                                        </ul>
-
-                                        <!-- Add Meeting Notes Form -->
-                                        <form class="add-notes-form" style="margin-top: 10px;">
-                                            <input type="hidden" name="project_id" value="<%= detail.project_id %>">
-                                            <div class="form-group">
-                                                <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
-                                                <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
-                                            </div>
-                                            <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
-                                        </form>
-
-                                    </li>
-                                <% }); %>
-                            </ul>
-                        <% } else { %>
-                            <p>No projects found.</p>
-                        <% } %>
-                    </div>
-
-
-                <!-- FOR ARCHIVED PROJECTS-->
+                <!-- FOR UNARCHIVED PROJECTS -->
                 <div class="container mt-5">
                     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
 
-                    <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
+                    <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
                         <ul style="font-size: 1.2rem;">
-                            <% project_details_archived.rows.forEach(function(detail) { %>
+                            <% project_details_unarchived.rows.forEach(function(detail) { %>
 
                                 <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
                                     <strong>Project:</strong> <%= detail.project_title %>
@@ -89,7 +36,7 @@
                                     </ul>
 
                                     <!-- Meeting Notes List -->
-                                    <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
+                                    <ul class="meeting-notes-list" style="margin-top: 10px;">
                                         <li><strong>Meeting Notes:</strong></li>
                                         <% if (detail.meeting_notes) { %>
                                             <% detail.meeting_notes.split('; ').forEach(function(note) { %>
@@ -107,7 +54,7 @@
                                             <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
                                             <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
                                         </div>
-                                        <button type="button" class="btn btn-primary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                                        <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
                                     </form>
 
                                 </li>
@@ -117,37 +64,90 @@
                         <p>No projects found.</p>
                     <% } %>
                 </div>
+
+                <!-- FOR ARCHIVED PROJECTS -->
+                <div class="container mt-5">
+                    <h3 style="font-size: 2rem;">
+                        <strong>Archived Projects</strong>
+                        <button class="btn btn-sm btn-secondary" id="toggle-archived-btn" onclick="toggleArchivedProjects()" style="margin-left: 10px;">Show</button>
+                    </h3>
+
+                    
+
+                    <div id="archived-projects" style="display: none;">
+                        <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
+                            <ul style="font-size: 1.2rem;">
+                                <% project_details_archived.rows.forEach(function(detail) { %>
+
+                                    <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                        <strong>Project:</strong> <%= detail.project_title %>
+                                        (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
+                                        <br>
+                                        <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
+                                        <br>
+                                        Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
+                                        | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
+
+                                        <!-- Student List -->
+                                        <ul class="student-list" style="margin-top: 10px;">
+                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
+                                        </ul>
+
+                                        <!-- Meeting Notes List -->
+                                        <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
+                                            <li><strong>Meeting Notes:</strong></li>
+                                            <% if (detail.meeting_notes) { %>
+                                                <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                                    <li><%= note %></li>
+                                                <% }) %>
+                                            <% } else { %>
+                                                <li>No meeting notes available.</li>
+                                            <% } %>
+                                        </ul>
+
+                                        <!-- Add Meeting Notes Form -->
+                                        <form class="add-notes-form" style="margin-top: 10px;">
+                                            <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                            <div class="form-group">
+                                                <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                                                <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                                        </form>
+
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        <% } else { %>
+                            <p>No projects found.</p>
+                        <% } %>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!--Prof to do section-->
-        <%- include('partials/task_mgmt_student.ejs')%>
+        <!-- Prof to do section -->
+        <%- include('partials/task_mgmt_student.ejs') %>
 
     </div>
 </div>
 
 <style>
     /* Search Results Box Styles */
-    /* Search Results Box Styles */
     .results-box {
         position: absolute;
         z-index: 1000;
         background-color: #fff;
         width: calc(100% - 20px);
-        /* Full width minus padding */
         max-width: 600px;
         padding: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         border: 1px solid #ccc;
         margin-top: 5px;
-        /* Space between input and results */
         left: 50%;
-        /* Center the box */
         transform: translateX(-50%);
-        /* Adjust for the width of the box */
     }
-
 
     .results-box button {
         width: 100%;
@@ -157,14 +157,11 @@
         text-align: left;
         cursor: pointer;
         border-radius: 4px;
-        /* Rounded corners for buttons */
         transition: background-color 0.3s;
-        /* Smooth transition for hover */
     }
 
     .results-box button:hover {
         background-color: #f0f0f0;
-        /* Change background on hover */
     }
 
     /* Modal Styles (if needed) */
@@ -206,5 +203,24 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<%- include('partials/student_script.ejs') %>
-<%- include('partials/footer') %>
+<script>
+    function toggleArchivedProjects() {
+        var archivedProjects = document.getElementById('archived-projects');
+        var button = document.getElementById('toggle-archived-btn');
+
+        if (archivedProjects.style.display === 'none') {
+            archivedProjects.style.display = 'block';
+            button.innerHTML = 'Hide';
+        } else {
+            archivedProjects.style.display = 'none';
+            button.innerHTML = 'Show';
+        }
+    }
+
+    function addMeetingNotes(projectId) {
+        var notes = document.getElementById("meeting-notes-input-" + projectId).value;
+        // Call the backend API to save the notes for the project
+        // This is a mock function, you need to implement actual API interaction
+        console.log("Added notes for project " + projectId + ": " + notes);
+    }
+</script>

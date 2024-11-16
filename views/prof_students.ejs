@@ -1,23 +1,26 @@
 <%- include('partials/header') %>
 
-    <div class="container-fluid">
+    <div class="container-fluid" style="background-color:#fff;">
         <div class="row">
 
             <!-- Nav bar section -->
             <%- include('partials/nav_bar.ejs')%>
             <!--Working Console-->
             <div class="col-md-6"
-                style="background-color: #f9f9f9; width: 100%; height: 100vh; margin-left: auto; margin-right: auto; padding:20px; position:relative;">
-                <div class="jumbotron text-center" style="margin-bottom: 20px;">
-                    <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Professor Dashboard</h1>
-                </div>
+                style=" background-color: #f9f9f9; width: 100%; height: 100vh; margin-left: auto; margin-right: auto; padding: 20px; position: relative;">
+            <div class="jumbotron text-center" style="margin-bottom: 20px;">
+            <h1 style="font-size: 4rem; font-weight: bold; color: #333;">My Students</h1>
+            </div>
+
 
                 <!-- Section for adding students -->
+             
                 <div class="search-container">
                     <input type="text" id="student-search" placeholder="Type student name..."
                         oninput="searchStudents()">
                     <div id="student-results" class="results-box"></div>
                 </div>
+           
 
 
 <!--                UNARCHIVED STUDENTS-->
@@ -91,12 +94,12 @@
     
     <!-- Button to toggle Archive and Delete buttons -->
 
-    <% if (student_details_unarchived && Array.isArray(student_details_unarchived.rows) && student_details_unarchived.rows.length > 0) { %>
+    <% if (student_details_archived && Array.isArray(student_details_archived.rows) && student_details_archived.rows.length > 0) { %>
         <ul style="font-size: 1.2rem; list-style: none; padding-left: 0;">
             <% let currentType = ''; %>
             <% let current_id = ''; %>
 
-            <% student_details_unarchived.rows.forEach(function(student) { %>
+            <% student_details_archived.rows.forEach(function(student) { %>
                 <% if (student.degree !== currentType) { %>
                     <% if (currentType !== '' ) { %>
                         </ul> <!-- Closing tag for previous student degree -->
@@ -121,7 +124,7 @@
                         <div class="button-group" style="margin-top: 10px; margin-bottom: 10px;">
                             <button class="btn btn-warning archive_student_button"
                                     data-student-id="<%= student.student_id %>"
-                                    style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Archive</button>
+                                    style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Unrchive</button>
                             <button class="btn btn-danger delete_student_button"
                                     data-student-id="<%= student.student_id %>"
                                     style="font-size: 0.8rem; padding: 5px 10px; height: 30px; display: none;">Delete</button>
@@ -144,6 +147,7 @@
     <% } %>
 
 </div>
+<br>
             </div>
 
             <!--todos and deadlines-->
@@ -174,78 +178,59 @@
         background-color: #696969 !important;
         /* Darker grey on hover */
     }
-
     
-
-
 
     body {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        /* Full viewport height */
-        background-color: #f9f9f9;
-        /* Light background for contrast */
+        justify-content: center; /* Horizontally center the search container */
+        align-items: center;     /* Vertically center the search container */
+        height: 100vh;           /* Full height of the viewport */
+        margin: 0;               /* Remove default body margin */
+        background-color: #f9f9f9; /* Optional: background color */
     }
 
     .search-container {
-        position: relative;
-        /* Relative positioning for absolute child */
-        max-width: 600px;
-        /* Max width for the search bar */
-        width: 100%;
-        /* Responsive */
+        
+        position: relative; /* For positioning the results box */
+        max-width: 600px;    /* Max width for the search bar */
+        width: 100%;         /* Make search bar responsive */
+        
     }
 
     #student-search {
-        width: 100%;
-        padding: 10px 20px;
-        border-radius: 50px;
-        /* Rounded corners */
-        border: 1px solid #ccc;
-        /* Light border */
-        font-size: 1rem;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        
+        width: 100%;         /* Full width of the container */
+        padding: 10px 20px;  /* Padding for a better look */
+        border-radius: 50px; /* Rounded corners */
+        border: 1px solid #ccc; /* Light border */
+        font-size: 1rem;     /* Font size for the text */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
     }
 
     .results-box {
-        position: absolute;
-        /* Position results box below the input */
-        top: 100%;
-        /* Align with the bottom of the input */
+        position: absolute;  /* Position results box below the input */
+        top: 100%;           /* Place the box directly below the input */
         left: 0;
         right: 0;
         background-color: white;
-        /* White background for the results */
         border: 1px solid #ccc;
-        /* Border around results box */
         border-radius: 8px;
-        /* Rounded corners */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        /* Shadow for depth */
-        z-index: 1000;
-        /* Make sure it's above other content */
-        display: none;
-        /* Initially hidden */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for results box */
+        z-index: 1000;       /* Ensure it appears above other content */
+        display: none;       /* Initially hide results box */
     }
 
     .results-box button {
-        width: 100%;
-        /* Full width buttons */
-        padding: 10px;
+        width: 100%;         /* Full width buttons */
+        padding: 10px;       /* Button padding */
         border: none;
-        background: transparent;
-        /* Transparent background */
-        text-align: left;
-        /* Align text to the left */
-        cursor: pointer;
-        /* Pointer cursor on hover */
+        background: transparent; /* Transparent background */
+        text-align: left;    /* Align text to the left */
+        cursor: pointer;    /* Pointer cursor on hover */
     }
 
     .results-box button:hover {
-        background-color: #f0f0f0;
-        /* Change background on hover */
+        background-color: #f0f0f0; /* Highlight button on hover */
     }
 
     .remove-btn {
