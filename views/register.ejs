@@ -1,36 +1,46 @@
 <%- include('partials/header') %>
 
-<div class="container">
-    <h2>Register as a Student</h2>
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header text-center" style="background-color: #f9f9f9;">
+                    <h2 style="font-size: 2.5rem; font-weight: bold; color: #333;">Register as a Student</h2>
+                </div>
+                <div class="card-body" style="padding: 30px;">
 
-    <% if (error) { %>
-        <div class="error-message">
-            <p><%= error %></p>
+                    <% if (error) { %>
+                        <div class="alert alert-danger text-center" role="alert">
+                            <p style="margin: 0;"><%= error %></p>
+                        </div>
+                    <% } %>
+
+                    <form action="/register" method="POST">
+                        <div class="form-group mb-4">
+                            <label for="name" style="font-size: 1.2rem; font-weight: bold;">Full Name</label>
+                            <input type="text" id="name" name="name" class="form-control" value="<%= user.displayName %>" required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="email" style="font-size: 1.2rem; font-weight: bold;">Email ID</label>
+                            <input type="email" id="email" name="email" class="form-control" value="<%= user.email %>" readonly required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="type" style="font-size: 1.2rem; font-weight: bold;">Program</label>
+                            <select id="type" name="type" class="form-control" required>
+                                <option value="B.Tech">B.Tech</option>
+                                <option value="M.Tech">M.Tech</option>
+                                <option value="PhD">PhD</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" style="font-size: 1.2rem; font-weight: bold; padding: 10px;">Register</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    <% } %>
-
-    <form action="/register" method="POST">
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" value="<%= user.displayName %>" required>
-        </div>
-
-        <div class="form-group">
-            <label for="email">Email ID</label>
-            <input type="email" id="email" name="email" value="<%= user.email %>" readonly required>
-        </div>
-
-        <div class="form-group">
-            <label for="type">Program</label>
-            <select id="type" name="type" required>
-                <option value="B.Tech">B.Tech</option>
-                <option value="M.Tech">M.Tech</option>
-                <option value="PhD">PhD</option>
-            </select>
-        </div>
-
-        <button type="submit" class="btn">Register</button>
-    </form>
+    </div>
 </div>
 
 <%- include('partials/footer') %>
