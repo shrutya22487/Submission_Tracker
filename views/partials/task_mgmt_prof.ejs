@@ -125,13 +125,13 @@
         function appendTodoItem(todo) {
             const todoItem = `<li id="todo-${todo.id}">
             <span><strong>Task:</strong> ${todo.task}</span>
-            <button class="delete-btn btn btn-sm" data-id="${todo.id}"><strong>🗑️</strong></button>
+            <button class="delete-btn1 btn btn-sm" data-id="${todo.id}"><strong>🗑️</strong></button>
         </li>`;
 
             $('#todo-items').append(todoItem);
 
             // Attach the delete handler
-            $(`#todo-${todo.id} .delete-btn`).on('click', function () {
+            $(`#todo-${todo.id} .delete-btn1`).on('click', function () {
                 deleteTodoItem(todo.id);
             });
         }

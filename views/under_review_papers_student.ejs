@@ -24,6 +24,10 @@
                                 <% project_details_unarchived.rows.forEach(function(detail) { %>
                                     <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
                                         <strong>Project:</strong> <%= detail.project_title %>
+                                        <br>
+                                        <strong>Professor:</strong> <%= detail.professor_names %>
+                                        <br>
+
                                         (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
                                         <br>
                                         <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
@@ -33,11 +37,11 @@
 
                                         <!-- Student List -->
                                         <ul class="student-list" style="margin-top: 10px;">
-                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
+                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No other students except you' %></li>
                                         </ul>
 
                                         <!-- Meeting Notes List -->
-                                        <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                        <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
                                             <li><strong>Meeting Notes:</strong></li>
                                             <% if (detail.meeting_notes) { %>
                                                 <% detail.meeting_notes.split('; ').forEach(function(note) { %>
@@ -50,7 +54,7 @@
 
                                         <!-- Add Meeting Notes Form -->
                                         <form class="add-notes-form" style="margin-top: 10px;">
-                                            <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                            <input type="hidden" name="project_id" data-project-id="<%= detail.project_id %>">
                                             <div class="form-group">
                                                 <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
                                                 <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
@@ -81,6 +85,10 @@
                                 <% project_details_archived.rows.forEach(function(detail) { %>
                                     <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
                                         <strong>Project:</strong> <%= detail.project_title %>
+                                        <br>
+                                        <strong>Professor:</strong> <%= detail.professor_names %>
+                                        <br>
+
                                         (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
                                         <br>
                                         <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
@@ -90,11 +98,11 @@
 
                                         <!-- Student List -->
                                         <ul class="student-list" style="margin-top: 10px;">
-                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
+                                            <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No other students except you' %></li>
                                         </ul>
 
                                         <!-- Meeting Notes List -->
-                                        <ul class="meeting-notes-list" style="margin-top: 10px;">
+                                        <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
                                             <li><strong>Meeting Notes:</strong></li>
                                             <% if (detail.meeting_notes) { %>
                                                 <% detail.meeting_notes.split('; ').forEach(function(note) { %>
@@ -107,7 +115,7 @@
 
                                         <!-- Add Meeting Notes Form -->
                                         <form class="add-notes-form" style="margin-top: 10px;">
-                                            <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                            <input type="hidden" name="project_id" data-project-id="<%= detail.project_id %>">
                                             <div class="form-group">
                                                 <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
                                                 <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
@@ -131,10 +139,6 @@
     </div>
 </div>
 
-<style>
-    /* Additional styles */
-</style>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%- include('partials/student_script.ejs') %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%- include('partials/footer') %>

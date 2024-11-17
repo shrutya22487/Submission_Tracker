@@ -33,7 +33,7 @@
                                     </td>
                                     <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
                                     <td>
-                                        <button class="btn delete-btn"
+                                        <button class="btn delete-btn_conference"
                                             data-id="<%= conference.id %>">🗑️</button>
                                     </td>
                                 </tr>
@@ -91,7 +91,7 @@
 <script>
     $(document).ready(function () {
         // Delete conference
-        $('#conference-table-body').on('click', '.delete-btn', function () {
+        $('#conference-table-body').on('click', '.delete-btn_conference', function () {
             const conferenceId = $(this).data('id');
             $.ajax({
                 url: '/prof_dashboard/delete_conference',
