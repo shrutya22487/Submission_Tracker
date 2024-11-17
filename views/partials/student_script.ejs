@@ -10,8 +10,7 @@
         const projectId = data.project_id;
         const noteText = `${data.notes} (${data.date})`;
 
-        // Locate the correct project and append the new meeting note
-        const meetingNotesList = document.querySelectorAll(`[data-project-id="${projectId}"]`)[1];
+        const meetingNotesList = document.querySelectorAll(`[data-project-id="${projectId}"]`)[0];
 
         if (meetingNotesList) {
             const listItem = document.createElement("li");

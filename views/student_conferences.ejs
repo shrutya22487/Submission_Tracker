@@ -32,7 +32,7 @@
                                     <td><%= conference.title %></td>
                                     <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
                                     <td>
-                                        <button class="btn delete-btn" data-id="<%= conference.id %>">🗑️</button>
+                                        <button class="btn delete-btn_conference" data-id="<%= conference.id %>">🗑️</button>
                                     </td>
                                 </tr>
                             <% }); %>
@@ -110,7 +110,7 @@
         border-radius: 5px;
     }
 
-    .delete-btn {
+    .delete-btn_conference {
         padding: 5px 10px;
         font-size: 0.9rem;
     }
@@ -159,7 +159,7 @@
         });
 
         // Delete conference
-        $('#conference-table-body').on('click', '.delete-btn', function() {
+        $('#conference-table-body').on('click', '.delete-btn_conference', function() {
             const conferenceId = $(this).data('id');
             $.ajax({
                 url: '/student_dashboard/delete_conference',

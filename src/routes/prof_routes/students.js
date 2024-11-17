@@ -99,49 +99,51 @@ router.get("/prof_dashboard/students",check_authentication,  async (req, res) =>
     s.id AS student_id,
     s.Name AS student_name,
     s.type AS degree,
-    COALESCE(STRING_AGG(pr.title, ', '), 'No Project Assigned') AS project_titles
+    COALESCE(STRING_AGG(pr.title, ', ' ORDER BY pr.title), 'No Project Assigned') AS project_titles
 FROM
     Professor p
 JOIN
-    Project_profs pp ON p.id = pp.prof_id
+    Team t ON t.prof_id = p.id
 JOIN
-    Project pr ON pp.project_id = pr.id
-JOIN
-    Project_Students ps ON pr.id = ps.project_id
-JOIN
-    Student s ON ps.student_id = s.id
-JOIN
-    Team t ON t.student_id = s.id AND t.prof_id = p.id
+    Student s ON t.student_id = s.id
+LEFT JOIN
+    Project_Students ps ON s.id = ps.student_id
+LEFT JOIN
+    Project pr ON ps.project_id = pr.id
+LEFT JOIN
+    Project_profs pp ON pr.id = pp.project_id AND pp.prof_id = p.id
 WHERE
     p.id = $1 AND t.archived = FALSE
 GROUP BY
     s.id, s.Name, s.type
 ORDER BY
-    s.type, s.Name;`,[prof_id]);
+    s.type, s.Name;
+`,[prof_id]);
 
     const student_details_archived = await db.query(`SELECT
     s.id AS student_id,
     s.Name AS student_name,
     s.type AS degree,
-    COALESCE(STRING_AGG(pr.title, ', '), 'No Project Assigned') AS project_titles
-    FROM
-        Professor p
-    JOIN
-        Project_profs pp ON p.id = pp.prof_id
-    JOIN
-        Project pr ON pp.project_id = pr.id
-    JOIN
-        Project_Students ps ON pr.id = ps.project_id
-    JOIN
-        Student s ON ps.student_id = s.id
-    JOIN
-        Team t ON t.student_id = s.id AND t.prof_id = p.id
-    WHERE
-        p.id = $1 AND t.archived = TRUE
-    GROUP BY
-        s.id, s.Name, s.type
-    ORDER BY
-        s.type, s.Name;`,[prof_id]);
+    COALESCE(STRING_AGG(pr.title, ', ' ORDER BY pr.title), 'No Project Assigned') AS project_titles
+FROM
+    Professor p
+JOIN
+    Team t ON t.prof_id = p.id
+JOIN
+    Student s ON t.student_id = s.id
+LEFT JOIN
+    Project_Students ps ON s.id = ps.student_id
+LEFT JOIN
+    Project pr ON ps.project_id = pr.id
+LEFT JOIN
+    Project_profs pp ON pr.id = pp.project_id AND pp.prof_id = p.id
+WHERE
+    p.id = $1 AND t.archived = TRUE
+GROUP BY
+    s.id, s.Name, s.type
+ORDER BY
+    s.type, s.Name;
+`,[prof_id]);
 
 
     res.render("prof_students.ejs", {
