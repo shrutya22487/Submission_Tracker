@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="conference">Conference:</label>
+                        <label for="conference">Author</label>
                         <input type="text" id="conference" name="conference" class="form-control">
                     </div>
 
@@ -86,7 +86,7 @@
                                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                                     <div>
                                                         <strong>Title:</strong> <%= book.title %><br>
-                                                        <strong>Conference:</strong> <%= book.conference || 'N/A' %><br>
+                                                        <strong>Author:</strong> <%= book.conference || 'N/A' %><br>
                                                         <strong>Status:</strong> <%= book.status || 'N/A' %><br>
                                                         <strong>Link 1:</strong> <a href="<%= book.link_1 %>" target="_blank">
                                                             <%= book.link_1 || 'No link' %>
