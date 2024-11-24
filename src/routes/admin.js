@@ -22,15 +22,21 @@ router.post("/admin/add_prof",check_authentication, async (req, res) => {
 });
 
 router.get('/admin',check_authentication, async (req, res) => {
-    try {
-        const students = await db.query('SELECT * FROM student;');
-        const professors = await db.query('SELECT * FROM professor;');
+    if (req.user.admin){
+        try {
+            const students = await db.query('SELECT * FROM student;');
+            const professors = await db.query('SELECT * FROM professor;');
 
-        res.render("admin.ejs", {students:students.rows, professors: professors.rows});
-    } catch (error) {
-        console.error("Error executing query:", error);
-        res.status(500).send("Internal server error");
+            res.render("admin.ejs", {students:students.rows, professors: professors.rows});
+        } catch (error) {
+            console.error("Error executing query:", error);
+            res.status(500).send("Internal server error");
+        }
     }
+    else{
+        res.redirect(`/login`);
+    }
+
 });
 
 
