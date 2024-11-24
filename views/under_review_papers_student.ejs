@@ -13,6 +13,59 @@
                     <h1 style="font-size: 4rem; font-weight: bold; color: #333;">Research Projects</h1>
                 </div>
 
+                <!-- FOR ADDING A PROJECT-->
+                <div id="addProjectForm" style=" background-color: #fff; padding: 20px; border-radius: 8px; margin-bottom: 40px;">
+                    <h2 style="margin-bottom: 20px;">Add New Project</h2>
+
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title" required class="form-control" style="margin-bottom: 10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="professor">Professor</label>
+                        <select id="professor" name="professor" required class="form-control" style="margin-bottom: 10px;">
+                            <!-- Dynamically populated -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="conference">Conference</label>
+                        <input type="text" id="conference" name="conference" class="form-control" style="margin-bottom: 10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required class="form-control" style="margin-bottom: 10px;">
+                            <option value="Upcoming">Upcoming</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="In Progress">In Progress</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link_1">Link 1</label>
+                        <input type="url" id="link_1" name="link_1" class="form-control" style="margin-bottom: 10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link_2">Link 2</label>
+                        <input type="url" id="link_2" name="link_2" class="form-control" style="margin-bottom: 10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="submitted_date">Submitted Date</label>
+                        <input type="date" id="submitted_date" name="submitted_date" class="form-control" style="margin-bottom: 10px;">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="deadline_date">Deadline Date</label>
+                        <input type="date" id="deadline_date" name="deadline_date" class="form-control" style="margin-bottom: 20px;">
+                    </div>
+
+                    <button class="btn btn-secondary btn-block" style="font-size: 1.2rem;" onclick="add_project()">Add</button>
+                </div>
+
                 <!-- Research Projects -->
                 <div>
                     <!-- FOR UNARCHIVED PROJECTS -->
@@ -133,11 +186,65 @@
             </div>
         </div>
 
-        <!-- Prof to do section -->
+        <!-- to do section -->
         <%- include('partials/task_mgmt_student.ejs')%>
 
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Fetch professors when the form is displayed
+        fetch("/get_professors", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                const professorSelect = document.getElementById("professor");
+                data.professors.forEach((prof) => {
+                    const option = document.createElement("option");
+                    option.value = prof.id;
+                    option.textContent = prof.name;
+                    professorSelect.appendChild(option);
+                });
+            })
+            .catch((error) => console.error("Error fetching professors:", error));
+    });
+
+    function add_project() {
+        const projectData = {
+            title: document.getElementById("title").value,
+            professor: document.getElementById("professor").value,
+            conference: document.getElementById("conference").value,
+            status: document.getElementById("status").value,
+            link_1: document.getElementById("link_1").value,
+            link_2: document.getElementById("link_2").value,
+            submitted_date: document.getElementById("submitted_date").value,
+            deadline_date: document.getElementById("deadline_date").value,
+        };
+
+        fetch("/add_paper_student", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(projectData),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    alert("Project added successfully!");
+                    location.reload(); // Optionally reload or update the page
+                } else {
+                    alert("Failed to add project. Please try again.");
+                }
+            })
+            .catch((error) => console.error("Error adding project:", error));
+    }
+
+</script>
 
 <%- include('partials/student_script.ejs') %>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

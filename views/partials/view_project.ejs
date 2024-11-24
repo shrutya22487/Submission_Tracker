@@ -55,9 +55,8 @@
                     <input type="date" id="deadline_date" name="deadline_date" class="form-control" style="margin-bottom: 20px;">
                 </div>
 
-                <button type="submit" class="btn btn-secondary btn-block" style="font-size: 1.2rem;" onclick="add_project()">Add Project</button>
+                <button type="submit" class="btn btn-secondary btn-block" style="font-size: 1.2rem;" onclick="add_project()">Add</button>
             </div>
-            <!-- End of Add Project Form -->
 
             <!-- FOR EDITING A PROJECT -->
             <div id="edit-project-modal" class="modal" style="display: none;">
@@ -108,108 +107,140 @@
             </div>
             
             
-<br>
+            <br>
             <!-- FOR UNARCHIVED PROJECTS-->
-<div class="container mt-5">
-    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
+            <div class="container mt-5">
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">Research Projects</h2>
 
-    <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
-        <ul style="font-size: 1.2rem;">
-            <% project_details_unarchived.rows.forEach(function(detail) { %>
-                <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                <% if (project_details_unarchived && Array.isArray(project_details_unarchived.rows) && project_details_unarchived.rows.length > 0) { %>
+                    <ul style="font-size: 1.2rem;">
+                        <% project_details_unarchived.rows.forEach(function(detail) { %>
+                            <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                <div class="d-flex justify-content-between align-items-center">
+                        <span>
+                            <strong>Project:</strong> <%= detail.project_title %>
+                            (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
+                            <br>
+                            <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
+                            <br>
+                            Submitted: <%= detail.submitted_date ? detail.submitted_date.toDateString() : 'N/A' %>
+                            | Deadline: <%= detail.deadline_date ? detail.deadline_date.toDateString() : 'N/A' %>
+                        </span>
+                                    <button class="btn btn-sm btn-secondary" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
+                                </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-<span>
-   
+                                <!-- Buttons Container -->
+                                <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
+                                    <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
+                                    <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                                    <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
+                                    <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                                </div>
 
-                    <strong>Project:</strong> <%= detail.project_title %>
-                    (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
-                    <br>
-                    <a href="<%= detail.link_1 %>">Link 1</a> | <a href="<%= detail.link_2 %>">Link 2</a>
-                    <br>
-                    Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
-                    | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
-</span>
-                    <!-- More Options Button with Same Alignment -->
-                    
-                        <button class="btn btn-sm btn-secondary" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
-                    </div>
+                                <!-- Hidden Search Bar Container -->
+                                <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
+                                    <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
 
-                    <!-- Hidden Buttons (Initially hidden) -->
-                    <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
-                        <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Archive</button>
-                        <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                        <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
-                        <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
-                    </div>
+                                    <!-- Search Form -->
+                                    <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
+                                        <input type="text" id="student-search-project-<%= detail.project_id %>"
+                                               data-project-id="<%= detail.project_id %>"
+                                               placeholder="Type student name..."
+                                               oninput="searchStudents(<%= detail.project_id %>)"
+                                               class="form-control"
+                                               style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
+                                               autocomplete="off" required>
+                                    </form>
 
-                    <!-- Hidden Search Bar Container -->
-                    <div id="search-bar-<%= detail.project_id %>" class="search-bar-container" style="display: none; margin-top: 20px;">
-                        <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Student Search</h3>
+                                    <!-- Search Results Box -->
+                                    <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
+                                        <!-- Search results will be displayed here -->
+                                    </div>
+                                </div>
 
-                        <!-- Search Form -->
-                        <form id="search-form" class="d-flex justify-content-center align-items-center" style="margin-bottom: 20px;">
-                            <input type="text" id="student-search-project-<%= detail.project_id %>"
-                                   data-project-id="<%= detail.project_id %>"
-                                   placeholder="Type student name..."
-                                   oninput="searchStudents(<%= detail.project_id %>)"
-                                   class="form-control"
-                                   style="max-width: 600px; padding: 10px 20px; border-radius: 50px; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);"
-                                   autocomplete="off" required>
-                        </form>
+                                <!-- Unarchived Students Section -->
+                                <ul class="student-list mt-3">
+                                    <li><strong>Unarchived Students:</strong></li>
+                                    <% if (detail.unarchived_students) { %>
+                                        <% detail.unarchived_students.split(', ').forEach(function(student) { %>
+                                            <% const [name, email] = student.match(/^(.*) \((.*)\)$/).slice(1); %>
+                                            <li class="student-item" style="position: relative; margin-bottom: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px;">
+                                                <span><%= name %></span>
 
-                        <!-- Search Results Box -->
-                        <div id="student-results-<%= detail.project_id %>" class="results-box" style="display: none;">
-                            <!-- Search results will be displayed here -->
-                        </div>
-                    </div>
-
-                    <!-- Student List -->
-                    <ul class="student-list" style="margin-top: 10px;">
-                        <li><strong>Students:</strong> <%= detail.students ? detail.students : 'No students assigned' %></li>
-                    </ul>
-
-                    <!-- Meeting Notes List -->
-                    <ul class="meeting-notes-list" style="margin-top: 10px;" data-project-id="<%= detail.project_id %>">
-                        <li><strong>Meeting Notes:</strong></li>
-                        <% if (detail.meeting_notes) { %>
-                            <% detail.meeting_notes.split('; ').forEach(function(note) { %>
-                                <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
-                                <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
-                                <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
-                                <li data-note-id="<%= noteId %>">
-                                    <%= noteText %>
-                                    <% if (noteId) { %>
-                                        <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
-                                            🗑️
-                                        </button>
+                                                <!-- Hover Buttons -->
+                                                <div class="student-options" style="display: none; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
+                                                    <button class="btn btn-sm btn-info" onclick="copyToClipboard('<%= email %>')">Copy Email</button>
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
+                                                    <button class="btn btn-sm btn-warning" onclick="archiveStudent('<%= email %>', <%= detail.project_id %>)">Archive</button>
+                                                </div>
+                                            </li>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <li>No unarchived students.</li>
                                     <% } %>
-                                </li>
-                            <% }) %>
-                        <% } else { %>
-                            <li>No meeting notes available.</li>
-                        <% } %>
+                                </ul>
+
+                                <!-- Archived Students Section -->
+                                <ul class="student-list mt-3">
+                                    <li><strong>Archived Students:</strong></li>
+                                    <% if (detail.archived_students) { %>
+                                        <% detail.archived_students.split(', ').forEach(function(student) { %>
+                                            <% const [name, email] = student.match(/^(.*) \((.*)\)$/).slice(1); %>
+                                            <li class="student-item" style="position: relative; margin-bottom: 10px; padding: 5px; border: 1px solid #ccc; border-radius: 5px;">
+                                                <span><%= name %></span>
+
+                                                <!-- Hover Buttons -->
+                                                <div class="student-options" style="display: none; position: absolute; top: 50%; right: 10px; transform: translateY(-50%);">
+                                                    <button class="btn btn-sm btn-info" onclick="copyToClipboard('<%= email %>')">Copy Email</button>
+                                                    <button class="btn btn-sm btn-danger" onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
+                                                    <button class="btn btn-sm btn-warning" onclick="archiveStudent('<%= email %>', <%= detail.project_id %>)">Un-Archive</button>
+                                                </div>
+                                            </li>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <li>No archived students.</li>
+                                    <% } %>
+                                </ul>
+
+                                <!-- Meeting Notes Section -->
+                                <ul class="meeting-notes-list mt-3" data-project-id="<%= detail.project_id %>">
+                                    <li><strong>Meeting Notes:</strong></li>
+                                    <% if (detail.meeting_notes) { %>
+                                        <% detail.meeting_notes.split('; ').forEach(function(note) { %>
+                                            <% const noteText = note.replace(/\s\[\d+\]$/, ''); %>
+                                            <% const noteIdMatch = note.match(/\[(\d+)\]$/); %>
+                                            <% const noteId = noteIdMatch ? noteIdMatch[1] : null; %>
+                                            <li data-note-id="<%= noteId %>">
+                                                <%= noteText %>
+                                                <% if (noteId) { %>
+                                                    <button onclick="deleteMeetingNotes(<%= noteId %>)" style="background: none; border: none;">
+                                                        🗑️
+                                                    </button>
+                                                <% } %>
+                                            </li>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <li>No meeting notes available.</li>
+                                    <% } %>
+                                </ul>
+
+                                <!-- Add Meeting Notes Form -->
+                                <form class="add-notes-form mt-3">
+                                    <input type="hidden" name="project_id" value="<%= detail.project_id %>">
+                                    <div class="form-group">
+                                        <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
+                                        <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
+                                </form>
+                            </li>
+                        <% }); %>
                     </ul>
-
-                    <!-- Add Meeting Notes Form -->
-                    <form class="add-notes-form" style="margin-top: 10px;">
-                        <input type="hidden" name="project_id" value="<%= detail.project_id %>">
-                        <div class="form-group">
-                            <label for="meeting-notes-input-<%= detail.project_id %>">Add Meeting Notes:</label>
-                            <textarea class="form-control" id="meeting-notes-input-<%= detail.project_id %>" name="notes" placeholder="Enter meeting notes..." required></textarea>
-                        </div>
-                        <button type="button" class="btn btn-secondary" onclick="addMeetingNotes(<%= detail.project_id %>)">Add Notes</button>
-                    </form>
-                    </li>
-
-                </li>
-            <% }); %>
-        </ul>
-    <% } else { %>
-        <p>No projects found.</p>
-    <% } %>
-</div>
-</div>
+                <% } else { %>
+                    <p>No projects found.</p>
+                <% } %>
+            </div>
+            </div>
 
 
 <div class="container mt-5">
@@ -241,7 +272,6 @@
                         <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
                             <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Unarchive</button>
                             <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                            <button class="btn btn-sm btn-info mr-2" onclick="toggleSearchBar(<%= detail.project_id %>)">Add Student</button>
                             <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
                         </div>
 
@@ -252,11 +282,7 @@
                                     <% detail.students.split(', ').forEach((student) => { %>
                                         <% const [name, email] = student.match(/(.*) \((.*)\)/).slice(1); %>
                                         <span class="student-item">
-                                            <span class="student-name"
-                                                  onmouseover="showOptions('<%= email %>')"
-                                                  onmouseout="hideOptions()">
-                                                  <%= name %>
-                                            </span>
+                                            <span class="student-name"><%= name %></span>
                                             <span class="student-options" style="display: none;" id="<%= email %>-options">
                                                 <button onclick="copyToClipboard('<%= email %>')">Copy Email</button>
                                                 <button onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
@@ -314,7 +340,41 @@
             this.textContent = 'Show';
         }
     });
-    
+
+    // Show options on hover
+    document.querySelectorAll('.student-item').forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const options = item.querySelector('.student-options');
+            if (options) options.style.display = 'block';
+        });
+        item.addEventListener('mouseleave', () => {
+            const options = item.querySelector('.student-options');
+            if (options) options.style.display = 'none';
+        });
+    });
+
+    // Archive student function
+    function archiveStudent(email, projectId) {
+        if (confirm("Are you sure you want to archive this student?")) {
+            fetch(`/project/${projectId}/archive-student-in-project`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email: email })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Student archived successfully");
+                        location.reload();
+                    } else {
+                        alert("Error: " + data.message);
+                    }
+                })
+                .catch(err => console.error("Failed to archive student:", err));
+        }
+    }
 
     // Function to add a new Meeting note
     function addMeetingNotes(project_id) {
@@ -343,21 +403,13 @@
         }
     }
 
-    function showOptions(email) {
-        document.getElementById(email + "-options").style.display = "inline";
-    }
-
-    function hideOptions() {
-        document.querySelectorAll(".student-options").forEach(el => el.style.display = "none");
-    }
-
     function copyToClipboard(email) {
         navigator.clipboard.writeText(email)
             .then(() => alert(`Email ${email} copied to clipboard!`))
             .catch(err => console.error("Failed to copy text: ", err));
     }
         // JavaScript function to toggle the visibility of the "Add New Project" form
-function toggleForm() {
+    function toggleForm() {
     var form = document.getElementById('addProjectForm');
     // Toggle visibility
     if (form.style.display === 'none' || form.style.display === '') {

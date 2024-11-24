@@ -1,8 +1,7 @@
 -- Inserting data into Professor table (20 rows)
 INSERT INTO Professor (Name, email_id) 
-VALUES
+VALUES('Shrutya', 'shrutyachawla@gmail.com'),
 ('Prabal', 'prabalminotra@gmail.com'),
-('Shrutya', 'shrutyachawla@gmail.com'),
 ('Dr. Jane Smith', 'jane.smith@university.edu'),
 ('Dr. Emily Clark', 'emily.clark@university.edu'),
 ('Dr. Mark Taylor', 'mark.taylor@university.edu'),
@@ -83,6 +82,7 @@ VALUES
 ('Data Privacy', 8, 8, 'SP 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-11-05', '2024-08-15', false, false),
 ('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false),
 ('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false);
+
 INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored, paper)
 VALUES
 ('Quantum Computing', 1, 1, 'ICML 2024', 'Submitted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-09-01', '2024-01-15', false, false , true),
@@ -95,6 +95,7 @@ VALUES
 ('Data Privacy', 8, 8, 'SP 2024', 'Accepted', 'http://linktoconference.com', 'http://linktopaper.com', '2023-11-05', '2024-08-15', false, false , true),
 ('Internet of Things', 9, 9, 'IoT Conference 2024', 'Drafting', 'http://linktoconference.com', 'http://linktopaper.com', '2023-12-01', '2024-09-10', false, false , true),
 ('Machine Learning Basics', 10, 10, 'ICLR 2024', 'Rejected', 'http://linktoconference.com', 'http://linktopaper.com', '2024-01-10', '2024-10-05', false, false , true);
+
 INSERT INTO Project_profs (project_id, prof_id)
 VALUES
 (1, 1), (2, 1), (3, 1),
@@ -103,7 +104,6 @@ VALUES
 (7, 2), (8, 2), (9, 2),
 (10, 2);
 
--- Inserting data into Project_Students table (20 rows)
 INSERT INTO Project_Students (project_id, student_id)
 VALUES (1, 1), (1, 2), (1, 3),
 (1, 4), (2, 5), (2, 1), (2, 2), (2, 3), (3, 1), (3 , 2),(3, 3), (4, 2), (5, 2), (5, 1), (4, 3),
@@ -136,27 +136,33 @@ VALUES
 
 INSERT INTO Conferences (prof_id, date, title, link)
 VALUES
-(1, '2024-09-01', 'AI Conference 2024', 'https://aiconf2024.com'),
-(1, '2024-09-15', 'Deep Learning Summit', 'https://deeplearningsummit.com'),
-(1, '2024-10-05', 'NLP Workshop', 'https://nlpworkshop.com'),
-(2, '2024-09-20', 'Data Science Symposium', 'https://datasciencesymposium.com'),
-(2, '2024-10-10', 'Big Data Expo', 'https://bigdataexpo.com'),
-(2, '2024-11-01', 'Quantum Computing Forum', 'https://quantumforum.com'),
-(3, '2024-08-28', 'Cloud Computing Conference', 'https://cloudcomputingconf.com'),
-(3, '2024-09-12', 'Blockchain Seminar', 'https://blockchainseminar.com'),
-(3, '2024-09-30', 'Edge AI Conference', 'https://edgeaiconference.com'),
-(4, '2024-08-30', 'Robotics Conference', 'https://roboticsconf.com'),
-(4, '2024-09-25', 'Autonomous Systems Expo', 'https://autonomousexpo.com'),
-(4, '2024-10-12', 'Smart Cities Conference', 'https://smartcitiesconference.com'),
-(5, '2024-08-26', 'Cybersecurity Forum', 'https://cybersecurityforum.com'),
-(5, '2024-09-18', 'IoT Summit', 'https://iotsummit.com'),
-(5, '2024-10-02', 'AR/VR Expo', 'https://arvrexpo.com'),
-(6, '2024-08-29', 'Software Engineering Conference', 'https://softengconf.com'),
-(6, '2024-09-19', 'DevOps World', 'https://devopsworld.com'),
-(6, '2024-10-07', 'SaaS Symposium', 'https://saassymposium.com'),
-(7, '2024-09-05', 'Green Tech Conference', 'https://greentechconference.com'),
-(7, '2024-09-22', 'Energy Efficiency Expo', 'https://energyefficiencyexpo.com');
+(1, '2024-09-01 10:00:00', 'AI Conference 2024', 'https://aiconf2024.com'),
+(1, '2024-09-15 14:00:00', 'Deep Learning Summit', 'https://deeplearningsummit.com'),
+(1, '2024-10-05 09:30:00', 'NLP Workshop', 'https://nlpworkshop.com'),
+(2, '2024-09-20 11:00:00', 'Data Science Symposium', 'https://datasciencesymposium.com'),
+(2, '2024-10-10 15:00:00', 'Big Data Expo', 'https://bigdataexpo.com'),
+(2, '2024-11-01 13:00:00', 'Quantum Computing Forum', 'https://quantumforum.com'),
+(1, '2024-08-28 08:45:00', 'Cloud Computing Conference', 'https://cloudcomputingconf.com'),
+(1, '2024-09-12 10:15:00', 'Blockchain Seminar', 'https://blockchainseminar.com'),
+(1, '2024-09-30 16:00:00', 'Edge AI Conference', 'https://edgeaiconference.com'),
+(2, '2024-08-30 09:00:00', 'Robotics Conference', 'https://roboticsconf.com'),
+(2, '2024-09-25 14:30:00', 'Autonomous Systems Expo', 'https://autonomousexpo.com'),
+(2, '2024-10-12 11:45:00', 'Smart Cities Conference', 'https://smartcitiesconference.com');
 
+INSERT INTO conferences_student (student_id, date, title, link)
+VALUES
+(1, '2024-09-01 10:00:00', 'AI Conference 2024', 'https://aiconf2024.com'),
+(1, '2024-09-15 14:00:00', 'Deep Learning Summit', 'https://deeplearningsummit.com'),
+(1, '2024-10-05 09:30:00', 'NLP Workshop', 'https://nlpworkshop.com'),
+(2, '2024-09-20 11:00:00', 'Data Science Symposium', 'https://datasciencesymposium.com'),
+(2, '2024-10-10 15:00:00', 'Big Data Expo', 'https://bigdataexpo.com'),
+(2, '2024-11-01 13:00:00', 'Quantum Computing Forum', 'https://quantumforum.com'),
+(1, '2024-08-28 08:45:00', 'Cloud Computing Conference', 'https://cloudcomputingconf.com'),
+(1, '2024-09-12 10:15:00', 'Blockchain Seminar', 'https://blockchainseminar.com'),
+(1, '2024-09-30 16:00:00', 'Edge AI Conference', 'https://edgeaiconference.com'),
+(2, '2024-08-30 09:00:00', 'Robotics Conference', 'https://roboticsconf.com'),
+(2, '2024-09-25 14:30:00', 'Autonomous Systems Expo', 'https://autonomousexpo.com'),
+(2, '2024-10-12 11:45:00', 'Smart Cities Conference', 'https://smartcitiesconference.com');
 
 
 INSERT INTO deadlines (prof_id, task, date) VALUES
@@ -204,3 +210,5 @@ INSERT INTO reading_list (title, genre, prof_id, conference, status, link_1, lin
 ('Parallel Computing', 'High Performance Computing', 1, 'HPC Conference 2024', 'In Progress', 'https://example.com/parallel_computing', ''),
 ('Introduction to Cryptography', 'Cryptography', 1, 'Crypto Conference 2023', 'Read', 'https://example.com/intro_to_crypto', 'https://example.com/crypto_extra'),
 ('Blockchain: Blueprint for a New Economy', 'Blockchain', 1, 'Blockchain Summit 2024', 'To Read', 'https://example.com/blockchain', '');
+
+-- INSERT INTO admin(name, email_id) VALUES ('Prabal','prabalminotra@gmail.com'), ('Shrutya','shrutyachawla@gmail.com');

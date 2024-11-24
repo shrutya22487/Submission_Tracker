@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+        }
+        label {
+            margin-bottom: 5px;
+        }
+        input {
+            margin-bottom: 15px;
+            padding: 8px;
+            font-size: 14px;
+        }
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+<h1>Admin Dashboard</h1>
+
+<h2>Students</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% students.forEach(student => { %>
+        <tr>
+            <td><%= student.id %></td>
+            <td><%= student.name %></td>
+            <td><%= student.email_id %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+
+<h2>Professors</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% professors.forEach(professor => { %>
+        <tr>
+            <td><%= professor.id %></td>
+            <td><%= professor.name %></td>
+            <td><%= professor.email_id %></td>
+        </tr>
+    <% }); %>
+    </tbody>
+</table>
+
+<h2>Add a Professor</h2>
+<form id="addProfessorForm">
+    <label for="professorName">Name</label>
+    <input type="text" id="professorName" name="name" required>
+    <label for="professorEmail">Email</label>
+    <input type="email" id="professorEmail" name="email" required>
+    <button type="submit">Add Professor</button>
+</form>
+
+<script>
+    document.getElementById('addProfessorForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('professorName').value;
+        const email = document.getElementById('professorEmail').value;
+
+        try {
+            const response = await fetch('/admin/add_prof', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email }),
+            });
+
+            if (response.ok) {
+                alert('Professor added successfully');
+                window.location.reload(); // Reload to fetch updated data
+            } else {
+                alert('Failed to add professor');
+            }
+        } catch (error) {
+            console.error('Error adding professor:', error);
+        }
+    });
+</script>
+</body>
+</html>

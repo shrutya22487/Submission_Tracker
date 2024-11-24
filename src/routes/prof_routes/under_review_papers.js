@@ -41,35 +41,52 @@ router.get("/prof_dashboard/under_review_papers",check_authentication,  async (r
     const prof_id = await utils.get_prof_id(req, res);
     const prof_name = await utils.get_prof_name(req, res, prof_id);
 
-    const project_details_unarchived = await db.query(`SELECT
-    p.id AS project_id,
-    p.title AS project_title,
-    p.deadline_date AS deadline_data,
-    p.submitted_date AS submitted_data,
-    p.status AS status,
-    p.link_1 AS link_1,
-    p.link_2 AS link_2,
-    p.conference AS project_conference,
-    
-    STRING_AGG(DISTINCT CONCAT(s.name, ' (', s.email_id, ')'), ', ') AS students, -- Fetch student names and emails
-    STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
-FROM
-    Project p
-LEFT JOIN
-    Project_Students ps ON p.id = ps.project_id
-LEFT JOIN
-    Student s ON ps.student_id = s.id
-JOIN
-    Project_profs pp ON p.id = pp.project_id
-JOIN
-    Professor pr ON pp.prof_id = pr.id
-LEFT JOIN
-    meeting_notes mn ON p.id = mn.project_id
-WHERE pr.id = $1 AND p.archived = FALSE AND p.paper = TRUE
-GROUP BY
-    p.id
-ORDER BY
-    p.id;
+    const project_details_unarchived = await db.query(`
+    SELECT
+        p.id AS project_id,
+        p.title AS project_title,
+        p.deadline_date AS deadline_date,
+        p.submitted_date AS submitted_date,
+        p.status AS status,
+        p.link_1 AS link_1,
+        p.link_2 AS link_2,
+        p.conference AS project_conference,
+
+        -- Fetch unarchived students
+        STRING_AGG(DISTINCT CASE 
+            WHEN ps.archived = FALSE THEN CONCAT(s.name, ' (', s.email_id, ')')
+            ELSE NULL 
+        END, ', ') AS unarchived_students,
+
+        -- Fetch archived students
+        STRING_AGG(DISTINCT CASE 
+            WHEN ps.archived = TRUE THEN CONCAT(s.name, ' (', s.email_id, ')')
+            ELSE NULL 
+        END, ', ') AS archived_students,
+
+        -- Fetch meeting notes
+        STRING_AGG(DISTINCT CONCAT(mn.notes, ' (', TO_CHAR(mn.date, 'YYYY-MM-DD'), ')', ' [', mn.id, ']'), '; ') AS meeting_notes
+    FROM
+        Project p
+    LEFT JOIN
+        Project_Students ps ON p.id = ps.project_id
+    LEFT JOIN
+        Student s ON ps.student_id = s.id
+    JOIN
+        Project_profs pp ON p.id = pp.project_id
+    JOIN
+        Professor pr ON pp.prof_id = pr.id
+    LEFT JOIN
+        meeting_notes mn ON p.id = mn.project_id
+    WHERE
+        pr.id = $1
+        AND p.archived = FALSE
+        AND p.sponsored = FALSE
+        AND p.paper = TRUE
+    GROUP BY
+        p.id
+    ORDER BY
+        p.id;
 `, [prof_id]);
 
     const project_details_archived = await db.query(`SELECT
