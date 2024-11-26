@@ -28,8 +28,6 @@ router.get('/search_students',check_authentication,  async (req, res) => {
         const results = data.rows.filter(item =>
             item.name.toLowerCase().includes(query.toLowerCase())
         );
-        console.log(results);
-
         res.json(results);
 
     } catch (error) {
@@ -99,7 +97,10 @@ router.get("/prof_dashboard/students",check_authentication,  async (req, res) =>
     s.id AS student_id,
     s.Name AS student_name,
     s.type AS degree,
-    COALESCE(STRING_AGG(pr.title, ', ' ORDER BY pr.title), 'No Project Assigned') AS project_titles
+    COALESCE(
+        STRING_AGG(pr.title, ', ' ORDER BY pr.title), 
+        'No Project Assigned'
+    ) AS project_titles
 FROM
     Professor p
 JOIN
@@ -111,14 +112,15 @@ LEFT JOIN
 LEFT JOIN
     Project pr ON ps.project_id = pr.id
 LEFT JOIN
-    Project_profs pp ON pr.id = pp.project_id AND pp.prof_id = p.id
+    Project_profs pp ON pr.id = pp.project_id
 WHERE
-    p.id = $1 AND t.archived = FALSE
+    p.id = $1
+    AND t.archived = FALSE
+    AND (pp.prof_id = p.id OR pp.prof_id IS NULL) -- Ensure projects are linked to this professor
 GROUP BY
     s.id, s.Name, s.type
 ORDER BY
-    s.type, s.Name;
-`,[prof_id]);
+    s.type, s.Name;`,[prof_id]);
 
     const student_details_archived = await db.query(`SELECT
     s.id AS student_id,

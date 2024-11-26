@@ -118,6 +118,12 @@ To install PostgreSQL without `sudo`, you can install it locally using a pre-bui
    ```
 
    After this input the data schemas given in the SQL files.
+7. input the admin details using
+
+   ```
+   INSERT INTO admin(name,email_id) VALUES ('name','email_id');
+   ```
+8. 
    quit using
    ```
    \q
@@ -197,3 +203,12 @@ Go to data Access tab, and add these scopes to the app.
 2. **Access the Application**:
 
    The server should now be running. You can access the application by navigating to `http://your_url` in your web browser.
+
+# Alternatively: Use the makefile
+
+1. First configure the Google API keys as shown above
+
+2. configure these values : DB_PASSWORD,ADMIN_NAME. ADMIN_EMAIL BASE_URL
+3. ![img_4.png](img_4.png)
+4. run ```make```
+5. do step 7 (above) to start the application.
