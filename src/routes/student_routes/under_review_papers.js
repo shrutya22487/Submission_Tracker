@@ -9,8 +9,80 @@ const router = Router();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
+
+router.get("/get_professors", check_authentication, async (req, res) => {
+    try {
+        const student_id = await utils.get_student_id(req, res);
+        const result = await db.query(
+            `SELECT DISTINCT p.id, p.name 
+             FROM Professor p
+             JOIN Team t ON p.id = t.prof_id
+             WHERE t.student_id = $1;`,
+            [student_id]
+        );
+
+        res.json({ professors: result.rows });
+    } catch (error) {
+        console.error("Error fetching professors:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+//adding a paper through the student side
+router.post("/add_paper_student", check_authentication, async (req, res) => {
+    const student_id = await utils.get_student_id(req, res);
+    const {
+        title,
+        professor,
+        conference,
+        status,
+        link_1,
+        link_2,
+        submitted_date,
+        deadline_date,
+    } = req.body;
+
+    try {
+        const result = await db.query(
+            `INSERT INTO Project (title, prof_table_id, student_table_id, conference, status, link_1, link_2, submitted_date, deadline_date, archived, sponsored, paper)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, FALSE, FALSE, TRUE)
+            RETURNING id;`,
+            [
+                title || null,
+                professor || null,
+                student_id,
+                conference || null,
+                status || null,
+                link_1 || null,
+                link_2 || null,
+                submitted_date || null,
+                deadline_date || null,
+            ]
+        );
+
+        const new_project_id = result.rows[0].id;
+
+        console.log(new_project_id);
+        // Link project with professor in Project_profs table
+        await db.query(
+            `INSERT INTO Project_profs (project_id, prof_id) VALUES ($1, $2);`,
+            [new_project_id, professor]
+        );
+        await db.query(
+            `INSERT INTO Project_students (project_id, student_id) VALUES ($1, $2);`,
+            [new_project_id, student_id]
+        );
+        res.status(200).send("Project added successfully.");
+    } catch (error) {
+        console.error("Error adding project:", error);
+        res.status(500).send("Internal server error");
+    }
+});
+
+
 //uses /prof_dashboard/add_meeting_notes to add meeting notes
 //Main Dashboard
+
 router.get("/student_dashboard/under_review_papers", check_authentication,async (req, res) => {
     const student_id = await utils.get_student_id(req, res);
     const project_details_unarchived = await db.query(`SELECT

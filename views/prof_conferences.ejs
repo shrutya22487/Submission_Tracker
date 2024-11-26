@@ -25,9 +25,8 @@
                         <% if (conferences && Array.isArray(conferences.rows)) { %>
                             <% conferences.rows.forEach(function(conference) { %>
                                 <tr data-id="<%= conference.id %>">
-                                    <td>
-                                        <%= conference.date %>
-                                    </td>
+                                    <td><%= new Date(conference.date).toLocaleString() %></td>
+
                                     <td>
                                         <%= conference.title %>
                                     </td>
@@ -48,10 +47,10 @@
                 <!-- Add Conference Form (Initially hidden) -->
                 <div id="add-conference-form-container" style="display: none; padding: 20px; background-color:#fff;border-radius: 8px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);">
                     <h2 class="mt-4">Add Conference</h2>
-                    <form id="add-conference-form" class="mb-3" >
+                    <form id="add-conference-form" class="mb-3">
                         <div class="form-group">
-                            <label for="date">Date:</label>
-                            <input type="date" id="date" name="date" class="form-control">
+                            <label for="date">Date and Time:</label>
+                            <input type="datetime-local" id="date" name="date" class="form-control" required>
                         </div>
                         <div class="form-group">
                             <label for="title">Title:</label>
@@ -64,6 +63,35 @@
                         <button type="submit" class="btn btn-secondary">Add Conference</button>
                     </form>
                 </div>
+
+                <!-- Conferences Table (students)-->
+
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Date</th>
+                        <th>Title</th>
+                        <th>Link</th>
+                    </tr>
+                    </thead>
+                    <tbody id="conference-table-body">
+                    <% if (student_conferences && Array.isArray(student_conferences.rows)) { %>
+                        <% student_conferences.rows.forEach(function(conference) { %>
+                            <tr data-id="<%= conference.id %>">
+                                <td><%= conference.student_name %></td>
+                                <td><%= new Date(conference.date).toLocaleString() %></td>
+                                <td><%= conference.title %></td>
+                                <td><a href="<%= conference.link %>" target="_blank">Link</a></td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                    </tbody>
+                </table>
+
+
+
+
             </div>
         </div>
 

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 20px;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            font-weight: bold;
+            color: #343a40;
+            margin-bottom: 20px;
+        }
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .logout-button:hover {
+            background-color: #c9302c;
+        }
+        .card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .table-container {
+            margin: 0 auto;
+            width: 90%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+            font-size: 1rem;
+        }
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .form-container {
+            width: 100%;
+            text-align: center;
+            margin: 0 auto;
+        }
+        .form-wrapper {
+            display: none;
+            margin: 0 auto;
+            width: 40%;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        label {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #495057;
+        }
+        input {
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        button {
+            padding: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: #636363;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #444444;
+        }
+        .toggle-button {
+            margin: 20px auto;
+            display: block;
+            width: fit-content;
+            padding: 10px 20px;
+            background-color: #636363;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .toggle-button:hover {
+            background-color: #444444;
+        }
+    </style>
+</head>
+<body>
+    
+
+    <button class="logout-button" onclick="logout()">Logout</button>
+    <br>
+    <h1 style="font-size: 4rem;">Admin Dashboard</h1>
+    <br><br>
+
+    <div class="table-container card">
+        <h2>Students</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% students.forEach(student => { %>
+                    <tr>
+                        <td><%= student.id %></td>
+                        <td><%= student.name %></td>
+                        <td><%= student.email_id %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+
+    <div class="table-container card">
+        <h2>Professors</h2>
+        <button class="toggle-button" onclick="toggleForm()">Toggle Add Professor Form</button>
+
+        <div class="form-container">
+            <div class="form-wrapper" id="formWrapper">
+                <h2>Add a Professor</h2>
+                <form id="addProfessorForm">
+                    <label for="professorName">Name</label>
+                    <input type="text" id="professorName" name="name" required>
+                    <label for="professorEmail">Email</label>
+                    <input type="email" id="professorEmail" name="email" required>
+                    <button type="submit">Add Professor</button>
+                </form>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% professors.forEach(professor => { %>
+                    <tr>
+                        <td><%= professor.id %></td>
+                        <td><%= professor.name %></td>
+                        <td><%= professor.email_id %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+    <script>
+        function toggleForm() {
+            const formWrapper = document.getElementById('formWrapper');
+            formWrapper.style.display = formWrapper.style.display === 'none' || formWrapper.style.display === '' ? 'block' : 'none';
+        }
+
+        function logout() {
+            window.location.href = '/logout'; // Redirect to the logout route
+        }
+
+        document.getElementById('addProfessorForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('professorName').value;
+            const email = document.getElementById('professorEmail').value;
+
+            try {
+                const response = await fetch('/admin/add_prof', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email }),
+                });
+
+                if (response.ok) {
+                    alert('Professor added successfully');
+                    window.location.reload(); // Reload to fetch updated data
+                } else {
+                    alert('Failed to add professor');
+                }
+            } catch (error) {
+                console.error('Error adding professor:', error);
+            }
+        });
+    </script>
+</body>
+</html>

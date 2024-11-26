@@ -94,7 +94,6 @@ app.get(
             }
             const message = info && info.message;
 
-            // Take action based on the message value
             if (message === "unauthorized_domain") {
                 return res.redirect("/login?error=unauthorized_domain");
             }
@@ -142,9 +141,12 @@ passport.use(
 
                 if (professorResult.rows.length > 0) {
                     user = professorResult.rows[0];
-                    user.student = false; // Set new field indicating the user is not a student
+                    user.student = false;
+                    user.admin = false;
+
                 }
                 else {
+
                     user.student = true; // Set new field indicating the user is a student
 
                     // Check if the email belongs to a student
@@ -158,8 +160,33 @@ passport.use(
                         user.student = true; // Set new field indicating the user is a student
 
                     } else {
-                        user.email_id = profile.email;
-                        user.name = profile.displayName;
+
+                        // Check if the email belongs to a professor
+                        const admin_result = await db.query(
+                            "SELECT * FROM admin WHERE email_id = $1",
+                            [email]
+                        );
+                        if (admin_result.rows.length > 0) {
+                            user = admin_result.rows[0];
+                            user.student = false;
+                            user.admin = true;
+
+                            // Set credentials for OAuth2 client
+                            oauth2Client.setCredentials({
+                                access_token: accessToken,
+                                refresh_token: refreshToken,
+                            });
+
+                            // Store tokens and user info in session
+                            user.accessToken = accessToken;
+                            user.refreshToken = refreshToken;
+                            return cb(null, user);
+
+                        }
+                        else{
+                            user.email_id = profile.email;
+                            user.name = profile.displayName;
+                        }
 
                         // Redirect to register page if email is not found in either table
                         return cb(null, user, { message: "prompt_register" });

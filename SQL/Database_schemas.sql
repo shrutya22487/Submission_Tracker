@@ -53,10 +53,12 @@ CREATE TABLE IF NOT EXISTS Project_Students
 (
     project_id INT NOT NULL,
     student_id    INT NOT NULL,
+    archived BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (project_id, student_id),
     FOREIGN KEY (project_id) REFERENCES Project(id) ON DELETE CASCADE,
     FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS meeting_notes
 (
@@ -71,13 +73,14 @@ CREATE TABLE IF NOT EXISTS meeting_notes
 
 CREATE TABLE IF NOT EXISTS Conferences
 (
-    prof_id INT NOT NULL,
+    prof_id INT       NOT NULL,
     id      SERIAL PRIMARY KEY,
-    date    DATE,
-    title  TEXT NOT NULL,
-    link  TEXT,
+    date    TIMESTAMP NOT NULL,
+    title   TEXT      NOT NULL,
+    link    TEXT,
     FOREIGN KEY (prof_id) REFERENCES Professor (id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS deadlines
 (
@@ -113,13 +116,14 @@ CREATE TABLE IF NOT EXISTS reading_list
 
 CREATE TABLE IF NOT EXISTS Conferences_student
 (
-    student_id INT NOT NULL,
-    id      SERIAL PRIMARY KEY,
-    date    DATE,
-    title  TEXT NOT NULL,
-    link  TEXT,
-    FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
+    student_id INT       NOT NULL,
+    id         SERIAL PRIMARY KEY,
+    date       TIMESTAMP NOT NULL,
+    title      TEXT      NOT NULL,
+    link       TEXT,
+    FOREIGN KEY (student_id) REFERENCES Student (id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE IF NOT EXISTS deadlines_student
 (
@@ -150,4 +154,11 @@ CREATE TABLE IF NOT EXISTS reading_list_student
     link_1     VARCHAR(1000),
     link_2     VARCHAR(1000),
     FOREIGN KEY (student_id) REFERENCES Student(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS admin
+(
+    id         SERIAL PRIMARY KEY,
+    Name     VARCHAR(50) NOT NULL,
+    email_id VARCHAR(50) UNIQUE NOT NULL
 );
