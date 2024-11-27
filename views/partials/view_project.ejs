@@ -242,7 +242,7 @@
             </div>
             </div>
 
-
+<!-- archives projects -->
 <div class="container mt-5">
     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">
         Archived Projects
@@ -410,14 +410,23 @@
     }
         // JavaScript function to toggle the visibility of the "Add New Project" form
     function toggleForm() {
+<<<<<<< HEAD
+        var form = document.getElementById('addProjectForm');
+        // Toggle visibility
+        if (form.style.display === 'none' || form.style.display === '') {
+            form.style.display = 'block';
+        } else {
+            form.style.display = 'none';
+        }
+=======
     var form = document.getElementById('addProjectForm');
     // Toggle visibility
     if (form.style.display === 'none' || form.style.display === '') {
         form.style.display = 'block';
     } else {
         form.style.display = 'none';
+>>>>>>> cb32ff4377b94de8220fa92875403a800b6fabb5
     }
-}
 
     function deleteStudent(email, projectId) {
         if (confirm("Are you sure you want to delete this student from the project?")) {
