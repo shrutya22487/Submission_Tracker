@@ -65,48 +65,48 @@
                     <h2>Edit Project</h2>
                     <form id="edit-project-form" style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
                         <input type="hidden" id="search-project_id" name="project_id">
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="title" style="font-weight: bold; margin-bottom: 5px;">Project Title:</label>
                             <input type="text" id="search-title" name="title" value="" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="conference" style="font-weight: bold; margin-bottom: 5px;">Conference:</label>
                             <input type="text" id="search-conference" name="conference" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="status" style="font-weight: bold; margin-bottom: 5px;">Status:</label>
                             <input type="text" id="search-status" name="status" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="link_1" style="font-weight: bold; margin-bottom: 5px;">Link 1:</label>
                             <input type="url" id="search-link_1" name="link_1" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="link_2" style="font-weight: bold; margin-bottom: 5px;">Link 2:</label>
                             <input type="url" id="search-link_2" name="link_2" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="submitted_date" style="font-weight: bold; margin-bottom: 5px;">Submitted Date:</label>
                             <input type="date" id="search-submitted_date" name="submitted_date" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <div style="display: flex; flex-direction: column; width: 100%;">
                             <label for="deadline_date" style="font-weight: bold; margin-bottom: 5px;">Deadline Date:</label>
                             <input type="date" id="search-deadline_date" name="deadline_date" class="form-input" style="width: 100%; padding: 10px; font-size: 1rem; border: 1px solid #ccc; border-radius: 5px;">
                         </div>
-                        
+
                         <button type="submit" onclick="edit_project()" class="btn btn-secondary" style="padding: 10px 20px; font-size: 1.2rem; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%;">Save Changes</button>
                     </form>
                 </div>
             </div>
-            
-            
+
+
             <br>
             <!-- FOR UNARCHIVED PROJECTS-->
             <div class="container mt-5">
@@ -240,22 +240,22 @@
                     <p>No projects found.</p>
                 <% } %>
             </div>
-            </div>
+        </div>
 
-<!-- archives projects -->
-<div class="container mt-5">
-    <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">
-        Archived Projects
-        <button class="btn btn-sm btn-secondary" id="toggleArchivedProjects" style="margin-left: 20px;">Show</button>
-    </h2>
 
-    <!-- Toggleable Content -->
-    <div id="archivedProjectsContent" style="display: none;">
-        <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
-            <ul style="font-size: 1.2rem;">
-                <% project_details_archived.rows.forEach(function(detail) { %>
-                    <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
-                        <div class="d-flex justify-content-between align-items-center">
+        <div class="container mt-5">
+            <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">
+                Archived Projects
+                <button class="btn btn-sm btn-secondary" id="toggleArchivedProjects" style="margin-left: 20px;">Show</button>
+            </h2>
+
+            <!-- Toggleable Content -->
+            <div id="archivedProjectsContent" style="display: none;">
+                <% if (project_details_archived && Array.isArray(project_details_archived.rows) && project_details_archived.rows.length > 0) { %>
+                    <ul style="font-size: 1.2rem;">
+                        <% project_details_archived.rows.forEach(function(detail) { %>
+                            <li class="project-list-item" style="padding: 10px 0; border-bottom: 1px solid #ddd;">
+                                <div class="d-flex justify-content-between align-items-center">
                             <span>
                                 <strong>Project:</strong> <%= detail.project_title %>
                                 (Conference: <%= detail.project_conference %>, Status: <%= detail.status %>)
@@ -265,43 +265,43 @@
                                 Submitted: <%= detail.submitted_data ? detail.submitted_data.toDateString() : 'N/A' %>
                                 | Deadline: <%= detail.deadline_data ? detail.deadline_data.toDateString() : 'N/A' %>
                             </span>
-                            <button class="btn btn-sm btn-secondary mt-2" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
-                        </div>
+                                    <button class="btn btn-sm btn-secondary mt-2" onclick="toggleButtons(<%= detail.project_id %>)">Edit</button>
+                                </div>
 
-                        <!-- Hidden Buttons -->
-                        <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
-                            <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Unarchive</button>
-                            <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
-                            <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
-                        </div>
+                                <!-- Hidden Buttons -->
+                                <div id="buttons-container-<%= detail.project_id %>" class="d-none mt-2">
+                                    <button class="btn btn-sm btn-warning archive_project_button mr-2" onclick="archive_project(<%= detail.project_id %>)">Unarchive</button>
+                                    <button class="btn btn-sm btn-danger delete_project_button mr-2" onclick="delete_project(<%= detail.project_id %>)">Delete</button>
+                                    <button class="btn btn-sm btn-secondary" onclick="openEditModal(<%= detail.project_id %>)">Edit Project</button>
+                                </div>
 
-                        <!-- Student List -->
-                        <ul class="student-list" style="margin-top: 10px;">
-                            <li><strong>Students:</strong>
-                                <% if (detail.students) { %>
-                                    <% detail.students.split(', ').forEach((student) => { %>
-                                        <% const [name, email] = student.match(/(.*) \((.*)\)/).slice(1); %>
-                                        <span class="student-item">
+                                <!-- Student List -->
+                                <ul class="student-list" style="margin-top: 10px;">
+                                    <li><strong>Students:</strong>
+                                        <% if (detail.students) { %>
+                                            <% detail.students.split(', ').forEach((student) => { %>
+                                                <% const [name, email] = student.match(/(.*) \((.*)\)/).slice(1); %>
+                                                <span class="student-item">
                                             <span class="student-name"><%= name %></span>
                                             <span class="student-options" style="display: none;" id="<%= email %>-options">
                                                 <button onclick="copyToClipboard('<%= email %>')">Copy Email</button>
                                                 <button onclick="deleteStudent('<%= email %>', <%= detail.project_id %>)">Delete</button>
                                             </span>
                                         </span>
-                                    <% }); %>
-                                <% } else { %>
-                                    No students assigned
-                                <% } %>
+                                            <% }); %>
+                                        <% } else { %>
+                                            No students assigned
+                                        <% } %>
+                                    </li>
+                                </ul>
                             </li>
-                        </ul>
-                    </li>
-                <% }); %>
-            </ul>
-        <% } else { %>
-            <p>No projects found.</p>
-        <% } %>
-    </div>
-</div>
+                        <% }); %>
+                    </ul>
+                <% } else { %>
+                    <p>No projects found.</p>
+                <% } %>
+            </div>
+        </div>
 
 
 
@@ -408,9 +408,8 @@
             .then(() => alert(`Email ${email} copied to clipboard!`))
             .catch(err => console.error("Failed to copy text: ", err));
     }
-        // JavaScript function to toggle the visibility of the "Add New Project" form
+    // JavaScript function to toggle the visibility of the "Add New Project" form
     function toggleForm() {
-<<<<<<< HEAD
         var form = document.getElementById('addProjectForm');
         // Toggle visibility
         if (form.style.display === 'none' || form.style.display === '') {
@@ -418,14 +417,6 @@
         } else {
             form.style.display = 'none';
         }
-=======
-    var form = document.getElementById('addProjectForm');
-    // Toggle visibility
-    if (form.style.display === 'none' || form.style.display === '') {
-        form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
->>>>>>> cb32ff4377b94de8220fa92875403a800b6fabb5
     }
 
     function deleteStudent(email, projectId) {
@@ -453,7 +444,7 @@
     function toggleButtons(projectId) {
         // Get the container holding the buttons
         const buttonsContainer = document.getElementById('buttons-container-' + projectId);
-        
+
         // Toggle the visibility of the buttons
         if (buttonsContainer.classList.contains('d-none')) {
             buttonsContainer.classList.remove('d-none');
@@ -462,5 +453,5 @@
         }
     }
 
-    
+
 </script>

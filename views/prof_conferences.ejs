@@ -53,6 +53,19 @@
                             <input type="datetime-local" id="date" name="date" class="form-control" required>
                         </div>
                         <div class="form-group">
+                            <label for="timezone">Timezone:</label>
+                            <select id="timezone" name="timezone" class="form-control">
+                                <option value="UTC">UTC</option>
+                                <option value="America/New_York">Eastern Time (ET)</option>
+                                <option value="Europe/London">Greenwich Mean Time (GMT)</option>
+                                <option value="Europe/Paris">Central European Time (CET)</option>
+                                <option value="Asia/Dubai">Gulf Standard Time (GST)</option>
+                                <option value="Asia/Kolkata" selected>Indian Standard Time (IST)</option>
+                                <option value="Asia/Tokyo">Japan Standard Time (JST)</option>
+                                <option value="Australia/Sydney">Australian Eastern Time (AET)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="title">Title:</label>
                             <input type="text" id="title" name="title" required class="form-control">
                         </div>
@@ -136,14 +149,42 @@
             });
         });
 
-        // Add conference
+        // Add conference with timezone conversion
         $('#add-conference-form').submit(function (e) {
             e.preventDefault();
+
+            // Get user inputs
+            const datetimeInput = $('#date').val();
+            const timezone = $('#timezone').val();
+            const title = $('#title').val();
+            const link = $('#link').val();
+
+            if (!datetimeInput) {
+                alert('Please enter a valid date and time.');
+                return;
+            }
+
+            // Convert input time to IST
+            const userDate = new Date(datetimeInput);
+            const userTimezoneOffset = new Date(userDate).toLocaleString('en-US', { timeZone: timezone });
+            const convertedToIST = new Date(userTimezoneOffset).toLocaleString('en-US', {
+                timeZone: 'Asia/Kolkata',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+            });
+
+            // Prepare the form data with the converted time
             const formData = {
-                date: $('#date').val(),
-                title: $('#title').val(),
-                link: $('#link').val()
+                date: convertedToIST,
+                title: title,
+                link: link,
             };
+
+            // Send AJAX request
             $.ajax({
                 url: '/prof_dashboard/add_conference',
                 method: 'POST',
@@ -154,10 +195,11 @@
                     location.reload();
                 },
                 error: function (error) {
-                    alert("Error adding conference.");
+                    alert('Error adding conference.');
                 }
             });
         });
+
 
         // Toggle form visibility
         $('#toggle-form-btn').click(function () {
