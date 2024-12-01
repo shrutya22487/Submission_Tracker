@@ -125,11 +125,14 @@ passport.use(
         async (accessToken, refreshToken, profile, cb) => {
             try {
                 const email = profile.email;
-                // const domain = email.split("@")[1]; // Extract the domain from the email
-                //
-                // if (domain !== "iiitd.ac.in") {
-                //     return cb(null, false, { message: "unauthorized_domain" });
-                // }
+
+                //////////////////////// COMMENT THIS OUT IF YOU WANT OTHERS TO ACCESS YOUR APP//////////////////////////
+                const domain = email.split("@")[1]; // Extract the domain from the email
+
+                if (domain !== "iiitd.ac.in") {
+                    return cb(null, false, { message: "unauthorized_domain" });
+                }
+                //////////////////////////////////////////////////////////////////////////////////////////////////////
 
                 let user = {};
 
