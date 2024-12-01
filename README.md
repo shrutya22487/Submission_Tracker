@@ -31,6 +31,9 @@ This guide will walk you through installing the **Submission Tracker** applicati
    echo 'export PATH=$HOME/pgsql/bin:$PATH' >> ~/.bashrc
    source ~/.bashrc  
    initdb -D $HOME/pg/data
+   mkdir -p $HOME/pg/tmp
+  chmod 1777 $HOME/pg/tmp
+  pg_ctl -D $HOME/pg/data -o "-k $HOME/pg/tmp" -l logfile start
    psql -h $HOME/pg/tmp -U prabal2022357 -d postgres
   CREATE DATABASE rema_db;
   \q 
