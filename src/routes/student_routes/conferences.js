@@ -37,7 +37,7 @@ router.post("/student_dashboard/add_conference", check_authentication,async (req
 router.get('/student_dashboard/conferences', check_authentication,async (req, res) => {
     try {
         const student_id = await get_student_id(req, res);
-        const data = await db.query('SELECT * FROM Conferences_student WHERE student_id = $1', [student_id]);
+        const data = await db.query('SELECT * FROM Conferences_student WHERE student_id = $1 ORDER BY date ASC', [student_id]);
 
         res.render("student_conferences.ejs",{
             conferences: data,

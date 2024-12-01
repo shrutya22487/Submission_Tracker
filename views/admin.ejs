@@ -123,106 +123,249 @@
     </style>
 </head>
 <body>
-    
+<button class="logout-button" onclick="logout()">Logout</button>
+<br>
+<h1 style="font-size: 4rem;">Admin Dashboard</h1>
+<br><br>
 
-    <button class="logout-button" onclick="logout()">Logout</button>
-    <br>
-    <h1 style="font-size: 4rem;">Admin Dashboard</h1>
-    <br><br>
+<div class="table-container card">
+    <h2>Students</h2>
+    <button class="toggle-button" onclick="toggleStudentForm()">Toggle Add Student Form</button>
 
-    <div class="table-container card">
-        <h2>Students</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% students.forEach(student => { %>
-                    <tr>
-                        <td><%= student.id %></td>
-                        <td><%= student.name %></td>
-                        <td><%= student.email_id %></td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
-    </div>
-    <br><br>
-
-    <div class="table-container card">
-        <h2>Professors</h2>
-        <button class="toggle-button" onclick="toggleForm()">Toggle Add Professor Form</button>
-
-        <div class="form-container">
-            <div class="form-wrapper" id="formWrapper">
-                <h2>Add a Professor</h2>
-                <form id="addProfessorForm">
-                    <label for="professorName">Name</label>
-                    <input type="text" id="professorName" name="name" required>
-                    <label for="professorEmail">Email</label>
-                    <input type="email" id="professorEmail" name="email" required>
-                    <button type="submit">Add Professor</button>
-                </form>
-            </div>
+    <div class="form-container">
+        <div class="form-wrapper" id="studentFormWrapper">
+            <h2>Add a Student</h2>
+            <form id="addStudentForm">
+                <label for="studentName">Name</label>
+                <input type="text" id="studentName" name="name" required>
+                <label for="studentEmail">Email</label>
+                <input type="email" id="studentEmail" name="email" required>
+                <label for="studentType">Type</label>
+                <input type="text" id="studentType" name="type" required>
+                <button type="submit">Add Student</button>
+            </form>
         </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% professors.forEach(professor => { %>
-                    <tr>
-                        <td><%= professor.id %></td>
-                        <td><%= professor.name %></td>
-                        <td><%= professor.email_id %></td>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
     </div>
-    <br><br>
-    <script>
-        function toggleForm() {
-            const formWrapper = document.getElementById('formWrapper');
-            formWrapper.style.display = formWrapper.style.display === 'none' || formWrapper.style.display === '' ? 'block' : 'none';
-        }
 
-        function logout() {
-            window.location.href = '/logout'; // Redirect to the logout route
-        }
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% students.forEach(student => { %>
+            <tr>
+                <td><%= student.id %></td>
+                <td><%= student.name %></td>
+                <td><%= student.email_id %></td>
+                <td><%= student.type %></td>
+                <td>
+                    <button onclick="showEditStudentForm(<%= student.id %>, '<%= student.name %>', '<%= student.email_id %>', '<%= student.type %>')">Edit</button>
+                    <button onclick="deleteStudent(<%= student.id %>)">Delete</button>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+<br><br>
 
-        document.getElementById('addProfessorForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const name = document.getElementById('professorName').value;
-            const email = document.getElementById('professorEmail').value;
+<div class="table-container card">
+    <h2>Professors</h2>
+    <button class="toggle-button" onclick="toggleProfessorForm()">Toggle Add Professor Form</button>
 
-            try {
-                const response = await fetch('/admin/add_prof', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, email }),
-                });
+    <div class="form-container">
+        <div class="form-wrapper" id="professorFormWrapper">
+            <h2>Add a Professor</h2>
+            <form id="addProfessorForm">
+                <label for="professorName">Name</label>
+                <input type="text" id="professorName" name="name" required>
+                <label for="professorEmail">Email</label>
+                <input type="email" id="professorEmail" name="email" required>
+                <button type="submit">Add Professor</button>
+            </form>
+        </div>
+    </div>
 
-                if (response.ok) {
-                    alert('Professor added successfully');
-                    window.location.reload(); // Reload to fetch updated data
-                } else {
-                    alert('Failed to add professor');
-                }
-            } catch (error) {
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% professors.forEach(professor => { %>
+            <tr>
+                <td><%= professor.id %></td>
+                <td><%= professor.name %></td>
+                <td><%= professor.email_id %></td>
+                <td>
+                    <button onclick="showEditProfessorForm(<%= professor.id %>, '<%= professor.name %>', '<%= professor.email_id %>')">Edit</button>
+                    <button onclick="deleteProfessor(<%= professor.id %>)">Delete</button>
+                </td>
+            </tr>
+        <% }); %>
+        </tbody>
+    </table>
+</div>
+<br><br>
 
+<script>
+    // Toggles for Add Forms
+    function toggleStudentForm() {
+        const studentFormWrapper = document.getElementById('studentFormWrapper');
+        studentFormWrapper.style.display = studentFormWrapper.style.display === 'none' || studentFormWrapper.style.display === '' ? 'block' : 'none';
+    }
 
-                console.error('Error adding professor:', error);
+    function toggleProfessorForm() {
+        const professorFormWrapper = document.getElementById('professorFormWrapper');
+        professorFormWrapper.style.display = professorFormWrapper.style.display === 'none' || professorFormWrapper.style.display === '' ? 'block' : 'none';
+    }
+
+    // Logout
+    function logout() {
+        window.location.href = '/logout'; // Redirect to the logout route
+    }
+
+    // Add Student Form
+    document.getElementById('addStudentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('studentName').value;
+        const email = document.getElementById('studentEmail').value;
+        const type = document.getElementById('studentType').value;
+
+        try {
+            const response = await fetch('/admin/add_student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, type }),
+            });
+
+            if (response.ok) {
+                alert('Student added successfully');
+                window.location.reload();
+            } else {
+                alert('Failed to add student');
             }
-        });
-    </script>
+        } catch (error) {
+            console.error('Error adding student:', error);
+        }
+    });
+
+    // Show Edit Form for Student
+    function showEditStudentForm(id, currentName, currentEmail, currentType) {
+        const newName = prompt("Edit Name:", currentName);
+        const newEmail = prompt("Edit Email:", currentEmail);
+        const newType = prompt("Edit Type:", currentType);
+
+        if (!newName || !newEmail || !newType) {
+            alert("All fields are required.");
+            return;
+        }
+
+        editStudent(id, newName, newEmail, newType);
+    }
+
+    async function editStudent(id, name, email, type) {
+        try {
+            const response = await fetch(`/admin/edit_student/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, type }),
+            });
+
+            if (response.ok) {
+                alert("Student updated successfully");
+                window.location.reload();
+            } else {
+                alert("Failed to update student");
+            }
+        } catch (error) {
+            console.error("Error editing student:", error);
+        }
+    }
+
+    // Show Edit Form for Professor
+    function showEditProfessorForm(id, currentName, currentEmail) {
+        const newName = prompt("Edit Name:", currentName);
+        const newEmail = prompt("Edit Email:", currentEmail);
+
+        if (!newName || !newEmail) {
+            alert("Both fields are required.");
+            return;
+        }
+
+        editProfessor(id, newName, newEmail);
+    }
+
+    async function editProfessor(id, name, email) {
+        try {
+            const response = await fetch(`/admin/edit_prof/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email }),
+            });
+
+            if (response.ok) {
+                alert("Professor updated successfully");
+                window.location.reload();
+            } else {
+                alert("Failed to update professor");
+            }
+        } catch (error) {
+            console.error("Error editing professor:", error);
+        }
+    }
+
+    // Delete Student
+    async function deleteStudent(id) {
+        if (!confirm("Are you sure you want to delete this student?")) return;
+
+        try {
+            const response = await fetch(`/admin/delete_student/${id}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert("Student deleted successfully");
+                window.location.reload();
+            } else {
+                alert("Failed to delete student");
+            }
+        } catch (error) {
+            console.error("Error deleting student:", error);
+        }
+    }
+
+    // Delete Professor
+    async function deleteProfessor(id) {
+        if (!confirm("Are you sure you want to delete this professor?")) return;
+
+        try {
+            const response = await fetch(`/admin/delete_prof/${id}`, {
+                method: 'POST',
+            });
+
+            if (response.ok) {
+                alert("Professor deleted successfully");
+                window.location.reload();
+            } else {
+                alert("Failed to delete professor");
+            }
+        } catch (error) {
+            console.error("Error deleting professor:", error);
+        }
+    }
+</script>
 </body>
+
+
 </html>

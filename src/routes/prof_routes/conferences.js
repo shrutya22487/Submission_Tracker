@@ -38,29 +38,33 @@ router.post("/prof_dashboard/add_conference", check_authentication,async (req, r
 router.get('/prof_dashboard/conferences', check_authentication,async (req, res) => {
     try {
         const profId = await get_prof_id(req, res);
-        const conferences = await db.query('SELECT * FROM Conferences WHERE prof_id = $1', [profId]);
+        const conferences = await db.query(
+            'SELECT * FROM Conferences WHERE prof_id = $1 ORDER BY date ASC',
+            [profId]
+        );
 
         const student_conferences = await db.query(`
-        SELECT 
-            Cs.student_id as student_id, 
-            Cs.id as id, 
-            Cs.date as date, 
-            Cs.title as title, 
-            Cs.link as link, 
-            S.name as student_name
-        FROM 
-            Professor p
-        JOIN 
-            Team ON p.id = Team.prof_id
-        JOIN 
-            Conferences_student Cs ON Team.student_id = Cs.student_id
-        JOIN 
-            Student S ON S.id = Cs.student_id
-        WHERE 
-            p.id = $1;`,
-                [profId]
-            );
-
+    SELECT 
+        Cs.student_id as student_id, 
+        Cs.id as id, 
+        Cs.date as date, 
+        Cs.title as title, 
+        Cs.link as link, 
+        S.name as student_name
+    FROM 
+        Professor p
+    JOIN 
+        Team ON p.id = Team.prof_id
+    JOIN 
+        Conferences_student Cs ON Team.student_id = Cs.student_id
+    JOIN 
+        Student S ON S.id = Cs.student_id
+    WHERE 
+        p.id = $1
+    ORDER BY 
+        Cs.date ASC;`,
+            [profId]
+        );
         res.render("prof_conferences.ejs",{
             conferences: conferences,
             student_conferences: student_conferences
