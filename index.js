@@ -30,7 +30,7 @@ const io = new Server(server);
 const oauth2Client = new OAuth2(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    "http://localhost:3000/auth/google/dashboard"
+    process.env.BASE_URL + "/auth/google/dashboard"
 );
 
 app.use(
@@ -120,7 +120,7 @@ passport.use(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/google/dashboard",
+            callbackURL: process.env.BASE_URL + "/auth/google/dashboard",
         },
         async (accessToken, refreshToken, profile, cb) => {
             try {
