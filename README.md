@@ -91,6 +91,7 @@ BASE_URL ="your_url"
 
 ## Step 5: Run the Application
 
+
 1. **Start the Application**:
 
    Once the dependencies are installed and environment variables are set, start the application and move in the background using:
