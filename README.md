@@ -1,7 +1,7 @@
 # Submission Tracker Installation Guide
 
 This guide will walk you through installing the **Submission Tracker** application on a Linux server without `sudo` access. The application requires **Node.js** and **PostgreSQL**.
-## Be in the root directory when you start.
+## Be in the root directory when you start. **Also be sure to rename this folder as app.**
 
 ## Step 1: Install Node.js (Without `sudo` Access)
 
@@ -18,7 +18,8 @@ This guide will walk you through installing the **Submission Tracker** applicati
 
 ## Step 2: Install PostgreSQL (Without `sudo` Access)
 
-### modify name and email_id of the user
+### modify name and email_id of the admin, modify SSH_ID with your ssh id.
+#### Tip: this is the id which is visible when you open the terminal.
 
 ```bash
    wget https://ftp.postgresql.org/pub/source/v15.3/postgresql-15.3.tar.gz
@@ -34,11 +35,11 @@ This guide will walk you through installing the **Submission Tracker** applicati
    mkdir -p $HOME/pg/tmp
   chmod 1777 $HOME/pg/tmp
   pg_ctl -D $HOME/pg/data -o "-k $HOME/pg/tmp" -l logfile start
-   psql -h $HOME/pg/tmp -U prabal2022357 -d postgres
+   psql -h $HOME/pg/tmp -U SSH_ID -d postgres
   CREATE DATABASE rema_db;
   \q 
-  psql -h $HOME/pg/tmp -U prabal2022357 -d rema_db
-  \i /home/prabal2022357/app/SQL/Database_schemas.sql
+  psql -h $HOME/pg/tmp -U SSH_ID -d rema_db
+  \i /home/SSH_ID/app/SQL/Database_schemas.sql
   INSERT INTO admin(name, email_id) VALUES ('name', 'email_id');
   \q
   cd ../app  
@@ -103,3 +104,22 @@ BASE_URL ="your_url"
 2. **Access the Application**:
 
    The server should now be running. You can access the application by navigating to `http://your_url` in your web browser.
+
+## Stopping the application:
+
+1. To stop the application run, this needs to be done if there is a change in the app. 
+
+```bash
+   ps aux | grep node
+```
+
+2. look for an entry like this
+![img_1.png](Images/img_11.png)
+
+the second column here(23209) is the process id here
+
+3. kill this process 
+```bash 
+kill <pid> 
+```
+4. re run the app
